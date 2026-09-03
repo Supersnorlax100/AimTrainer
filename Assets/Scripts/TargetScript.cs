@@ -3,14 +3,19 @@ using UnityEngine;
 public class TargetScript : MonoBehaviour
 {
     [SerializeField] int health;
-    [SerializeField] int scoreValue;
+    public int scoreValue;
 
+    public void Start()
+    {
+        
+    }
     public void GetHit(int damage)
     {
         health -= damage;
         if (health <= 0)
         {
-            Die();
+            EventHandeler.onTargetDeath?.Invoke();
+            Destroy(gameObject);
         }
     }
 
@@ -21,11 +26,6 @@ public class TargetScript : MonoBehaviour
 
     public void Die()
     {
-        PlayerControler.instance.AddScore(scoreValue);
-        Destroy(gameObject);
+
     }
-
-
-
-
 }

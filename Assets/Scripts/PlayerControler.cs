@@ -1,12 +1,13 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
+using TMPro;
 
 public class PlayerControler : MonoBehaviour
 {
+    [SerializeField] TMP_Text scoreText;
     public static PlayerControler instance;
     Ray gunRay;
     RaycastHit whatHit;
+    GameObject target;
 
     [SerializeField] int damage;
 
@@ -22,6 +23,7 @@ public class PlayerControler : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        EventHandeler.onTargetDeath += AddScore;
     }
 
     private void Update()
@@ -32,7 +34,7 @@ public class PlayerControler : MonoBehaviour
             Debug.DrawRay(gunRay.origin, gunRay.direction * 100f, Color.red, 1f);
             if (Physics.Raycast(gunRay, out whatHit) && whatHit.transform.gameObject.GetComponent<TargetScript>() != null)
             {
-                GameObject target = whatHit.transform.gameObject;
+                target = whatHit.transform.gameObject;
 
                 target.GetComponent<TargetScript>().GetHit(damage);
 
@@ -41,10 +43,10 @@ public class PlayerControler : MonoBehaviour
         }
     }
 
-    public void AddScore(int value)
+    public void AddScore()
     {
-        score += value;
-        Debug.Log("Score: " + score);
+        score += target.GetComponent<TargetScript>().scoreValue;
+        scoreText.text = "Score: " + score.ToString();
     }
 
 }
