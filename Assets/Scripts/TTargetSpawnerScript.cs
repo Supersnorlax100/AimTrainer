@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TargetSpawnerScript : MonoBehaviour
+public class TTargetSpawnerScript : MonoBehaviour
 {
     public GameObject targetSpawnArea;
     public GameObject target;
@@ -10,6 +10,9 @@ public class TargetSpawnerScript : MonoBehaviour
 
     private float XtargetSpawnAreaScale;
     private float YtargetSpawnAreaScale;
+
+    public float targetSpeed = 1;
+    public float targetSpeedVariability = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -41,7 +44,10 @@ public class TargetSpawnerScript : MonoBehaviour
             if (Physics.OverlapSphere(targetPos, target.GetComponent<SphereCollider>().radius + targetSpace).Length <= 1)
             {
                 Debug.Log("no overlap");
-                Instantiate(target, targetPos, Quaternion.identity, targetParent.transform);
+                GameObject _target = Instantiate(target, targetPos, Quaternion.identity, targetParent.transform);
+                Vector3 _targetDirection = new Vector3(Random.Range(0,10), Random.Range(1,10), 0);
+                float _targetSpeed = targetSpeed + Random.Range(-(targetSpeedVariability), targetSpeedVariability);
+                _target.GetComponent<Rigidbody>().AddForce(_targetDirection.normalized * _targetSpeed, ForceMode.Impulse);
                 break;
             }
         }
