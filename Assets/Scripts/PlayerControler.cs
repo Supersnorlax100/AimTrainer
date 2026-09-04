@@ -6,12 +6,17 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] TMP_Text scoreText;
     public static PlayerControler instance;
     Ray gunRay;
-    RaycastHit whatHit;
+    RaycastHit targetHit;
+    RaycastHit targetCrit;
     GameObject target;
 
-    [SerializeField] int damage;
+    LayerMask targetHitMask;
+    LayerMask targetCritMask;
 
-    int score = 0;
+    public float damage = 1;
+    public float critMultiplier = 1.5f;
+
+    public int score = 0;
 
     private void Awake()
     {
@@ -24,6 +29,9 @@ public class PlayerControler : MonoBehaviour
             Destroy(gameObject);
         }
         EventHandeler.onTargetDeath += AddScore;
+
+        targetHitMask = LayerMask.GetMask("TargetHit");
+        targetCritMask = LayerMask.GetMask("TargetCrit");
     }
 
     private void Update()
@@ -32,12 +40,19 @@ public class PlayerControler : MonoBehaviour
         {
             gunRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             Debug.DrawRay(gunRay.origin, gunRay.direction * 100f, Color.red, 1f);
-            if (Physics.Raycast(gunRay, out whatHit) && whatHit.transform.gameObject.GetComponent<TargetScript>() != null)
+            if (Physics.Raycast(gunRay, out targetHit, 9999999, targetCritMask))
             {
-                target = whatHit.transform.gameObject;
+                target = targetHit.transform.gameObject;
 
-                target.GetComponent<TargetScript>().GetHit(damage);
+                //Debug.Log(target.name);
+                target.GetComponent<TargetScript>().GetHit(damage, true, critMultiplier);
+            }
+            else if (Physics.Raycast(gunRay, out targetHit, 99999999, targetHitMask))
+            {
+                target = targetHit.transform.gameObject;
 
+                //Debug.Log(target.name);
+                target.GetComponent<TargetScript>().GetHit(damage, false, critMultiplier);
             }
 
         }

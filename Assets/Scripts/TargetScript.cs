@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class TargetScript : MonoBehaviour
 {
-    [SerializeField] int health;
+    public float health;
     public int scoreValue;
     private Slider healthBar;
 
@@ -14,10 +14,14 @@ public class TargetScript : MonoBehaviour
         healthBar.value = health;
         healthBar.gameObject.SetActive(false);
     }
-    public void GetHit(int damage)
+    public void GetHit(float damage, bool isCrit, float critMultiplier)
     {
-        health -= damage;
+        Debug.Log("is crit: " + isCrit);
+        if (isCrit) { health -= damage * critMultiplier; }
+        else { health -= damage; }
+           
         UpdateHealthBar();
+        
         if (health <= 0)
         {
             EventHandeler.onTargetDeath?.Invoke();
