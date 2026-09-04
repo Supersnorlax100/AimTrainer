@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class TargetSpawnerScript : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class TargetSpawnerScript : MonoBehaviour
 
     private float XtargetSpawnAreaScale;
     private float YtargetSpawnAreaScale;
+
+    public bool areTargetsMoving;
+    public float targetSpeed = 1;
+    public float targetSpeedVariability = 0;
 
     private void Awake()
     {
@@ -44,7 +49,13 @@ public class TargetSpawnerScript : MonoBehaviour
 
             if (Physics.OverlapSphere(targetPos, target.GetComponent<SphereCollider>().radius + targetSpace).Length <= 1)
             {
-                Instantiate(target, targetPos, Quaternion.identity, targetParent.transform);
+                GameObject _target = Instantiate(target, targetPos, Quaternion.identity, targetParent.transform);
+                if (areTargetsMoving)
+                {
+                    Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
+                    float _targetSpeed = targetSpeed + Random.Range(-(targetSpeedVariability), targetSpeedVariability);
+                    _target.GetComponent<Rigidbody>().AddForce(_targetDirection.normalized * _targetSpeed, ForceMode.Impulse);
+                }
                 return;
             }
         }

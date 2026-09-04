@@ -986,12 +986,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 903377045}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0010c840a173f9846ab71e59b2691980, type: 3}
+  m_Script: {fileID: 11500000, guid: e8687369514cff641b5131a48d9c4eec, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TTargetSpawnerScript
+  m_EditorClassIdentifier: Assembly-CSharp::TargetSpawnerScript
   targetSpawnArea: {fileID: 1041608399}
-  target: {fileID: 4949817593039051315, guid: 97d741cdedb920247b2c423afe0b8010, type: 3}
+  target: {fileID: 4949817593039051315, guid: 7694825c4a285c84c95c85be1d4b7c28, type: 3}
   targetParent: {fileID: 612807507}
+  initialTargetCount: 5
   targetSpace: 0
   targetSpeed: 10
   targetSpeedVariability: 0
