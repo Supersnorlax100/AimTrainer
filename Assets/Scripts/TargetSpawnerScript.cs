@@ -47,7 +47,7 @@ public class TargetSpawnerScript : MonoBehaviour
             float targetZ = targetSpawnArea.transform.position.z + 0.75f; // just added offset
             Vector3 targetPos = new Vector3(targetX, targetY, targetZ);
 
-            if (Physics.OverlapSphere(targetPos, target.GetComponent<SphereCollider>().radius + targetSpace).Length <= 1)
+            if (Physics.OverlapSphere(targetPos, target.GetComponentInChildren<SphereCollider>().radius + targetSpace).Length <= 1)
             {
                 GameObject _target = Instantiate(target, targetPos, Quaternion.identity, targetParent.transform);
                 if (areTargetsMoving)
