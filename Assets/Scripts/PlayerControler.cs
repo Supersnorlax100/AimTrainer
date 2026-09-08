@@ -24,6 +24,7 @@ public class PlayerControler : MonoBehaviour
             Destroy(gameObject);
         }
         EventHandeler.onTargetDeath += AddScore;
+        EventHandeler.onPlayerDeath += Die;
     }
 
     private void Update()
@@ -47,6 +48,11 @@ public class PlayerControler : MonoBehaviour
     {
         score += target.GetComponent<TargetScript>().scoreValue;
         scoreText.text = "Score: " + score.ToString();
+    }
+
+    public void Die()
+    {
+        Destroy(gameObject);
     }
 
 }
