@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CameraControler : MonoBehaviour
 {
-    [SerializeField] private GameObject player;
+    private GameObject player;
 
     [Header("Camera Variables")]
     public float mouseSpeed;
@@ -13,10 +13,11 @@ public class CameraControler : MonoBehaviour
     private float yRotation;
     Transform rootTransform;
 
+
     private void Start()
     {
+        player = PlayerControler.instance.gameObject;
         Cursor.lockState = CursorLockMode.Locked;
-
     }
 
     private void Update()
@@ -31,11 +32,18 @@ public class CameraControler : MonoBehaviour
         // Camera Constraints Along Y-axis
         xRotation = Mathf.Clamp(xRotation, -cameraBounds, cameraBounds);
 
-        MoveCamera(new Vector3(xRotation, yRotation, 0f));
+        if (player == null)
+        {
+            return;
+        }
+        else
+        {
+            MoveCamera(new Vector3(xRotation, yRotation, 0f));
 
-        rootTransform.position = player.transform.position + offset;
+            rootTransform.position = player.transform.position + offset;
+        }
 
-  
+
     }
 
     private void MoveCamera(Vector3 movement)

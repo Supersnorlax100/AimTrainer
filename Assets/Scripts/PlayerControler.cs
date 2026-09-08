@@ -32,6 +32,9 @@ public class PlayerControler : MonoBehaviour
 
         targetHitMask = LayerMask.GetMask("TargetHit");
         targetCritMask = LayerMask.GetMask("TargetCrit");
+
+        EventHandeler.onPlayerDeath += Die;
+
     }
 
     private void Update()
@@ -62,6 +65,11 @@ public class PlayerControler : MonoBehaviour
     {
         score += target.GetComponent<TargetScript>().scoreValue;
         scoreText.text = "Score: " + score.ToString();
+    }
+
+    public void Die()
+    {
+        Destroy(gameObject);
     }
 
 }
