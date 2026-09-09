@@ -1537,7 +1537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TargetSpawnerScript
   targetSpawnArea: {fileID: 2037568309}
-  target: {fileID: 4949817593039051315, guid: 7694825c4a285c84c95c85be1d4b7c28, type: 3}
+  target: {fileID: 2778329977594167737, guid: 622e0e121ccdf7b4990234dc2570d50e, type: 3}
   targetParent: {fileID: 770039680}
   initialTargetCount: 5
   targetSpace: 0
