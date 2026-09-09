@@ -30,15 +30,24 @@ public class ComboScript : MonoBehaviour
     {
         if (!isPaused)
         {
-            activeComboTimer -= Time.deltaTime;
-            if (activeComboTimer > 0) { comboTextUI.text = "Combo: " + (Mathf.Round(activeComboTimer * 100)/100).ToString(); }
-            else { comboTextUI.text = "Combo: 0"; sliderImage.enabled = false; }
             comboSlider.value = activeComboTimer;
+            activeComboTimer -= Time.deltaTime;
+            if (activeComboTimer > 0) 
+            { 
+                comboTextUI.text = "Combo: " + (comboValue).ToString(); 
+            }
+            else 
+            { 
+                comboTextUI.text = "";
+                comboValue = 0;
+                sliderImage.enabled = false; 
+            }
         }
     }
 
     public void RefreshCombo()
     {
+        comboValue += 1;
         activeComboTimer = maxComboTimer;
         sliderImage.enabled = true;
     }
