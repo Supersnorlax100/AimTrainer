@@ -1419,6 +1419,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8576091514897720222, guid: 622e0e121ccdf7b4990234dc2570d50e, type: 3}
+      propertyPath: timebetween
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8576091514897720222, guid: 622e0e121ccdf7b4990234dc2570d50e, type: 3}
+      propertyPath: persentageOfForce
+      value: 99
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

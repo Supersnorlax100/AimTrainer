@@ -56,7 +56,8 @@ public class TargetSpawnerScript : MonoBehaviour
                     Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
                     float _targetSpeed = targetSpeed + Random.Range(-(targetSpeedVariability), targetSpeedVariability);
                     _target.GetComponent<Rigidbody>().AddForce(_targetDirection.normalized * _targetSpeed, ForceMode.Impulse);
-                    _target.GetComponent<TargetScript>().force = _targetSpeed;
+
+
                 }
                 return;
             }

@@ -7,15 +7,21 @@ public class TargetScript : MonoBehaviour
     public int scoreValue;
     [SerializeField] private GameObject healthBarCanvas;
     private Slider healthBar;
-    public float force;
-    [SerializeField] float persentageOfForce;
+
     private void Awake()
     {
         healthBar = healthBarCanvas.GetComponentInChildren<Slider>();
+
+        
+    }
+
+    private void Start()
+    {
         healthBar.maxValue = health;
         healthBar.value = health;
         healthBar.gameObject.SetActive(false);
-        
+
+
     }
 
     private void Update()
@@ -23,12 +29,6 @@ public class TargetScript : MonoBehaviour
         healthBarCanvas.transform.position = transform.position;
         
     }
-
-
-    //public void Addforce()
-    //{
-    //    gameObject.GetComponent<Rigidbody>().AddForce(gameObject.GetComponent<Rigidbody>(). * force / persentageOfForce, ForceMode.Impulse);
-    //}
 
 
     public void GetHit(float damage, bool isCrit, float critMultiplier)

@@ -293,6 +293,9 @@ MonoBehaviour:
   health: 3
   scoreValue: 10
   healthBarCanvas: {fileID: 8692264305002491007}
+  force: 0
+  persentageOfForce: 1
+  timebetween: 1
 --- !u!54 &114914050999209406
 Rigidbody:
   m_ObjectHideFlags: 0
