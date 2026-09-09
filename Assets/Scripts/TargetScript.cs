@@ -5,15 +5,32 @@ public class TargetScript : MonoBehaviour
 {
     public float health;
     public int scoreValue;
+    [SerializeField] private GameObject healthBarCanvas;
     private Slider healthBar;
-
+    public float force;
+    [SerializeField] float persentageOfForce;
     private void Awake()
     {
-        healthBar = GetComponentInChildren<Slider>();
+        healthBar = healthBarCanvas.GetComponentInChildren<Slider>();
         healthBar.maxValue = health;
         healthBar.value = health;
         healthBar.gameObject.SetActive(false);
+        
     }
+
+    private void Update()
+    {
+        healthBarCanvas.transform.position = transform.position;
+        
+    }
+
+
+    //public void Addforce()
+    //{
+    //    gameObject.GetComponent<Rigidbody>().AddForce(gameObject.GetComponent<Rigidbody>(). * force / persentageOfForce, ForceMode.Impulse);
+    //}
+
+
     public void GetHit(float damage, bool isCrit, float critMultiplier)
     {
         Debug.Log("is crit: " + isCrit);
@@ -25,7 +42,7 @@ public class TargetScript : MonoBehaviour
         if (health <= 0)
         {
             EventHandeler.onTargetDeath?.Invoke();
-            Destroy(gameObject);
+            Destroy(gameObject.transform.parent.gameObject);
         }
     }
 

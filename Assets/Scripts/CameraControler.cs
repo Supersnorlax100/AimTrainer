@@ -10,18 +10,14 @@ public class CameraControler : MonoBehaviour
     [SerializeField] private Vector3 offset;
 
     private float xRotation;
-    private float yRotation;
+    private float yRotation = 180;
     Transform rootTransform;
 
-    private void Awake()
-    {
-        player = PlayerControler.instance.gameObject;
-    }
 
     private void Start()
     {
+        player = PlayerControler.instance.gameObject;
         Cursor.lockState = CursorLockMode.Locked;
-
     }
 
     private void Update()
