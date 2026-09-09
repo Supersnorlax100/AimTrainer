@@ -33,7 +33,6 @@ public class TargetScript : MonoBehaviour
 
     public void GetHit(float damage, bool isCrit, float critMultiplier)
     {
-        Debug.Log("is crit: " + isCrit);
         if (isCrit) { health -= damage * critMultiplier; }
         else { health -= damage; }
            
@@ -46,10 +45,6 @@ public class TargetScript : MonoBehaviour
         }
     }
 
-    public void CritHit()
-    {
-
-    }
     void UpdateHealthBar()
     {
         if (!healthBar.gameObject.activeSelf)

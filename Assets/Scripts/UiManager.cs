@@ -5,13 +5,14 @@ public class UiManager : MonoBehaviour
 {
     [SerializeField] TMP_Text scoreText;
     [SerializeField] GameObject Timer;
+    [SerializeField] GameObject Combo;
     [SerializeField] GameObject DeathScreen;
     [SerializeField] TMP_Text finalScore;
+
     private void Awake()
     {
         EventHandeler.onPlayerDeath += ActivateDeathScreen;
     }
-
 
     public void ActivateUi()
     {

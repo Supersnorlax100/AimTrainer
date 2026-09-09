@@ -13,7 +13,6 @@ public class CameraControler : MonoBehaviour
     private float yRotation = 180;
     Transform rootTransform;
 
-
     private void Start()
     {
         player = PlayerControler.instance.gameObject;
