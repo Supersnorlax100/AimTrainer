@@ -21,6 +21,10 @@ public class CameraControler : MonoBehaviour
 
     private void Update()
     {
+        if (UiManager.instance.isPaused)
+        {
+            return;
+        }
         float horizontal = Input.GetAxis("Mouse X") * mouseSpeed;
         float vertical = Input.GetAxis("Mouse Y") * -mouseSpeed;
 

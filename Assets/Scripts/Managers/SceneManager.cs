@@ -23,6 +23,11 @@ public class SceneManager : MonoBehaviour
         Application.Quit();
     }
 
+    public void MainMenuOpen()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    }
+
     public void AdvanceScene()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex + 1);

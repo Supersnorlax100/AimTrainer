@@ -40,14 +40,14 @@ public class TargetSpawnerScript : MonoBehaviour
 
     public void Spawn()
     {
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < 10000; i++)
         {
             float targetX = targetSpawnArea.transform.position.x + Random.Range(-(XtargetSpawnAreaScale / 2), XtargetSpawnAreaScale / 2);
             float targetY = targetSpawnArea.transform.position.y + Random.Range(-(YtargetSpawnAreaScale / 2), YtargetSpawnAreaScale / 2);
             float targetZ = targetSpawnArea.transform.position.z + 0.75f; // just added offset
             Vector3 targetPos = new Vector3(targetX, targetY, targetZ);
 
-            if (Physics.OverlapSphere(targetPos, target.GetComponentInChildren<SphereCollider>().radius + targetSpace).Length <= 1)
+            if (Physics.OverlapSphere(targetPos, target.GetComponentInChildren<SphereCollider>().radius + targetSpace).Length <= 1 || i == 9999)
             {
                 GameObject _target = Instantiate(target, targetPos, Quaternion.identity, targetParent.transform);
                 _target = _target.transform.GetChild(0).gameObject;

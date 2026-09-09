@@ -6,9 +6,7 @@ public class ComboScript : MonoBehaviour
 {
     [SerializeField] TMP_Text comboTextUI;
     [SerializeField] Slider comboSlider;
-    [SerializeField] Image sliderImage;
-
-    bool isPaused;
+    [SerializeField] GameObject comboContainer;
 
     public float maxComboTimer = 1;
     float activeComboTimer;
@@ -21,26 +19,20 @@ public class ComboScript : MonoBehaviour
         EventHandeler.onTargetDeath += RefreshCombo;
     }
 
-    private void Start()
-    {
-        
-    }
-
     private void Update()
     {
-        if (!isPaused)
+        if (! UiManager.instance.isPaused)
         {
             comboSlider.value = activeComboTimer;
             activeComboTimer -= Time.deltaTime;
             if (activeComboTimer > 0) 
-            { 
-                comboTextUI.text = "Combo: " + (comboValue).ToString(); 
+            {
+                comboTextUI.text = (comboValue).ToString(); 
             }
             else 
-            { 
-                comboTextUI.text = "";
+            {
+                comboContainer.SetActive(false);
                 comboValue = 0;
-                sliderImage.enabled = false; 
             }
         }
     }
@@ -49,7 +41,7 @@ public class ComboScript : MonoBehaviour
     {
         comboValue += 1;
         activeComboTimer = maxComboTimer;
-        sliderImage.enabled = true;
+        comboContainer.SetActive(true);
     }
 
 }

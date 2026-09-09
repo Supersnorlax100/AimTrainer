@@ -8,7 +8,7 @@ public class PlayerControler : MonoBehaviour
     Ray gunRay;
     RaycastHit targetHit;
     RaycastHit targetCrit;
-    GameObject target;
+    public GameObject target;
 
     LayerMask targetHitMask;
     LayerMask targetCritMask;
@@ -28,7 +28,6 @@ public class PlayerControler : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        EventHandeler.onTargetDeath += AddScore;
 
         EventHandeler.onPlayerDeath += Die;
 
@@ -46,24 +45,16 @@ public class PlayerControler : MonoBehaviour
             {
                 target = targetHit.transform.gameObject;
 
-                //Debug.Log(target.name);
                 target.GetComponent<TargetScript>().GetHit(damage, true, critMultiplier);
             }
             else if (Physics.Raycast(gunRay, out targetHit, 99999999, targetHitMask))
             {
                 target = targetHit.transform.gameObject;
 
-                //Debug.Log(target.name);
                 target.GetComponent<TargetScript>().GetHit(damage, false, critMultiplier);
             }
 
         }
-    }
-
-    public void AddScore()
-    {
-        score += target.GetComponent<TargetScript>().scoreValue;
-        scoreText.text = "Score: " + score.ToString();
     }
 
     public void Die()
