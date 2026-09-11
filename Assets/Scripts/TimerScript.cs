@@ -2,8 +2,6 @@ using UnityEngine;
 using TMPro;
 public class TimerScript : MonoBehaviour
 {
-    [SerializeField] int minutesGiven;
-    [SerializeField] int secondsGiven;
     [SerializeField] TMP_Text timerTextUI;
 
     int seconds;
@@ -13,8 +11,8 @@ public class TimerScript : MonoBehaviour
 
     void Start()
     {
-        seconds = secondsGiven;
-        minutes = minutesGiven;
+        seconds = GameManager.instance.secondsGiven;
+        minutes = GameManager.instance.minutesGiven;
         centiseconds = 0;
         UpdateTimer();
         InvokeRepeating("UpdateTimer", 0.01f, 0.01f);

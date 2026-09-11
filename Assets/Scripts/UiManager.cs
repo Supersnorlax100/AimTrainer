@@ -1,19 +1,22 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
 {
     public static UiManager instance;
 
-    public bool isPaused;
-    public bool forceLock;
-
     [SerializeField] TMP_Text scoreText;
     [SerializeField] GameObject Timer;
-    [SerializeField] GameObject Combo;
-    [SerializeField] GameObject DeathScreen;
+
     [SerializeField] TMP_Text finalScore;
+
+    [SerializeField] GameObject DeathScreen;
     [SerializeField] GameObject pauseMenu;
+
+    [SerializeField] TMP_Text comboTextNum;
+    [SerializeField] Slider comboSlider;
+    [SerializeField] GameObject comboContainer;
 
     private void Awake()
     {
@@ -31,26 +34,23 @@ public class UiManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown("escape") && !forceLock)
+        if (Input.GetKeyDown("escape") && !GameManager.instance.forceLock)
         {
-            Pause(!isPaused);
-            PauseMenu(isPaused);
+            GameManager.instance.Invoke("Pause", 0);
+            PauseMenu(GameManager.instance.isPaused);
         }
     }
 
-    public void Pause(bool pause)
+    public void UpdateComboUI(float activeComboTimer, float comboValue)
     {
-        isPaused = pause;
-        if (isPaused)
+        if (activeComboTimer <= 0)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Time.timeScale = 0;
+            comboContainer.SetActive(false);
+            return;
         }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Time.timeScale = 1;
-        }
+        comboContainer.SetActive(true);
+        comboSlider.value = activeComboTimer;
+        comboTextNum.text = (comboValue).ToString();
     }
 
     void PauseMenu(bool enabled)
@@ -60,7 +60,7 @@ public class UiManager : MonoBehaviour
 
     public void UpdateScore()
     {
-        scoreText.text = "Score: " + PlayerControler.instance.score.ToString();
+        scoreText.text = "Score: " + (Mathf.Round(PlayerControler.instance.roomScore)).ToString();
     }
 
     public void ActivateDeathScreen()
@@ -81,7 +81,7 @@ public class UiManager : MonoBehaviour
     public void PauseMenuClose()
     {
         PauseMenu(false);
-        Pause(false);
+        GameManager.instance.Invoke("Pause", 0);
     }
 
     #endregion

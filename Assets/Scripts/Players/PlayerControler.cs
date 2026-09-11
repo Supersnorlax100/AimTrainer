@@ -7,7 +7,6 @@ public class PlayerControler : MonoBehaviour
     public static PlayerControler instance;
     Ray gunRay;
     RaycastHit targetHit;
-    RaycastHit targetCrit;
     public GameObject target;
 
     LayerMask targetHitMask;
@@ -17,6 +16,7 @@ public class PlayerControler : MonoBehaviour
     public float critMultiplier = 1.5f;
 
     public int score = 0;
+    public int roomScore = 0;
 
     private void Awake()
     {
@@ -28,8 +28,6 @@ public class PlayerControler : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        EventHandeler.onPlayerDeath += Die;
 
         targetHitMask = LayerMask.GetMask("TargetHit");
         targetCritMask = LayerMask.GetMask("TargetCrit");
@@ -56,10 +54,4 @@ public class PlayerControler : MonoBehaviour
 
         }
     }
-
-    public void Die()
-    {
-        Destroy(gameObject);
-    }
-
 }

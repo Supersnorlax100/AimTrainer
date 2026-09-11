@@ -168,10 +168,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 811767f7b3679464aaec892fe92d9a19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComboScript
-  comboTextUI: {fileID: 835302043}
-  comboSlider: {fileID: 1727236837}
-  comboContainer: {fileID: 1918631710}
-  maxComboTimer: 1
 --- !u!1 &25062525
 GameObject:
   m_ObjectHideFlags: 0
@@ -1022,7 +1018,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: initialTargetCount
-      value: 90
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6104861953093992852, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1635,8 +1631,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10cdf06b94d89504d88c8ce6210eba09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimerScript
-  minutesGiven: 2
-  secondsGiven: 0
   timerTextUI: {fileID: 649868905}
 --- !u!114 &649868905
 MonoBehaviour:
@@ -3060,6 +3054,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b49988fd5584d4a40a0c3d78860d7d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  minutesGiven: 0
+  secondsGiven: 10
+  isPaused: 0
+  forceLock: 0
+  maxComboTimer: 3
+  activeComboTimer: 0
+  comboValue: 0
 --- !u!4 &1441810463
 Transform:
   m_ObjectHideFlags: 0
@@ -4005,14 +4006,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c90675b5ec593a4aa55446ab5a82447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiManager
-  isPaused: 0
-  forceLock: 0
   scoreText: {fileID: 25062526}
   Timer: {fileID: 649868902}
-  Combo: {fileID: 835302041}
-  DeathScreen: {fileID: 1414771989}
   finalScore: {fileID: 1283908997}
+  DeathScreen: {fileID: 1414771989}
   pauseMenu: {fileID: 726860461}
+  comboTextNum: {fileID: 835302043}
+  comboSlider: {fileID: 1727236837}
+  comboContainer: {fileID: 1918631710}
 --- !u!114 &2044310788
 MonoBehaviour:
   m_ObjectHideFlags: 0

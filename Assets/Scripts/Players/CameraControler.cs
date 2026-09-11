@@ -21,7 +21,7 @@ public class CameraControler : MonoBehaviour
 
     private void Update()
     {
-        if (UiManager.instance.isPaused)
+        if (GameManager.instance.isPaused)
         {
             return;
         }
