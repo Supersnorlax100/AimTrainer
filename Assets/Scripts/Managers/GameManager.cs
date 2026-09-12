@@ -30,8 +30,8 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         EventHandeler.onPlayerDeath += PlayerDie;
-        EventHandeler.onTargetDeath += AddScore;
         EventHandeler.onTargetDeath += RefreshCombo;
+        EventHandeler.onTargetDeath += AddScore;
     }
 
     private void Update()

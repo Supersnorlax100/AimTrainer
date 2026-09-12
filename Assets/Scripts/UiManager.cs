@@ -74,6 +74,7 @@ public class UiManager : MonoBehaviour
             comboContainer.SetActive(false);
             return;
         }
+        comboSlider.maxValue = GameManager.instance.maxComboTimer;
         comboContainer.SetActive(true);
         comboSlider.value = activeComboTimer;
         comboTextNum.text = (comboValue).ToString();
