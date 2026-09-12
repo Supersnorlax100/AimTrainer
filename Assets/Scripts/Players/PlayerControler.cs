@@ -37,6 +37,10 @@ public class PlayerControler : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.instance.isPaused || GameManager.instance.forceLock)
+        {
+            return;
+        }
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             gunRay = Camera.main.ScreenPointToRay(Input.mousePosition);

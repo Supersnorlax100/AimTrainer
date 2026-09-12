@@ -8,7 +8,7 @@ public class TargetScript : MonoBehaviour
     [SerializeField] private GameObject healthBarCanvas;
     private Slider healthBar;
     public float force;
-    [SerializeField] float persentageOfForce;
+    [SerializeField] float percentageOfForce;
     private void Awake()
     {
         healthBar = healthBarCanvas.GetComponentInChildren<Slider>();
@@ -23,13 +23,6 @@ public class TargetScript : MonoBehaviour
         healthBarCanvas.transform.position = transform.position;
         
     }
-
-
-    //public void Addforce()
-    //{
-    //    gameObject.GetComponent<Rigidbody>().AddForce(gameObject.GetComponent<Rigidbody>(). * force / persentageOfForce, ForceMode.Impulse);
-    //}
-
 
     public void GetHit(float damage, bool isCrit, float critMultiplier)
     {

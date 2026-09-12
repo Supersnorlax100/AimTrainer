@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class TargetSpawnerScript : MonoBehaviour
 {
@@ -7,6 +6,7 @@ public class TargetSpawnerScript : MonoBehaviour
     [SerializeField] GameObject target;
     [SerializeField] GameObject targetParent;
     [SerializeField] int initialTargetCount;
+    [SerializeField] int attemptsToSpawn = 1000;
 
     public float targetSpace;
 
@@ -34,20 +34,19 @@ public class TargetSpawnerScript : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
- 
-
-
     public void Spawn()
     {
-        for (int i = 0; i < 10000; i++)
+        for (int i = 0; i < attemptsToSpawn; i++)
         {
-            float targetX = targetSpawnArea.transform.position.x + Random.Range(-(XtargetSpawnAreaScale / 2), XtargetSpawnAreaScale / 2);
-            float targetY = targetSpawnArea.transform.position.y + Random.Range(-(YtargetSpawnAreaScale / 2), YtargetSpawnAreaScale / 2);
-            float targetZ = targetSpawnArea.transform.position.z + 0.75f; // just added offset
+            // The + YtargetSpawnAreaScale/10 is because the target spawns a little too low than what it should so I added an offset
+            // float targetX = targetSpawnArea.transform.position.x + Random.Range(-(XtargetSpawnAreaScale / 2), XtargetSpawnAreaScale / 2);
+            // float targetY = targetSpawnArea.transform.position.y + Random.Range(-(YtargetSpawnAreaScale / 2), YtargetSpawnAreaScale / 2);
+            float targetX = targetSpawnArea.transform.position.x + Random.Range(-(XtargetSpawnAreaScale / 2) + XtargetSpawnAreaScale/25, XtargetSpawnAreaScale / 2 - XtargetSpawnAreaScale/25);
+            float targetY = targetSpawnArea.transform.position.y + Random.Range(-(YtargetSpawnAreaScale / 2) + YtargetSpawnAreaScale/10, YtargetSpawnAreaScale / 2 + YtargetSpawnAreaScale/25);
+            float targetZ = targetSpawnArea.transform.position.z + 0.3f; // just added offset
             Vector3 targetPos = new Vector3(targetX, targetY, targetZ);
 
-            if (Physics.OverlapSphere(targetPos, target.GetComponentInChildren<SphereCollider>().radius + targetSpace).Length <= 1 || i == 9999)
+            if (Physics.OverlapSphere(targetPos, target.GetComponentInChildren<SphereCollider>().radius + targetSpace).Length == 1 || i == attemptsToSpawn-1)
             {
                 GameObject _target = Instantiate(target, targetPos, Quaternion.identity, targetParent.transform);
                 _target = _target.transform.GetChild(0).gameObject;
@@ -62,6 +61,24 @@ public class TargetSpawnerScript : MonoBehaviour
             }
         }
         Debug.LogError("Could not spawn target.");
+
+    }
+
+    public void RespawnAll()
+    {
+        for (int i = 0; i < initialTargetCount; i++)
+        {
+            Spawn();
+        }
+    }
+
+    public void ClearTargets()
+    {
+        TargetScript[] allTargets = GetComponentsInChildren<TargetScript>();
+        foreach (TargetScript _target in allTargets)
+        {
+            Destroy(_target.gameObject.transform.parent.gameObject);
+        }
     }
 
 }

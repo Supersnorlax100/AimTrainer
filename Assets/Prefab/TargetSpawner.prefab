@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 2378653563376651317}
   - component: {fileID: 453875938761268581}
   m_Layer: 0
-  m_Name: SpawnCube
+  m_Name: TargetSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -133,10 +133,11 @@ MonoBehaviour:
   targetSpawnArea: {fileID: 3190852982541391575}
   target: {fileID: 2778329977594167737, guid: 622e0e121ccdf7b4990234dc2570d50e, type: 3}
   targetParent: {fileID: 4730480723742252738}
-  initialTargetCount: 10
+  initialTargetCount: 50
+  attemptsToSpawn: 1000
   targetSpace: 0.25
-  areTargetsMoving: 1
-  targetSpeed: 3
+  areTargetsMoving: 0
+  targetSpeed: 0
   targetSpeedVariability: 0
 --- !u!65 &5473678009961869306
 BoxCollider:
@@ -157,8 +158,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.001394844, y: 1, z: 10.044651}
-  m_Center: {x: -0.4993026, y: 0, z: 4.5223217}
+  m_Size: {x: 0, y: 1, z: 10}
+  m_Center: {x: -0.5, y: 0, z: 4.5}
 --- !u!65 &6691607886747222423
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -178,8 +179,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0, z: 10.401448}
-  m_Center: {x: 0, y: -0.5000002, z: 4.700721}
+  m_Size: {x: 1, y: 0, z: 10}
+  m_Center: {x: 0, y: -0.5, z: 4.5}
 --- !u!65 &2378653563376651317
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -199,8 +200,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.0026819229, z: 10.418184}
-  m_Center: {x: 0, y: 0.49865913, z: 4.709089}
+  m_Size: {x: 1, y: 0, z: 10}
+  m_Center: {x: 0, y: 0.5, z: 4.5}
 --- !u!65 &453875938761268581
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -220,8 +221,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.0017354012, y: 1, z: 10.282904}
-  m_Center: {x: 0.4991323, y: 0, z: 4.641449}
+  m_Size: {x: 0, y: 1, z: 10}
+  m_Center: {x: 0.5, y: 0, z: 4.5}
 --- !u!1 &4730480723742252738
 GameObject:
   m_ObjectHideFlags: 0
