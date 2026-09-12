@@ -146,6 +146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TargetScript
   health: 3
   scoreValue: 10
+  healthBarCanvas: {fileID: 0}
 --- !u!54 &1889895963811558186
 Rigidbody:
   m_ObjectHideFlags: 0
