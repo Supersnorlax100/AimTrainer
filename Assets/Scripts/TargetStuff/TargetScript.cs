@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class TargetScript : MonoBehaviour
 {
     public float health;
-    public int scoreValue;
+    public float scoreValue;
     [SerializeField] private GameObject healthBarCanvas;
     private Slider healthBar;
     public float force;

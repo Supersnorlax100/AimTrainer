@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public float activeComboTimer;
 
     public int comboValue;
+    public float comboMult;
+    public float comboMultDivisor = 10;
 
     private void Awake()
     {
@@ -54,7 +56,9 @@ public class GameManager : MonoBehaviour
 
     public void AddScore()
     {
-        PlayerControler.instance.roomScore += (PlayerControler.instance.target.GetComponent<TargetScript>().scoreValue) * (1 + (comboValue/10)) ;
+        comboMult = 1 + comboValue/comboMultDivisor;
+        PlayerControler.instance.roomScore += PlayerControler.instance.target.GetComponent<TargetScript>().scoreValue * comboMult;
+        Debug.Log("room score: " + PlayerControler.instance.roomScore);
     }
 
     public void PlayerDie()

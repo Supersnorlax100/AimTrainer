@@ -250,7 +250,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -3061,6 +3061,8 @@ MonoBehaviour:
   maxComboTimer: 3
   activeComboTimer: 0
   comboValue: 0
+  comboMult: 0
+  comboMultDivisor: 10
 --- !u!4 &1441810463
 Transform:
   m_ObjectHideFlags: 0
@@ -4007,12 +4009,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c90675b5ec593a4aa55446ab5a82447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiManager
-  scoreText: {fileID: 25062526}
   Timer: {fileID: 649868902}
+  scoreText: {fileID: 25062526}
   finalScore: {fileID: 1283908997}
   DeathScreen: {fileID: 1414771989}
   pauseMenu: {fileID: 726860461}
   comboTextNum: {fileID: 835302043}
+  comboTextMult: {fileID: 2053486140}
   comboSlider: {fileID: 1727236837}
   comboContainer: {fileID: 1918631710}
 --- !u!114 &2044310788

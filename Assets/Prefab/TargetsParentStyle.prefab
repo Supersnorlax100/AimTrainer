@@ -290,9 +290,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2bae1f8ffa908f4e838264ffb31134a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TargetScript
-  health: 3
+  health: 1
   scoreValue: 10
   healthBarCanvas: {fileID: 8692264305002491007}
+  force: 0
+  persentageOfForce: 0
 --- !u!54 &114914050999209406
 Rigidbody:
   m_ObjectHideFlags: 0

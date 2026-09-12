@@ -16,7 +16,7 @@ public class PlayerControler : MonoBehaviour
     public float critMultiplier = 1.5f;
 
     public int score = 0;
-    public int roomScore = 0;
+    public float roomScore = 0;
 
     private void Awake()
     {

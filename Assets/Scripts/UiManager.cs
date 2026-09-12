@@ -1,20 +1,23 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class UiManager : MonoBehaviour
 {
     public static UiManager instance;
 
-    [SerializeField] TMP_Text scoreText;
     [SerializeField] GameObject Timer;
 
+    [SerializeField] TMP_Text scoreText;
     [SerializeField] TMP_Text finalScore;
 
     [SerializeField] GameObject DeathScreen;
     [SerializeField] GameObject pauseMenu;
 
+// Combo stuff
     [SerializeField] TMP_Text comboTextNum;
+    [SerializeField] TMP_Text comboTextMult;
     [SerializeField] Slider comboSlider;
     [SerializeField] GameObject comboContainer;
 
@@ -51,6 +54,7 @@ public class UiManager : MonoBehaviour
         comboContainer.SetActive(true);
         comboSlider.value = activeComboTimer;
         comboTextNum.text = (comboValue).ToString();
+        comboTextMult.text = (Math.Round(GameManager.instance.comboMult * 10)/10).ToString() + "x";
     }
 
     void PauseMenu(bool enabled)
