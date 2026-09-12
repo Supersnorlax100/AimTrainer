@@ -2,17 +2,22 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
 
 public class UiManager : MonoBehaviour
 {
     public static UiManager instance;
+
+    public GameObject activeMenu = null;
+    [SerializeField] List<GameObject> menuOpenOrder;
 
     [SerializeField] GameObject Timer;
 
     [SerializeField] TMP_Text scoreText;
     [SerializeField] TMP_Text finalScore;
 
-    [SerializeField] GameObject DeathScreen;
+    [SerializeField] GameObject settingsMenu;
+    [SerializeField] GameObject deathScreen;
     [SerializeField] GameObject pauseMenu;
 
 // Combo stuff
@@ -37,10 +42,26 @@ public class UiManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown("escape") && !GameManager.instance.forceLock)
+        if (GameManager.instance.forceLock)
         {
-            GameManager.instance.Invoke("Pause", 0);
-            PauseMenu(GameManager.instance.isPaused);
+            return;
+        }
+
+        if (Input.GetKeyDown("escape"))
+        {
+           if (activeMenu == pauseMenu)
+            {
+                GameManager.instance.Pause();
+                MenuOpen(pauseMenu, false, true);
+                return;
+            }
+            else if (!activeMenu)
+            {
+                GameManager.instance.Pause();
+                MenuOpen(pauseMenu, true, true);
+            }
+            // if active menu that is not pause menu
+            else if (Input.GetKeyDown("escape")) Back();
         }
     }
 
@@ -57,6 +78,33 @@ public class UiManager : MonoBehaviour
         comboTextMult.text = (Math.Round(GameManager.instance.comboMult * 10)/10).ToString() + "x";
     }
 
+    public void MenuOpen(GameObject menuToOpen, bool isOpening, bool addNewMenuOpenOrder)
+    {
+        Debug.Log("menu open");
+        if (activeMenu && addNewMenuOpenOrder)
+        {
+            menuOpenOrder.Add(activeMenu);
+            activeMenu.SetActive(false);
+        } 
+        else if (activeMenu)
+        {
+            activeMenu.SetActive(false);
+        }
+
+        if (isOpening)
+        {
+            activeMenu = menuToOpen;
+        }
+        else
+        {
+            activeMenu = null;
+            menuOpenOrder = new List<GameObject>();
+            GameManager.instance.Pause();
+        }
+
+        menuToOpen.SetActive(isOpening);
+    }
+
     void PauseMenu(bool enabled)
     {
         pauseMenu.SetActive(enabled);
@@ -69,7 +117,8 @@ public class UiManager : MonoBehaviour
 
     public void ActivateDeathScreen()
     {
-        DeathScreen.SetActive(true); 
+        deathScreen.SetActive(true); 
+        activeMenu = deathScreen;
         finalScore.text = "Final " + scoreText.text;
         Timer.SetActive(false);
         scoreText.gameObject.SetActive(false);
@@ -84,8 +133,22 @@ public class UiManager : MonoBehaviour
 
     public void PauseMenuClose()
     {
-        PauseMenu(false);
-        GameManager.instance.Invoke("Pause", 0);
+        MenuOpen(pauseMenu, false, false);
+    }
+
+    public void Back()
+    {
+        Debug.Log("back");
+        // ^1 is the same as -1 except for some reason it doesn't like -1 so I used ^1
+        GameObject lastMenu = menuOpenOrder[^1];
+        Debug.Log("last menu: " + lastMenu);
+        menuOpenOrder.Remove(lastMenu);
+        MenuOpen(lastMenu, true, false);
+    }
+
+    public void SettingsMenu()
+    {
+        MenuOpen(settingsMenu, true, true);
     }
 
     #endregion
