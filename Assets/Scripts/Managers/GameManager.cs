@@ -58,7 +58,6 @@ public class GameManager : MonoBehaviour
     {
         comboMult = 1 + comboValue/comboMultDivisor;
         PlayerControler.instance.roomScore += PlayerControler.instance.target.GetComponent<TargetScript>().scoreValue * comboMult;
-        Debug.Log("room score: " + PlayerControler.instance.roomScore);
     }
 
     public void PlayerDie()
@@ -69,9 +68,9 @@ public class GameManager : MonoBehaviour
         forceLock = true;
     }
 
-    public void Pause()
+    public void Pause(bool isPausing)
     {
-        isPaused = !isPaused;
+        isPaused = isPausing;
         if (isPaused)
         {
             Cursor.lockState = CursorLockMode.None;

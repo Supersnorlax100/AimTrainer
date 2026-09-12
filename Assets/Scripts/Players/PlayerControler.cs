@@ -3,14 +3,16 @@ using TMPro;
 
 public class PlayerControler : MonoBehaviour
 {
-    [SerializeField] TMP_Text scoreText;
     public static PlayerControler instance;
+
+    // Shooting
+    public GameObject target;
     Ray gunRay;
     RaycastHit targetHit;
-    public GameObject target;
-
     LayerMask targetHitMask;
     LayerMask targetCritMask;
+
+    public float mouseSens;
 
     public float damage = 1;
     public float critMultiplier = 1.5f;

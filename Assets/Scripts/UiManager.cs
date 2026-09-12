@@ -20,11 +20,15 @@ public class UiManager : MonoBehaviour
     [SerializeField] GameObject deathScreen;
     [SerializeField] GameObject pauseMenu;
 
-// Combo stuff
+    // Combo stuff
     [SerializeField] TMP_Text comboTextNum;
     [SerializeField] TMP_Text comboTextMult;
     [SerializeField] Slider comboSlider;
     [SerializeField] GameObject comboContainer;
+
+    // Settings
+    [SerializeField] Slider mouseSensSlider;
+    [SerializeField] TMP_Text mouseSensSliderText;
 
     private void Awake()
     {
@@ -47,17 +51,15 @@ public class UiManager : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown("escape"))
+        if (Input.GetKeyDown("escape") || Input.GetKeyDown("tab"))
         {
            if (activeMenu == pauseMenu)
             {
-                GameManager.instance.Pause();
                 MenuOpen(pauseMenu, false, true);
                 return;
             }
             else if (!activeMenu)
             {
-                GameManager.instance.Pause();
                 MenuOpen(pauseMenu, true, true);
             }
             // if active menu that is not pause menu
@@ -80,7 +82,7 @@ public class UiManager : MonoBehaviour
 
     public void MenuOpen(GameObject menuToOpen, bool isOpening, bool addNewMenuOpenOrder)
     {
-        Debug.Log("menu open");
+        GameManager.instance.Pause(true);
         if (activeMenu && addNewMenuOpenOrder)
         {
             menuOpenOrder.Add(activeMenu);
@@ -99,7 +101,7 @@ public class UiManager : MonoBehaviour
         {
             activeMenu = null;
             menuOpenOrder = new List<GameObject>();
-            GameManager.instance.Pause();
+            GameManager.instance.Pause(false);
         }
 
         menuToOpen.SetActive(isOpening);
@@ -125,6 +127,18 @@ public class UiManager : MonoBehaviour
        
     }
 
+    public void SettingsUpdate()
+    {
+        // Round Values
+        mouseSensSlider.value = Mathf.Round(mouseSensSlider.value * 100) / 100;
+
+        // Change values
+        PlayerControler.instance.mouseSens = mouseSensSlider.value;
+
+        // Update Visual
+        mouseSensSliderText.text = mouseSensSlider.value.ToString();
+    }
+
     #region Button Functions
     public void MainMenuOpen()
     {
@@ -138,10 +152,8 @@ public class UiManager : MonoBehaviour
 
     public void Back()
     {
-        Debug.Log("back");
         // ^1 is the same as -1 except for some reason it doesn't like -1 so I used ^1
         GameObject lastMenu = menuOpenOrder[^1];
-        Debug.Log("last menu: " + lastMenu);
         menuOpenOrder.Remove(lastMenu);
         MenuOpen(lastMenu, true, false);
     }

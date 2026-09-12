@@ -5,12 +5,12 @@ public class CameraControler : MonoBehaviour
     private GameObject player;
 
     [Header("Camera Variables")]
-    public float mouseSpeed;
+
     [SerializeField] private float cameraBounds;
     [SerializeField] private Vector3 offset;
 
-    private float xRotation;
-    private float yRotation = 180;
+    float xRotation;
+    float yRotation = 180;
     Transform rootTransform;
 
     private void Start()
@@ -25,8 +25,8 @@ public class CameraControler : MonoBehaviour
         {
             return;
         }
-        float horizontal = Input.GetAxis("Mouse X") * mouseSpeed;
-        float vertical = Input.GetAxis("Mouse Y") * -mouseSpeed;
+        float horizontal = Input.GetAxis("Mouse X") * PlayerControler.instance.mouseSens;
+        float vertical = Input.GetAxis("Mouse Y") * -PlayerControler.instance.mouseSens;
 
         yRotation += horizontal;
         xRotation += vertical;
