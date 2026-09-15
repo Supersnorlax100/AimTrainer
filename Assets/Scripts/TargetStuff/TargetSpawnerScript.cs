@@ -39,15 +39,32 @@ public class TargetSpawnerScript : MonoBehaviour
         for (int i = 0; i < attemptsToSpawn; i++)
         {
             // The + YtargetSpawnAreaScale/10 is because the target spawns a little too low than what it should so I added an offset
-            // float targetX = targetSpawnArea.transform.position.x + Random.Range(-(XtargetSpawnAreaScale / 2), XtargetSpawnAreaScale / 2);
-            // float targetY = targetSpawnArea.transform.position.y + Random.Range(-(YtargetSpawnAreaScale / 2), YtargetSpawnAreaScale / 2);
-            float targetX = targetSpawnArea.transform.position.x + Random.Range(-(XtargetSpawnAreaScale / 2) + XtargetSpawnAreaScale/25, XtargetSpawnAreaScale / 2 - XtargetSpawnAreaScale/25);
-            float targetY = targetSpawnArea.transform.position.y + Random.Range(-(YtargetSpawnAreaScale / 2) + YtargetSpawnAreaScale/10, YtargetSpawnAreaScale / 2 + YtargetSpawnAreaScale/25);
+            // The sqrt is to out to if a square was rotated 45 
+            float targetX = targetSpawnArea.transform.position.x + Random.Range(-(XtargetSpawnAreaScale/2 * Mathf.Sqrt(2)) + XtargetSpawnAreaScale/25, XtargetSpawnAreaScale/2 * Mathf.Sqrt(2) - XtargetSpawnAreaScale/25);
+            float targetY = targetSpawnArea.transform.position.y + Random.Range(-(YtargetSpawnAreaScale/2 * Mathf.Sqrt(2)) + YtargetSpawnAreaScale/10, YtargetSpawnAreaScale/2 * Mathf.Sqrt(2) + YtargetSpawnAreaScale/25);
             float targetZ = targetSpawnArea.transform.position.z + 0.3f; // just added offset
             Vector3 targetPos = new Vector3(targetX, targetY, targetZ);
+            Collider[] targetCollisions;
+            Collider[] spawnableCollisions;
+            targetCollisions = Physics.OverlapSphere(targetPos, target.GetComponentInChildren<SphereCollider>().radius + targetSpace, layerMask: 6);
+            spawnableCollisions = Physics.OverlapSphere(targetPos, 0.001f, layerMask: 9);
 
-            if (Physics.OverlapSphere(targetPos, target.GetComponentInChildren<SphereCollider>().radius + targetSpace).Length == 1 || i == attemptsToSpawn-1)
+            // number after layer is equal to the layer of TargetSpawnable
+            //if ((targetCollisions.Length == 1 && (spawnableCollisions.Length == 0 || spawnableCollisions[0].gameObject.layer == 9)) || i == attemptsToSpawn - 1)
+
+            //if ((targetCollisions[0].gameObject.layer == 9) || i == attemptsToSpawn - 1)
+            if ((targetCollisions.Length == 0 && spawnableCollisions.Length == 1))
             {
+                //Debug.Log("layer: " + targetCollisions[0].gameObject.layer + " obj: " + targetCollisions[0].gameObject.name + " length: " + targetCollisions.Length);
+                //Debug.Log("all collisions: " );
+                //Debug.Log(" length: " + targetCollisions.Length);
+                Debug.Log("colliders: ");
+                foreach (Collider coll in spawnableCollisions) { Debug.Log("spawn coll: " + coll.name); }
+                foreach (Collider coll in targetCollisions) { Debug.Log("targ coll: " + coll.name); }
+                if (i == attemptsToSpawn-1)
+                {
+                    Debug.Log("force");
+                }
                 GameObject _target = Instantiate(target, targetPos, Quaternion.identity, targetParent.transform);
                 _target = _target.transform.GetChild(0).gameObject;
                 if (areTargetsMoving)
@@ -60,7 +77,7 @@ public class TargetSpawnerScript : MonoBehaviour
                 return;
             }
         }
-        Debug.LogError("Could not spawn target.");
+        //Debug.LogError("Could not spawn target.");
 
     }
 

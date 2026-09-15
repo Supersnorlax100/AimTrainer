@@ -1141,20 +1141,12 @@ PrefabInstance:
       value: TargetSpawner
       objectReference: {fileID: 0}
     - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
-      propertyPath: targetSpeed
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: attemptsToSpawn
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 6104861953093992852, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: m_LocalScale.z
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
-      propertyPath: areTargetsMoving
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
-      propertyPath: initialTargetCount
-      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 6104861953093992852, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1194,6 +1186,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6104861953093992852, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213427078862267861, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213427078862267861, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213427078862267861, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6213427078862267861, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
