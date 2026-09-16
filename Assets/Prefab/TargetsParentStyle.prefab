@@ -175,7 +175,7 @@ Transform:
   m_GameObject: {fileID: 2778329977594167737}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.25697, y: 4.05953, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -213,7 +213,7 @@ Transform:
   m_GameObject: {fileID: 3894689320437146684}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.000289917, y: -0.39209986, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -294,7 +294,7 @@ MonoBehaviour:
   scoreValue: 10
   healthBarCanvas: {fileID: 8692264305002491007}
   force: 0
-  persentageOfForce: 0
+  percentageOfForce: 0
 --- !u!54 &114914050999209406
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -669,7 +669,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.000289917, y: -0.3365999}
+  m_AnchoredPosition: {x: 0, y: 0.05}
   m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2532150402503461295
