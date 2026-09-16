@@ -1165,6 +1165,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5355865981914919785, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5355865981914919785, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
@@ -1262,7 +1266,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6213427078862267861, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6213427078862267861, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -5634,7 +5638,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!135 &1789852851
 SphereCollider:
   m_ObjectHideFlags: 0
