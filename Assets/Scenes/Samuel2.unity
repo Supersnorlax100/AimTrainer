@@ -4147,7 +4147,7 @@ MonoBehaviour:
   initialEnemyCount: 1
   attemptsToSpawn: 2000
   enemySpace: 5
-  areEnemysMoving: 0
+  areEnemysMoving: 1
   enemySpeed: 3
   enemySpeedVariability: 0
 --- !u!1 &1283908995

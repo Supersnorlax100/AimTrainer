@@ -44,7 +44,7 @@ public class TargetSpawnerScript : MonoBehaviour
             // The + YtargetSpawnAreaScale/10 is because the target spawns a little too low than what it should so I added an offset
             // The sqrt is to out to if a square was rotated 45             
             float targetX = targetSpawnArea.transform.position.x + Random.Range(-(XtargetSpawnAreaScale / 2) + XtargetSpawnAreaScale / 25, XtargetSpawnAreaScale / 2 - XtargetSpawnAreaScale / 25);
-            float targetY = targetSpawnArea.transform.position.y + Random.Range(-(YtargetSpawnAreaScale / 2) + YtargetSpawnAreaScale / 10, YtargetSpawnAreaScale / 2 + YtargetSpawnAreaScale / 25);
+            float targetY = targetSpawnArea.transform.position.y + Random.Range(-(YtargetSpawnAreaScale / 2), YtargetSpawnAreaScale / 2);
             float targetZ = target.transform.GetChild(0).gameObject.GetComponent<SphereCollider>().radius + 0.1f;
             Vector3 targetPos = new Vector3(targetX, targetY, targetZ);
 
@@ -87,7 +87,6 @@ public class TargetSpawnerScript : MonoBehaviour
                             Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
                             float _targetSpeed = targetSpeed + Random.Range(-(targetSpeedVariability), targetSpeedVariability);
                             _target.GetComponent<Rigidbody>().AddForce(_targetDirection.normalized * _targetSpeed, ForceMode.Impulse);
-                            _target.GetComponent<TargetScript>().force = _targetSpeed;
                         }
                         return;
                     }
