@@ -1140,6 +1140,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TargetSpawner
       objectReference: {fileID: 0}
+    - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: attemptsToSpawn
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3499332521282399213, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6104861953093992852, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
