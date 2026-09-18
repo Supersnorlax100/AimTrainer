@@ -20,7 +20,7 @@ public class TargetScript : MonoBehaviour
         healthBarCanvas.transform.position = transform.position;
     }
 
-    public void GetHit(float damage, bool isCrit, float critMultiplier)
+    public virtual void GetHit(float damage, bool isCrit, float critMultiplier)
     {
         if (canGetHit)
         {
