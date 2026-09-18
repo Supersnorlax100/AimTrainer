@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6104861953093992852}
   - component: {fileID: 3434196348848202477}
   m_Layer: 0
-  m_Name: TargetSpawner
+  m_Name: CircleTargetSpawner 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
