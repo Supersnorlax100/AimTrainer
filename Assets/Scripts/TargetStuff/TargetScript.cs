@@ -5,36 +5,45 @@ public class TargetScript : MonoBehaviour
 {
     public float health;
     public float scoreValue;
-    [SerializeField] private GameObject healthBarCanvas;
+    public GameObject healthBarCanvas;
     private Slider healthBar;
-    public float force;
-    [SerializeField] float percentageOfForce;
-    private void Awake()
+    public bool canGetHit = true;
+    public bool isEnemy = false;
+
+    private void Start()
     {
-        healthBar = healthBarCanvas.GetComponentInChildren<Slider>();
-        healthBar.maxValue = health;
-        healthBar.value = health;
-        healthBar.gameObject.SetActive(false);
-        
+        SetHealthBar();
     }
 
     private void Update()
     {
         healthBarCanvas.transform.position = transform.position;
-        
     }
 
     public void GetHit(float damage, bool isCrit, float critMultiplier)
     {
-        if (isCrit) { health -= damage * critMultiplier; }
-        else { health -= damage; }
-           
-        UpdateHealthBar();
-        
-        if (health <= 0)
+        if (canGetHit)
         {
-            EventHandeler.onTargetDeath?.Invoke();
-            Destroy(gameObject.transform.parent.gameObject);
+            if (isCrit) { health -= damage * critMultiplier; }
+            else { health -= damage; }
+           
+            UpdateHealthBar();
+        
+            if (health <= 0)
+            {
+                if (isEnemy)
+                {
+                    Destroy(gameObject.transform.parent.gameObject);
+                    EventHandeler.onEnemyDeath?.Invoke();
+                    return;
+                }
+                Destroy(gameObject.transform.parent.gameObject);
+                EventHandeler.onTargetDeath?.Invoke();
+            }
+        }
+        else
+        {
+            return;
         }
     }
 
@@ -45,5 +54,13 @@ public class TargetScript : MonoBehaviour
             healthBar.gameObject.SetActive(true);
         }
         healthBar.value = health;
+    }
+
+    public void SetHealthBar()
+    {
+        healthBar = healthBarCanvas.GetComponentInChildren<Slider>();
+        healthBar.maxValue = health;
+        healthBar.value = health;
+        healthBar.gameObject.SetActive(false);
     }
 }

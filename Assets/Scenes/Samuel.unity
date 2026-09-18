@@ -696,7 +696,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d113a91e1ab9744d86b2a034b7a6e6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraControler
-  mouseSpeed: 2.5
   cameraBounds: 80
   offset: {x: 0, y: 0.5, z: 0.15}
 --- !u!4 &637482292
@@ -939,7 +938,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d113a91e1ab9744d86b2a034b7a6e6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraControler
-  mouseSpeed: 2.5
   cameraBounds: 45
   offset: {x: 0, y: 0.5, z: 0.15}
 --- !u!114 &1123919491
@@ -1242,11 +1240,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c90675b5ec593a4aa55446ab5a82447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiManager
-  scoreText: {fileID: 569831652}
+  activeMenu: {fileID: 0}
+  menuOpenOrder: []
   Timer: {fileID: 1929736378}
-  Combo: {fileID: 0}
-  DeathScreen: {fileID: 1262842680}
+  scoreText: {fileID: 569831652}
   finalScore: {fileID: 136880239}
+  settingsMenu: {fileID: 0}
+  deathScreen: {fileID: 0}
+  pauseMenu: {fileID: 0}
+  comboTextNum: {fileID: 0}
+  comboTextMult: {fileID: 0}
+  comboSlider: {fileID: 0}
+  comboContainer: {fileID: 0}
+  mouseSensSlider: {fileID: 0}
+  mouseSensSliderText: {fileID: 0}
 --- !u!1001 &1428843576
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1354,19 +1361,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6104861953093992852, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.85211736
       objectReference: {fileID: 0}
     - target: {fileID: 6104861953093992852, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6104861953093992852, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6104861953093992852, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0.52335066
       objectReference: {fileID: 0}
     - target: {fileID: 6104861953093992852, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1378,7 +1385,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6104861953093992852, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: -63.115
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1514,8 +1521,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10cdf06b94d89504d88c8ce6210eba09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimerScript
-  minutesGiven: 0
-  secondsGiven: 30
   timerTextUI: {fileID: 1929736381}
 --- !u!114 &1929736381
 MonoBehaviour:

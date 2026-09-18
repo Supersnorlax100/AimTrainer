@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
         EventHandeler.onPlayerDeath += PlayerDie;
         EventHandeler.onTargetDeath += RefreshCombo;
         EventHandeler.onTargetDeath += AddScore;
+        EventHandeler.onEnemyDeath += AddScore;
+        EventHandeler.onEnemyDeath += RefreshCombo;
     }
 
     private void Update()

@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class UiManager : MonoBehaviour
 {
@@ -42,6 +43,7 @@ public class UiManager : MonoBehaviour
         }
         EventHandeler.onPlayerDeath += ActivateDeathScreen;
         EventHandeler.onTargetDeath += UpdateScore;
+        EventHandeler.onEnemyDeath += UpdateScore;
     }
 
     private void Update()
@@ -54,16 +56,16 @@ public class UiManager : MonoBehaviour
         if (Input.GetKeyDown("escape") || Input.GetKeyDown("tab"))
         {
            if (activeMenu == pauseMenu)
-            {
+           {
                 MenuOpen(pauseMenu, false, true);
                 return;
-            }
-            else if (!activeMenu)
-            {
+           }
+           else if (!activeMenu)
+           {
                 MenuOpen(pauseMenu, true, true);
-            }
-            // if active menu that is not pause menu
-            else if (Input.GetKeyDown("escape")) Back();
+           }
+            // if active menu that is not pause menu 
+           else if (Input.GetKeyDown("escape")) Back();
         }
     }
 
@@ -81,7 +83,7 @@ public class UiManager : MonoBehaviour
         comboTextMult.text = (Math.Round(GameManager.instance.comboMult * 10)/10).ToString() + "x";
     }
 
-    public void MenuOpen(GameObject menuToOpen, bool isOpening, bool addNewMenuOpenOrder)
+    public void MenuOpen(GameObject menu, bool isOpening, bool addNewMenuOpenOrder)
     {
         GameManager.instance.Pause(true);
         if (activeMenu && addNewMenuOpenOrder)
@@ -96,7 +98,7 @@ public class UiManager : MonoBehaviour
 
         if (isOpening)
         {
-            activeMenu = menuToOpen;
+            activeMenu = menu;
         }
         else
         {
@@ -105,7 +107,7 @@ public class UiManager : MonoBehaviour
             GameManager.instance.Pause(false);
         }
 
-        menuToOpen.SetActive(isOpening);
+        menu.SetActive(isOpening);
     }
 
     void PauseMenu(bool enabled)
@@ -154,9 +156,8 @@ public class UiManager : MonoBehaviour
     public void Back()
     {
         // ^1 is the same as -1 except for some reason it doesn't like -1 so I used ^1
-        GameObject lastMenu = menuOpenOrder[^1];
-        menuOpenOrder.Remove(lastMenu);
-        MenuOpen(lastMenu, true, false);
+        MenuOpen(menuOpenOrder[^1], true, false);
+        menuOpenOrder.Remove(menuOpenOrder[^1]);
     }
 
     public void SettingsMenu()
