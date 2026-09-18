@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public int targetCount;
+
     public int minutesGiven;
     public int secondsGiven;
 
@@ -18,6 +20,14 @@ public class GameManager : MonoBehaviour
     public int comboValue;
     public float comboMult;
     public float comboMultDivisor = 10;
+
+    public enum StageType
+    {
+        CLICKING,
+        SWITCHING,
+        TRACKING
+    }
+    public StageType stageType;
 
     private void Awake()
     {

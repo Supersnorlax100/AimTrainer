@@ -5017,6 +5017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b49988fd5584d4a40a0c3d78860d7d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  targetCount: 0
   minutesGiven: 10
   secondsGiven: 10
   isPaused: 0
@@ -5026,6 +5027,7 @@ MonoBehaviour:
   comboValue: 0
   comboMult: 0
   comboMultDivisor: 10
+  stageType: 2
 --- !u!4 &1441810463
 Transform:
   m_ObjectHideFlags: 0

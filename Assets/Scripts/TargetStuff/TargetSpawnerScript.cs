@@ -8,6 +8,8 @@ public class TargetSpawnerScript : MonoBehaviour
     [SerializeField] int initialTargetCount;
     [SerializeField] int attemptsToSpawn = 1000;
 
+    GameObject spawnedTarget;
+
     public Collider[] targetCollisions;
     public Collider[] spawnableCollisions;
 
@@ -20,6 +22,14 @@ public class TargetSpawnerScript : MonoBehaviour
     public float targetSpeed = 1;
     public float targetSpeedVariability = 0;
 
+    public enum StageType
+    {
+        CLICKING,
+        SWITCHING,
+        TRACKING
+    }
+    public StageType stageType;
+
     private void Awake()
     {
         EventHandeler.onTargetDeath += Spawn;
@@ -28,6 +38,9 @@ public class TargetSpawnerScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Debug.Log("game man enum: " + GameManager.instance.stageType);
+        stageType = (StageType)GameManager.instance.stageType; 
+        Debug.Log("sta enum: " +  stageType);
         XtargetSpawnAreaScale = targetSpawnArea.transform.localScale.x;
         YtargetSpawnAreaScale = targetSpawnArea.transform.localScale.y;
 
@@ -39,6 +52,12 @@ public class TargetSpawnerScript : MonoBehaviour
 
     public void Spawn()
     {
+        if (GameManager.instance.targetCount > 0 && stageType == StageType.TRACKING)
+        {
+            Debug.Log("return");
+            return;
+        }
+        GameManager.instance.targetCount++; ;
         for (int i = 0; i < attemptsToSpawn; i++)
         {
             // The + YtargetSpawnAreaScale/10 is because the target spawns a little too low than what it should so I added an offset
@@ -64,6 +83,7 @@ public class TargetSpawnerScript : MonoBehaviour
             {
                 GameObject _target = Instantiate(target, targetPos, Quaternion.identity, targetParent.transform);
                 _target = _target.transform.GetChild(0).gameObject;
+                _target.GetComponent<TargetScript>().targetType = (TargetScript.TargetType)stageType;
                 if (areTargetsMoving)
                 {
                     Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
@@ -73,6 +93,7 @@ public class TargetSpawnerScript : MonoBehaviour
                 }
                 return;
             }
+            // force spawn
             if (i == attemptsToSpawn - 1)
             {
                 Debug.Log("force");
@@ -82,6 +103,7 @@ public class TargetSpawnerScript : MonoBehaviour
                     {
                         GameObject _target = Instantiate(target, targetPos, Quaternion.identity, targetParent.transform);
                         _target = _target.transform.GetChild(0).gameObject;
+                        _target.GetComponent<TargetScript>().targetType = (TargetScript.TargetType)stageType;
                         if (areTargetsMoving)
                         {
                             Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
@@ -91,7 +113,7 @@ public class TargetSpawnerScript : MonoBehaviour
                         return;
                     }
                }
-                Debug.LogError("Could not spawn target.");
+            Debug.LogError("Could not spawn target.");
             }
         }
     }

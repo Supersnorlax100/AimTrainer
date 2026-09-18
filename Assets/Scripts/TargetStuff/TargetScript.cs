@@ -10,6 +10,14 @@ public class TargetScript : MonoBehaviour
     public bool canGetHit = true;
     public bool isEnemy = false;
 
+    public enum TargetType
+    {
+        CLICKING,
+        SWITCHING,
+        TRACKING
+    }
+    public TargetType targetType;
+
     private void Start()
     {
         SetHealthBar();
@@ -24,20 +32,30 @@ public class TargetScript : MonoBehaviour
     {
         if (canGetHit)
         {
-            if (isCrit) { health -= damage * critMultiplier; }
-            else { health -= damage; }
-           
             UpdateHealthBar();
-        
-            if (health <= 0)
+            if (targetType == TargetType.CLICKING || targetType == TargetType.SWITCHING)
             {
-                if (isEnemy)
+                Debug.Log("click or switch");
+                if (isCrit) { health -= damage * critMultiplier; }
+                else { health -= damage; }
+
+                if (health <= 0)
                 {
+                    if (isEnemy)
+                    {
+                        Destroy(gameObject.transform.parent.gameObject);
+                        GameManager.instance.targetCount--;
+                        EventHandeler.onEnemyDeath?.Invoke();
+                        return;
+                    }
                     Destroy(gameObject.transform.parent.gameObject);
-                    EventHandeler.onEnemyDeath?.Invoke();
-                    return;
+                    GameManager.instance.targetCount--;
+                    EventHandeler.onTargetDeath?.Invoke();
                 }
-                Destroy(gameObject.transform.parent.gameObject);
+            }
+            else
+            {
+                Debug.Log("track");
                 EventHandeler.onTargetDeath?.Invoke();
             }
         }
