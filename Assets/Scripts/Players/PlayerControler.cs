@@ -47,16 +47,26 @@ public class PlayerControler : MonoBehaviour
             Debug.DrawRay(gunRay.origin, gunRay.direction * 100f, Color.red, 1f);
             if (Physics.Raycast(gunRay, out targetHit, 9999999, targetCritMask))
             {
-                target = targetHit.transform.gameObject;
+                target = targetHit.collider.transform.gameObject;
+                if (target.GetComponent<Rigidbody>() == null)
+                {
+                    target = target.transform.parent.gameObject;
+                }
 
                 target.GetComponent<TargetScript>().GetHit(damage, true, critMultiplier);
             }
             else if (Physics.Raycast(gunRay, out targetHit, 99999999, targetHitMask))
             {
-                target = targetHit.transform.gameObject;
-
+                target = targetHit.collider.transform.gameObject;
+                if(target.GetComponent<Rigidbody>() == null)
+                {
+                    target = target.transform.parent.gameObject;
+                }
                 target.GetComponent<TargetScript>().GetHit(damage, false, critMultiplier);
             }
+
+
+
 
         }
     }

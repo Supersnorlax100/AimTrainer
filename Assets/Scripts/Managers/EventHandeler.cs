@@ -8,4 +8,6 @@ public class EventHandeler : MonoBehaviour
     public delegate void OnPlayerDeath();
     public static OnPlayerDeath onPlayerDeath;
 
+    public delegate void OnEnemyDeath();
+    public static OnEnemyDeath onEnemyDeath;
 }
