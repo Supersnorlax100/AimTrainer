@@ -46,6 +46,15 @@ public class GameManager : MonoBehaviour
         EventHandeler.onEnemyDeath += RefreshCombo;
     }
 
+    void Start()
+    {
+        if (stageType == StageType.TRACKING)
+        {
+            maxComboTimer = maxComboTimer/10;
+            comboMultDivisor = comboMultDivisor*10;
+        }
+    }
+
     private void Update()
     {
         // Handle Combo Logic
@@ -69,7 +78,14 @@ public class GameManager : MonoBehaviour
     public void AddScore()
     {
         comboMult = 1 + comboValue/comboMultDivisor;
-        PlayerControler.instance.roomScore += PlayerControler.instance.target.GetComponent<TargetScript>().scoreValue * comboMult;
+        if (stageType == StageType.TRACKING)
+        {
+            PlayerControler.instance.roomScore += PlayerControler.instance.target.GetComponent<TargetScript>().scoreValue / 10 * comboMult;
+        }
+        else
+        {
+            PlayerControler.instance.roomScore += PlayerControler.instance.target.GetComponent<TargetScript>().scoreValue * comboMult;
+        }
     }
 
     public void PlayerDie()

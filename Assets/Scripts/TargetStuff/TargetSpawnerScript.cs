@@ -21,6 +21,8 @@ public class TargetSpawnerScript : MonoBehaviour
     public bool areTargetsMoving;
     public float targetSpeed = 1;
     public float targetSpeedVariability = 0;
+    public float targetHealth;
+    public float targetScore;
 
     public enum StageType
     {
@@ -38,12 +40,13 @@ public class TargetSpawnerScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log("game man enum: " + GameManager.instance.stageType);
         stageType = (StageType)GameManager.instance.stageType; 
-        Debug.Log("sta enum: " +  stageType);
         XtargetSpawnAreaScale = targetSpawnArea.transform.localScale.x;
         YtargetSpawnAreaScale = targetSpawnArea.transform.localScale.y;
 
+        target.transform.GetChild(0).gameObject.GetComponent<TargetScript>().health = targetHealth;
+        target.transform.GetChild(0).gameObject.GetComponent<TargetScript>().scoreValue = targetScore;
+        
         for (int i = 0; i < initialTargetCount; i++)
         {
             Spawn();
@@ -54,7 +57,6 @@ public class TargetSpawnerScript : MonoBehaviour
     {
         if (GameManager.instance.targetCount > 0 && stageType == StageType.TRACKING)
         {
-            Debug.Log("return");
             return;
         }
         GameManager.instance.targetCount++; ;

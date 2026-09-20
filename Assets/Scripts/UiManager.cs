@@ -79,8 +79,8 @@ public class UiManager : MonoBehaviour
         comboSlider.maxValue = GameManager.instance.maxComboTimer;
         comboContainer.SetActive(true);
         comboSlider.value = activeComboTimer;
-        comboTextNum.text = (comboValue).ToString();
-        comboTextMult.text = (Math.Round(GameManager.instance.comboMult * 10)/10).ToString() + "x";
+        comboTextNum.text = comboValue.ToString();
+        comboTextMult.text = (Math.Round(GameManager.instance.comboMult * 100)/100).ToString() + "x";
     }
 
     public void MenuOpen(GameObject menu, bool isOpening, bool addNewMenuOpenOrder)

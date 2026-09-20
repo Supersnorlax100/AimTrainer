@@ -1136,13 +1136,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1803779459703905638, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1803779459703905638, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3190852982541391575, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_Name
       value: TargetSpawner
       objectReference: {fileID: 0}
     - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: targetScore
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: targetSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: targetHealth
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: attemptsToSpawn
       value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: areTargetsMoving
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: initialTargetCount
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3499332521282399213, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: m_Layer
@@ -5027,7 +5055,7 @@ MonoBehaviour:
   comboValue: 0
   comboMult: 0
   comboMultDivisor: 10
-  stageType: 2
+  stageType: 1
 --- !u!4 &1441810463
 Transform:
   m_ObjectHideFlags: 0
@@ -5132,7 +5160,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 881005774614822855, guid: c99b697677046134ba66edef32dde040, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 881005774614822855, guid: c99b697677046134ba66edef32dde040, type: 3}
       propertyPath: m_LocalPosition.z
