@@ -2062,7 +2062,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 34db74db7fc7ff645af657713772d32f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3792,7 +3792,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 34db74db7fc7ff645af657713772d32f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4089,7 +4089,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 34db74db7fc7ff645af657713772d32f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4141,13 +4141,19 @@ MonoBehaviour:
   spawnArea: {fileID: 1142766303}
   enemies:
   - {fileID: 7855493583777466659, guid: f7f46dbc0f8382648bb36dfe0357e877, type: 3}
+  - {fileID: 3332953422200138115, guid: 35742c63f8416934db8922802aa97378, type: 3}
   enemynames:
-  - flower
+  - Flower
+  - Blinky
   enemyParent: {fileID: 617926887}
   initialEnemyCount: 1
   attemptsToSpawn: 2000
+  targetCollisions: []
+  spawnableCollisions: []
+  enemyName: Flower
   enemySpace: 5
-  areEnemysMoving: 1
+  maxHealth: 4
+  areEnemysMoving: 0
   enemySpeed: 3
   enemySpeedVariability: 0
 --- !u!1 &1283908995
@@ -5535,7 +5541,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 34db74db7fc7ff645af657713772d32f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

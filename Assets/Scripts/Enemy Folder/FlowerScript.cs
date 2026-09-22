@@ -27,7 +27,6 @@ public class FlowerScript : TargetScript
         SetHealthBar();
         petalRotateVariationMax = Random.Range(1,petalRotateVariationMax +1);
         petalRotateVariationCurrent = petalRotateVariationMax;
-        Debug.Log(petalRotateVariationMax);
     }
     private void Update()
     {
@@ -35,7 +34,7 @@ public class FlowerScript : TargetScript
         healthBarCanvas.transform.position = gameObject.transform.position;
         if (!canGetHit)
         {
-            GetComponent<Renderer>().material.color = Color.blue;
+            GetComponent<Renderer>().material.color = Color.lightBlue;
         }
         else
         {
