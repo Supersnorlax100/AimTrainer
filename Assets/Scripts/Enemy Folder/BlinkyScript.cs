@@ -1,16 +1,16 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BlinkyScript : TargetScript
 {
 
-    Vector3[] blinkPositions;
-    Vector3 pos;
+    public List<Vector3> blinkPositions;
     int curentIndex = 0;
 
     private void Start()
     {
         SetHealthBar();
-        pos = blinkPositions[0];
+        transform.position = blinkPositions[curentIndex];
         curentIndex = 0;
     }
 
@@ -18,6 +18,6 @@ public class BlinkyScript : TargetScript
     {
         base.GetHit(damage, isCrit, critMultiplier);
         curentIndex++;
-        pos = blinkPositions[curentIndex];
+        transform.position = blinkPositions[curentIndex];
     }
 }

@@ -33,8 +33,9 @@ public class TargetScript : MonoBehaviour
             {
                 if (isEnemy)
                 {
-                    Destroy(gameObject.transform.parent.gameObject);
                     EventHandeler.onEnemyDeath?.Invoke();
+                    Destroy(gameObject.transform.parent.gameObject);
+                    //EventHandeler.onEnemyDeath?.Invoke();
                     return;
                 }
                 Destroy(gameObject.transform.parent.gameObject);

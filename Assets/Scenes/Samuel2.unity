@@ -4141,14 +4141,19 @@ MonoBehaviour:
   spawnArea: {fileID: 1142766303}
   enemies:
   - {fileID: 7855493583777466659, guid: f7f46dbc0f8382648bb36dfe0357e877, type: 3}
-  enemynames: []
+  - {fileID: 3332953422200138115, guid: 35742c63f8416934db8922802aa97378, type: 3}
+  enemynames:
+  - Flower
+  - Blinky
   enemyParent: {fileID: 617926887}
   initialEnemyCount: 1
   attemptsToSpawn: 2000
   targetCollisions: []
   spawnableCollisions: []
+  enemyName: Flower
   enemySpace: 5
-  areEnemysMoving: 1
+  maxHealth: 4
+  areEnemysMoving: 0
   enemySpeed: 3
   enemySpeedVariability: 0
 --- !u!1 &1283908995
