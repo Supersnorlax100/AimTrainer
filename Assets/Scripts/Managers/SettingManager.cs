@@ -1,16 +1,37 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SettingManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static SettingManager Instance;
+
+    [SerializeField] Slider mouseSensSlider;
+    [SerializeField] TMP_Text mouseSensSliderText;
+
+    void Awake()
     {
-        
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SettingsUpdate()
     {
-        
+        // Round Values
+        mouseSensSlider.value = Mathf.Round(mouseSensSlider.value * 100) / 100;
+
+        // Change values
+        PlayerControler.instance.mouseSens = mouseSensSlider.value;
+
+        // Update Visual
+        mouseSensSliderText.text = mouseSensSlider.value.ToString();
     }
+
 }

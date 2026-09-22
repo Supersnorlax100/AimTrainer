@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public class UiManager : MonoBehaviour
 {
@@ -27,9 +26,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] Slider comboSlider;
     [SerializeField] GameObject comboContainer;
 
-    // Settings
-    [SerializeField] Slider mouseSensSlider;
-    [SerializeField] TMP_Text mouseSensSliderText;
+
 
     private void Awake()
     {
@@ -128,18 +125,6 @@ public class UiManager : MonoBehaviour
         Timer.SetActive(false);
         scoreText.gameObject.SetActive(false);
        
-    }
-
-    public void SettingsUpdate()
-    {
-        // Round Values
-        mouseSensSlider.value = Mathf.Round(mouseSensSlider.value * 100) / 100;
-
-        // Change values
-        PlayerControler.instance.mouseSens = mouseSensSlider.value;
-
-        // Update Visual
-        mouseSensSliderText.text = mouseSensSlider.value.ToString();
     }
 
     #region Button Functions

@@ -1,9 +1,9 @@
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
-using static UnityEngine.GraphicsBuffer;
 
 public class GameManager : MonoBehaviour
 {
+    public TargetType stageType;
+
     public static GameManager instance;
 
     public int targetCount;
@@ -21,19 +21,12 @@ public class GameManager : MonoBehaviour
     public float comboMult;
     public float comboMultDivisor = 10;
 
-    public enum StageType
-    {
-        CLICKING,
-        SWITCHING,
-        TRACKING
-    }
-    public StageType stageType;
-
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -48,7 +41,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        if (stageType == StageType.TRACKING)
+        if (stageType == TargetType.TRACKING)
         {
             maxComboTimer = maxComboTimer/10;
             comboMultDivisor = comboMultDivisor*10;
@@ -65,7 +58,7 @@ public class GameManager : MonoBehaviour
             {
                 comboValue = 0;
             }
-            UiManager.instance.UpdateComboUI(activeComboTimer, comboValue);
+            UiManager.instance?.UpdateComboUI(activeComboTimer, comboValue);
         }
     }
 
@@ -78,7 +71,7 @@ public class GameManager : MonoBehaviour
     public void AddScore()
     {
         comboMult = 1 + comboValue/comboMultDivisor;
-        if (stageType == StageType.TRACKING)
+        if (stageType == TargetType.TRACKING)
         {
             PlayerControler.instance.roomScore += PlayerControler.instance.target.GetComponent<TargetScript>().scoreValue / 10 * comboMult;
         }

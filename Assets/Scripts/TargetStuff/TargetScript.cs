@@ -1,22 +1,22 @@
 using UnityEngine;
 using UnityEngine.UI;
+public enum TargetType
+{
+    CLICKING,
+    SWITCHING,
+    TRACKING
+}
 
 public class TargetScript : MonoBehaviour
 {
+    public TargetType targetType;
+
     public float health;
     public float scoreValue;
     public GameObject healthBarCanvas;
     private Slider healthBar;
     public bool canGetHit = true;
     public bool isEnemy = false;
-
-    public enum TargetType
-    {
-        CLICKING,
-        SWITCHING,
-        TRACKING
-    }
-    public TargetType targetType;
 
     private void Start()
     {
@@ -35,7 +35,6 @@ public class TargetScript : MonoBehaviour
             UpdateHealthBar();
             if (targetType == TargetType.CLICKING || targetType == TargetType.SWITCHING)
             {
-                Debug.Log("click or switch");
                 if (isCrit) { health -= damage * critMultiplier; }
                 else { health -= damage; }
 
@@ -55,7 +54,6 @@ public class TargetScript : MonoBehaviour
             }
             else
             {
-                Debug.Log("track");
                 EventHandeler.onTargetDeath?.Invoke();
             }
         }

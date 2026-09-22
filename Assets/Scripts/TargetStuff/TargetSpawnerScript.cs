@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class TargetSpawnerScript : MonoBehaviour
 {
+    public TargetType stageType;
+
     [SerializeField] GameObject targetSpawnArea;
     [SerializeField] GameObject target;
     [SerializeField] GameObject targetParent;
@@ -21,16 +23,9 @@ public class TargetSpawnerScript : MonoBehaviour
     public bool areTargetsMoving;
     public float targetSpeed = 1;
     public float targetSpeedVariability = 0;
-    public float targetHealth;
+    public float targetMaxHealth;
     public float targetScore;
 
-    public enum StageType
-    {
-        CLICKING,
-        SWITCHING,
-        TRACKING
-    }
-    public StageType stageType;
 
     private void Awake()
     {
@@ -40,11 +35,11 @@ public class TargetSpawnerScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        stageType = (StageType)GameManager.instance.stageType; 
+        stageType = GameManager.instance.stageType; 
         XtargetSpawnAreaScale = targetSpawnArea.transform.localScale.x;
         YtargetSpawnAreaScale = targetSpawnArea.transform.localScale.y;
 
-        target.transform.GetChild(0).gameObject.GetComponent<TargetScript>().health = targetHealth;
+        target.transform.GetChild(0).gameObject.GetComponent<TargetScript>().health = targetMaxHealth;
         target.transform.GetChild(0).gameObject.GetComponent<TargetScript>().scoreValue = targetScore;
         
         for (int i = 0; i < initialTargetCount; i++)
@@ -55,7 +50,7 @@ public class TargetSpawnerScript : MonoBehaviour
 
     public void Spawn()
     {
-        if (GameManager.instance.targetCount > 0 && stageType == StageType.TRACKING)
+        if (GameManager.instance.targetCount > 0 && stageType == TargetType.TRACKING)
         {
             return;
         }
@@ -85,7 +80,7 @@ public class TargetSpawnerScript : MonoBehaviour
             {
                 GameObject _target = Instantiate(target, targetPos, Quaternion.identity, targetParent.transform);
                 _target = _target.transform.GetChild(0).gameObject;
-                _target.GetComponent<TargetScript>().targetType = (TargetScript.TargetType)stageType;
+                _target.GetComponent<TargetScript>().targetType = stageType;
                 if (areTargetsMoving)
                 {
                     Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
@@ -105,7 +100,7 @@ public class TargetSpawnerScript : MonoBehaviour
                     {
                         GameObject _target = Instantiate(target, targetPos, Quaternion.identity, targetParent.transform);
                         _target = _target.transform.GetChild(0).gameObject;
-                        _target.GetComponent<TargetScript>().targetType = (TargetScript.TargetType)stageType;
+                        _target.GetComponent<TargetScript>().targetType = stageType;
                         if (areTargetsMoving)
                         {
                             Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);

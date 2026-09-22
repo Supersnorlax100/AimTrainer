@@ -51,7 +51,7 @@ public class PlayerControler : MonoBehaviour
             curShotTimer -= Time.deltaTime;
         }
 
-        if (GameManager.instance.stageType == GameManager.StageType.CLICKING)
+        if (GameManager.instance.stageType == TargetType.CLICKING)
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -73,7 +73,6 @@ public class PlayerControler : MonoBehaviour
 
     void Shoot()
     {
-        Debug.Log("Shoot");
         gunRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         Debug.DrawRay(gunRay.origin, gunRay.direction * 100f, Color.red, 1f);
         if (Physics.Raycast(gunRay, out targetHit, 9999999, targetCritMask))
