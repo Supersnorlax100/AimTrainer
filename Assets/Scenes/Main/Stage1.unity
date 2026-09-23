@@ -1165,8 +1165,12 @@ PrefabInstance:
       value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
-      propertyPath: areTargetsMoving
+      propertyPath: targetMaxHealth
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
+      propertyPath: areTargetsMoving
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3434196348848202477, guid: d45b987c948a92c498075e52dca4600d, type: 3}
       propertyPath: initialTargetCount

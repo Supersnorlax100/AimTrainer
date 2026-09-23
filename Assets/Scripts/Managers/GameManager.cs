@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -65,7 +66,7 @@ public class GameManager : MonoBehaviour
     public void RefreshCombo()
     {
         comboValue += 1;
-        activeComboTimer = maxComboTimer;
+        activeComboTimer = Mathf.Clamp(maxComboTimer / Mathf.Clamp(comboValue * 0.05f, 1, 10), 0.4f, 5);
     }
 
     public void AddScore()
