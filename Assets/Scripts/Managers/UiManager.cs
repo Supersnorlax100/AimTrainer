@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class UiManager : MonoBehaviour
 {
@@ -130,7 +131,7 @@ public class UiManager : MonoBehaviour
     #region Button Functions
     public void MainMenuOpen()
     {
-        SceneManager.Instance.MainMenuOpen();
+        //#TODO
     }
 
     public void PauseMenuClose()
