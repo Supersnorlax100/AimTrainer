@@ -34,10 +34,15 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         EventHandeler.onPlayerDeath += PlayerDie;
+
         EventHandeler.onTargetDeath += RefreshCombo;
         EventHandeler.onTargetDeath += AddScore;
+
         EventHandeler.onEnemyDeath += AddScore;
         EventHandeler.onEnemyDeath += RefreshCombo;
+
+        EventHandeler.onPetalDeath += AddScore;
+        EventHandeler.onPetalDeath += RefreshCombo;
     }
 
     void Start()
@@ -74,11 +79,11 @@ public class GameManager : MonoBehaviour
         comboMult = 1 + comboValue/comboMultDivisor;
         if (stageType == TargetType.TRACKING)
         {
-            PlayerControler.instance.roomScore += PlayerControler.instance.target.GetComponent<TargetScript>().scoreValue / 10 * comboMult;
+            PlayerControler.instance.roomScore += PlayerControler.instance.target.GetComponent<EnemyScript>().scoreValue / 10 * comboMult;
         }
         else
         {
-            PlayerControler.instance.roomScore += PlayerControler.instance.target.GetComponent<TargetScript>().scoreValue * comboMult;
+            PlayerControler.instance.roomScore += PlayerControler.instance.target.GetComponent<EnemyScript>().scoreValue * comboMult;
         }
     }
 

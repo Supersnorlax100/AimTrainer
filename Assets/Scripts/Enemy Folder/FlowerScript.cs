@@ -2,7 +2,7 @@ using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class FlowerScript : TargetScript
+public class FlowerScript : EnemyScript
 {
     [SerializeField] GameObject petal;
     [SerializeField] int petalCount;
@@ -17,14 +17,14 @@ public class FlowerScript : TargetScript
     int petalRotateVariationCurrent;
     private void Awake()
     {
-        EventHandeler.onTargetDeath += CheckPetals;
+        EventHandeler.onPetalDeath += CheckPetals;
         
     }
     private void Start()
     {
         spawnPetals();
-        canGetHit = false;
         SetHealthBar();
+        canGetHit = false;
         petalRotateVariationMax = Random.Range(1,petalRotateVariationMax +1);
         petalRotateVariationCurrent = petalRotateVariationMax;
     }

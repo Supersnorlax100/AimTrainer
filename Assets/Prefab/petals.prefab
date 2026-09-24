@@ -161,8 +161,8 @@ GameObject:
   - component: {fileID: 5016343394400734197}
   - component: {fileID: 6343793395786625091}
   - component: {fileID: 2624604888298889958}
-  - component: {fileID: 8043465984052253357}
   - component: {fileID: 7831110249071987781}
+  - component: {fileID: 5846274354695984592}
   m_Layer: 6
   m_Name: Target
   m_TagString: Untagged
@@ -244,23 +244,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8043465984052253357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3240139046360233125}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2bae1f8ffa908f4e838264ffb31134a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TargetScript
-  health: 1
-  scoreValue: 10
-  healthBarCanvas: {fileID: 8549859748705345562}
-  canGetHit: 1
-  isEnemy: 0
 --- !u!135 &7831110249071987781
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -282,6 +265,23 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5846274354695984592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3240139046360233125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c872ea294cd20a4a9f87141dcb5997e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PetalScript
+  targetType: 0
+  health: 1
+  scoreValue: 10
+  healthBarCanvas: {fileID: 8549859748705345562}
+  canGetHit: 1
 --- !u!1 &3577302483299786334
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,7 +350,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 523}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1169066259381575203
@@ -476,7 +476,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.3}
   m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &3461362688544093165

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlinkyScript : TargetScript
+public class BlinkyScript : EnemyScript
 {
 
     public List<Vector3> blinkPositions;
