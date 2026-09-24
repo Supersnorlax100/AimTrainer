@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class PlayerControler : MonoBehaviour
+public class PractiesPlayerControler : MonoBehaviour
 {
-    public static PlayerControler instance;
+    public static PractiesPlayerControler instance;
 
     // Shooting
     public GameObject target;
@@ -45,7 +45,7 @@ public class PlayerControler : MonoBehaviour
         {
             return;
         }
-        else if (! GameManager.instance.isPaused)
+        else if (!GameManager.instance.isPaused)
         {
             curShotTimer -= Time.deltaTime;
         }
@@ -77,21 +77,21 @@ public class PlayerControler : MonoBehaviour
         if (Physics.Raycast(gunRay, out targetHit, 9999999, targetCritMask))
         {
             target = targetHit.collider.transform.gameObject;
-            if (target.GetComponent<EnemyScript>() == null)
+            if (target.GetComponent<Rigidbody>() == null)
             {
                 target = target.transform.parent.gameObject;
             }
 
-            target.GetComponent<EnemyScript>().GetHit(damage, true, critMultiplier);
+            target.GetComponent<TargetScript>().GetHit(damage, true, critMultiplier);
         }
         else if (Physics.Raycast(gunRay, out targetHit, 99999999, targetHitMask))
         {
             target = targetHit.collider.transform.gameObject;
-            if(target.GetComponent<EnemyScript>() == null)
+            if (target.GetComponent<Rigidbody>() == null)
             {
                 target = target.transform.parent.gameObject;
             }
-            target.GetComponent<EnemyScript>().GetHit(damage, false, critMultiplier);
+            target.GetComponent<TargetScript>().GetHit(damage, false, critMultiplier);
         }
     }
 }

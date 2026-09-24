@@ -1,13 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
-public enum TargetType
-{
-    CLICKING,
-    SWITCHING,
-    TRACKING
-}
 
-public class TargetScript : MonoBehaviour
+public class EnemyScript : MonoBehaviour
 {
     public TargetType targetType;
 
@@ -15,22 +9,14 @@ public class TargetScript : MonoBehaviour
     public float scoreValue;
     public GameObject healthBarCanvas;
     private Slider healthBar;
+    public bool canGetHit = true;
 
-    private void Start()
-    {
-        SetHealthBar();
-    }
-
-    private void Update()
-    {
-        healthBarCanvas.transform.position = transform.position;
-    }
 
     public virtual void GetHit(float damage, bool isCrit, float critMultiplier)
     {
-        UpdateHealthBar();
-        if (targetType == TargetType.CLICKING || targetType == TargetType.SWITCHING)
+        if (canGetHit)
         {
+            UpdateHealthBar();
             if (isCrit) { health -= damage * critMultiplier; }
             else { health -= damage; }
 
@@ -38,16 +24,16 @@ public class TargetScript : MonoBehaviour
             {
                 Destroy(gameObject.transform.parent.gameObject);
                 GameManager.instance.targetCount--;
-                EventHandeler.onTargetDeath?.Invoke();
+                EventHandeler.onEnemyDeath?.Invoke();
             }
         }
         else
         {
-                EventHandeler.onTargetDeath?.Invoke();
+            return;
         }
     }
 
-    void UpdateHealthBar()
+    public void UpdateHealthBar()
     {
         if (!healthBar.gameObject.activeSelf)
         {

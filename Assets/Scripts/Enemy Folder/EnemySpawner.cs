@@ -152,8 +152,8 @@ public class EnemySpawner : MonoBehaviour
 
     public void Clearenemys()
     {
-        TargetScript[] allenemys = GetComponentsInChildren<TargetScript>();
-        foreach (TargetScript _enemy in allenemys)
+        EnemyScript[] allenemys = GetComponentsInChildren<EnemyScript>();
+        foreach (EnemyScript _enemy in allenemys)
         {
             Destroy(_enemy.gameObject.transform.parent.gameObject);
         }
