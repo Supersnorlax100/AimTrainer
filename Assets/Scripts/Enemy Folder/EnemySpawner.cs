@@ -65,12 +65,23 @@ public class EnemySpawner : MonoBehaviour
         // The sqrt is to out to if a square was rotated 45             
         float targetX = spawnArea.transform.position.x + Random.Range(-(XspawnAreaScale / 2) + XspawnAreaScale / 25, XspawnAreaScale / 2 - XspawnAreaScale / 25);
         float targetY = spawnArea.transform.position.y + Random.Range(-(YspawnAreaScale / 2), YspawnAreaScale / 2);
-        float targetZ = enemy.transform.GetChild(0).gameObject.GetComponent<SphereCollider>().radius + 0.1f;
+        float targetZ = spawnArea.transform.position.z + enemy.transform.GetChild(0).gameObject.GetComponent<SphereCollider>().radius - .2f;
         Vector3 targetPos = new Vector3(targetX, targetY, targetZ);
 
         // Test a collider in given area
         targetCollisions = Physics.OverlapSphere(targetPos, enemy.GetComponentInChildren<SphereCollider>().radius + enemySpace);
         spawnableCollisions = Physics.OverlapSphere(targetPos, 0.1f);
+
+        Debug.Log("atemted spawn pos: " + targetPos);
+        Debug.Log("length: " + targetCollisions.Length);
+        Debug.Log("target coll: ");
+        foreach (Collider coll in targetCollisions) { Debug.Log("targ coll: " + coll.name); }
+        Debug.Log("spawnable collisions length: " + spawnableCollisions.Length);
+        Debug.Log("spawnable collisions layer: " + spawnableCollisions[0].gameObject.layer);
+        Debug.Log("colliders: ");
+
+        foreach (Collider coll in spawnableCollisions) { Debug.Log("spawn coll: " + coll.name); }
+
         if (spawnableCollisions.Length == 1 && spawnableCollisions[0].gameObject.layer == 9 && targetCollisions.Length > 0 && (targetCollisions[0].gameObject.layer != 6 || targetCollisions[1].gameObject.layer != 6))
         {
             return targetPos;
@@ -88,6 +99,7 @@ public class EnemySpawner : MonoBehaviour
             {
                 GameObject _target = Instantiate(enemy, targetPos, Quaternion.identity, enemyParent.transform);
                 _target = _target.transform.GetChild(0).gameObject;
+
                 if(enemy.name == "Blinky")
                 {
                     GeneratBlinkyPoses(_target);
