@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum RoomType
 {
@@ -29,6 +29,9 @@ public class MapManager : MonoBehaviour
     [SerializeField] private int floorsNumber;
     [SerializeField] private int RoomsPerFloor;
 
+    Vector2 currentRoom = new Vector2(1,-1);
+    List<Vector2> pastRooms = new List<Vector2>(1);
+
     public Sprite[] sprites;
     [SerializeField] GameObject mapNode;
 
@@ -46,23 +49,26 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
+        pastRooms.Add(currentRoom);
         MakeMap();
         foreach (GameObject mapNode in nodeMap.Values)
         {
             Debug.Log(mapNode.name);
         }
+        NodeAvailability();
     }
 
     public void GoToRoom(Vector2 room)
     {
-        Debug.Log("go to room: " + room);
-        Debug.Log(roomMap[room]);
         SceneManager.LoadScene((int)roomMap[room]);
+        currentRoom = room;
+        pastRooms.Add(room);
+        NodeAvailability();
     }
 
     private void MakeMap()
     {
-
+        // Floor Dict
         for(int floor = 0; floor < floorsNumber; floor++)
         {
             for (int room = 0; room < RoomsPerFloor; room++)
@@ -75,7 +81,7 @@ public class MapManager : MonoBehaviour
                 GenerateMapNode(roomPosition);
             }
         }
-
+        // Home Node
         Vector2 _roomPosition = new Vector2(1, -1);
         RoomType roomType = RoomType.HOME;
         roomMap.Add(_roomPosition, roomType);
@@ -84,7 +90,7 @@ public class MapManager : MonoBehaviour
         _roomPosition = new Vector2(1, floorsNumber);
         roomType = RoomType.BOSS;
         roomMap.Add(_roomPosition, roomType);
-        GenerateMapNode(_roomPosition);
+        GenerateMapNode(_roomPosition);  
     }
 
     void GenerateMapNode(Vector2 roomPosition)
@@ -99,13 +105,45 @@ public class MapManager : MonoBehaviour
     public Sprite GetRoomSprite(Vector2 roomPosition)
     {
         Sprite roomSprite = sprites[(int)roomMap[roomPosition]];
-        //string roomName = roomMap[roomPosition].ToString().ToLower();
-        //Sprite roomSprite = roomSprites.Find(sprite => sprite.name.ToLower() == roomName);
         return roomSprite;
     }
 
     public void NodeAvailability()
     {
-        //#TODO: Determine which buttons are available
+        // Clears all nodes
+        foreach (Vector2 roomPos in nodeMap.Keys)
+        {
+            nodeMap[roomPos].GetComponent<Button>().enabled = false;
+            foreach (Vector2 pastPos in pastRooms)
+            {
+                Debug.Log("pastPos: " + pastPos);
+                if (roomPos == pastPos)
+                {
+                    nodeMap[roomPos].GetComponent<Image>().color = Color.white;
+                    break;
+                }
+                else
+                {
+                    nodeMap[roomPos].GetComponent<Image>().color = Color.black;
+                }
+            }
+        }
+
+        // Checks for available nodes
+        if (nodeMap.ContainsKey(new Vector2(currentRoom.x, currentRoom.y + 1)))
+        {
+            nodeMap[new Vector2(currentRoom.x, currentRoom.y + 1)].GetComponent<Button>().enabled = true;
+            nodeMap[new Vector2(currentRoom.x, currentRoom.y + 1)].GetComponent<Image>().color = Color.white;
+        }
+        if (nodeMap.ContainsKey(new Vector2(currentRoom.x - 1, currentRoom.y + 1)))
+        {
+            nodeMap[new Vector2(currentRoom.x - 1, currentRoom.y + 1)].GetComponent<Button>().enabled = true;
+            nodeMap[new Vector2(currentRoom.x - 1, currentRoom.y + 1)].GetComponent<Image>().color = Color.white;
+        }
+        if (nodeMap.ContainsKey(new Vector2(currentRoom.x + 1, currentRoom.y + 1)))
+        {
+            nodeMap[new Vector2(currentRoom.x + 1, currentRoom.y + 1)].GetComponent<Button>().enabled = true;
+            nodeMap[new Vector2(currentRoom.x + 1, currentRoom.y + 1)].GetComponent<Image>().color = Color.white;
+        }
     }
 }
