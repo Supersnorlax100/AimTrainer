@@ -45,6 +45,8 @@ public class MapManager : MonoBehaviour
     public int shopOdds;
     public int eventOdds;
 
+    GameObject[] activeCanvases;
+
     private void Awake()
     {
         if (instance == null)
@@ -56,6 +58,7 @@ public class MapManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Start()
@@ -72,7 +75,7 @@ public class MapManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            map.SetActive(!map.activeSelf);
+            MapVisibility(!map.activeSelf);
         }
         if (Input.GetKeyDown("r"))
         {
@@ -219,5 +222,20 @@ public class MapManager : MonoBehaviour
         canShopSpawn = false;
 
         MakeMap();
+    }
+
+    // Runs automatically whenever any scene finishes loading
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        activeCanvases = GameObject.FindGameObjectsWithTag("Canvas");
+    }
+
+    void MapVisibility(bool isVisible)
+    {
+        foreach (GameObject canvas in activeCanvases)
+        {
+            canvas.SetActive(!isVisible);
+        }
+        map.SetActive(isVisible);
     }
 }
