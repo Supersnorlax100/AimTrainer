@@ -130,12 +130,10 @@ public class MapManager : MonoBehaviour
     {
         if (roomPos.y >= Mathf.Floor(floorsNumber/2))
         {
-            Debug.Log("more 2: " + roomPos);
             canMiniBossSpawn = true;
         }
         if (roomPos.y >= Mathf.Floor(floorsNumber/3))
         {
-            Debug.Log("more 3: " + roomPos);
             canShopSpawn = true;
             canEventSpawn = true;
         }
