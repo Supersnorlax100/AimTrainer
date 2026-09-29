@@ -987,7 +987,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb25cd442df80744a08df002f5633e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  shopUpgrade: {fileID: 0}
+  shopUpgrade: {fileID: 5694827128877360338, guid: 234bca82fe931c6498884391c6b9c2a5, type: 3}
+  shopUpgradeContainer: {fileID: 1117603962}
   scoreText: {fileID: 1074824083}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
