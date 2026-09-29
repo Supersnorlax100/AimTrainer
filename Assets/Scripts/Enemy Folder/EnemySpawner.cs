@@ -4,25 +4,30 @@ using static UnityEngine.GraphicsBuffer;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] GameObject spawnArea;
-    [SerializeField] GameObject[] enemies;
-    [SerializeField] string[] enemynames;
-    Dictionary<string, GameObject> enemyDictionary = new Dictionary<string, GameObject>();
-    GameObject enemy;
-    [SerializeField] GameObject enemyParent;
-    [SerializeField] int initialEnemyCount;
-    [SerializeField] int attemptsToSpawn = 1000;
 
+
+
+    [SerializeField] GameObject[] trakingEnemies;
+    [SerializeField] GameObject[] switchingEnemies;
+    [SerializeField] GameObject[] clikingEnemies;
+    GameObject enemy;
+
+    float randomHealth;
+
+
+    [SerializeField] int attemptsToSpawn = 1000;
     public Collider[] targetCollisions;
     public Collider[] spawnableCollisions;
-
-    [SerializeField] string enemyName;
-
     public float enemySpace;
 
+    [SerializeField] GameObject spawnArea;
+    [SerializeField] GameObject enemyParent;
     private float XspawnAreaScale;
     private float YspawnAreaScale;
 
+    [SerializeField] int initialEnemyCount;
+    int numberOfSpawnedEnemys;
+    [SerializeField] int maxEnemyCount;
     public bool areEnemysMoving;
     public float enemySpeed = 1;
     public float enemySpeedVariability = 0;
@@ -37,28 +42,59 @@ public class EnemySpawner : MonoBehaviour
     {
         XspawnAreaScale = spawnArea.transform.localScale.x;
         YspawnAreaScale = spawnArea.transform.localScale.y;
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            enemyDictionary.Add(enemynames[i], enemies[i]);
-        }
-        if (enemyName != null && enemyDictionary.ContainsKey(enemyName))
-        {
-            enemy = enemyDictionary[enemyName];
-        }
-        else
-        {
-            string randomName = enemynames[Random.Range(0, enemynames.Length)];
-            enemy = enemyDictionary[randomName];
-        }
-        enemies = null;
-        enemynames = null;
 
+        generateRandomHealth();
+        PickEnemy();
         for (int i = 0; i < initialEnemyCount; i++)
         {
             Spawn();
         }
     }
 
+    private void RandomEnemeyChoice(TargetType enemyType)
+    {
+        switch (enemyType)
+        {
+            case TargetType.CLICKING:
+                enemy = clikingEnemies[Random.Range(0, clikingEnemies.Length)];
+                break;
+            case TargetType.SWITCHING:
+                enemy = switchingEnemies[Random.Range(0, switchingEnemies.Length)];
+                break;
+            case TargetType.TRACKING:
+                enemy = trakingEnemies[Random.Range(0, trakingEnemies.Length)];
+                break;
+            default:
+                Debug.LogError("Error in RandomEnemeyChoice: Invalid enemy type.");
+                break;
+        }
+    }
+
+
+
+    public void PickEnemy()
+    {
+        switch(GameManager.instance.stageType)
+        {
+            case TargetType.CLICKING:
+                enemy = clikingEnemies[Random.Range(0, clikingEnemies.Length)];
+                break;
+            case TargetType.SWITCHING:
+                enemy = switchingEnemies[Random.Range(0, switchingEnemies.Length)];
+                break;
+            case TargetType.TRACKING:
+                enemy = trakingEnemies[Random.Range(0, trakingEnemies.Length)];
+                break;
+            default:
+                Debug.LogError("Error in PickEnemyPool: Invalid stage type.");
+                break;
+        }
+    }
+    private void generateRandomHealth()
+    {
+        float maxHealth = Mathf.Pow(1.3f, MapManager.instance.curentFloor) *5;
+        randomHealth = Random.Range(1,maxHealth);
+    }
     public Vector3 GenerateSpawnLocation()
     {
         // The + YtargetSpawnAreaScale/10 is because the target spawns a little too low than what it should so I added an offset
@@ -72,13 +108,15 @@ public class EnemySpawner : MonoBehaviour
         targetCollisions = Physics.OverlapSphere(targetPos, enemy.GetComponentInChildren<SphereCollider>().radius + enemySpace);
         spawnableCollisions = Physics.OverlapSphere(targetPos, 0.1f);
 
-        Debug.Log("atemted spawn pos: " + targetPos);
-        Debug.Log("length: " + targetCollisions.Length);
-        Debug.Log("target coll: ");
-        foreach (Collider coll in targetCollisions) { Debug.Log("targ coll: " + coll.name); }
-        Debug.Log("spawnable collisions length: " + spawnableCollisions.Length);
-        Debug.Log("spawnable collisions layer: " + spawnableCollisions[0].gameObject.layer);
-        Debug.Log("colliders: ");
+        #region Debugs
+        //Debug.Log("atemted spawn pos: " + targetPos);
+        //Debug.Log("length: " + targetCollisions.Length);
+        //Debug.Log("target coll: ");
+        //foreach (Collider coll in targetCollisions) { Debug.Log("targ coll: " + coll.name); }
+        //Debug.Log("spawnable collisions length: " + spawnableCollisions.Length);
+        //Debug.Log("spawnable collisions layer: " + spawnableCollisions[0].gameObject.layer);
+        //Debug.Log("colliders: ");
+        #endregion
 
         foreach (Collider coll in spawnableCollisions) { Debug.Log("spawn coll: " + coll.name); }
 
@@ -99,8 +137,8 @@ public class EnemySpawner : MonoBehaviour
             {
                 GameObject _target = Instantiate(enemy, targetPos, Quaternion.identity, enemyParent.transform);
                 _target = _target.transform.GetChild(0).gameObject;
-
-                if(enemy.name == "Blinky")
+                _target.GetComponent<EnemyScript>().health = randomHealth;
+                if (enemy.name == "Blinky")
                 {
                     GeneratBlinkyPoses(_target);
                 }
@@ -162,7 +200,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    public void Clearenemys()
+    public void ClearEnemys()
     {
         EnemyScript[] allenemys = GetComponentsInChildren<EnemyScript>();
         foreach (EnemyScript _enemy in allenemys)

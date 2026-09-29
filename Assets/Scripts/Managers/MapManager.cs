@@ -24,6 +24,8 @@ public class MapManager : MonoBehaviour
     public GameObject[] roomObjs;
     public Sprite[] sprites;
 
+    public int curentFloor; //Temp Destroy me i am called in EnemySpawner
+
     private void Awake()
     {
         if (instance == null)

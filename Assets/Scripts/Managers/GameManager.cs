@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
     public float comboMult;
     public float comboMultDivisor = 10;
 
+
+    public RoomType runType;
+
     private void Awake()
     {
         if (instance == null)
