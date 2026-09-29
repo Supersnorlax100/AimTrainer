@@ -13,8 +13,8 @@ public class GameManager : MonoBehaviour
     public int minutesGiven;
     public int secondsGiven;
 
-    public bool isPaused;
-    public bool forceLock;
+    public bool isPaused {get; private set;}
+    public bool forceLock { get; private set; }
 
     public float maxComboTimer = 1;
     public float activeComboTimer;
@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
 
     float roomScore;
     public int score;
+
+    public RoomType runType;
 
     private void Awake()
     {

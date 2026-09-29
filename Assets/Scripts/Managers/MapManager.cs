@@ -47,6 +47,8 @@ public class MapManager : MonoBehaviour
 
     GameObject[] activeCanvases;
 
+    public int curentFloor; //Temp Destroy me i am called in EnemySpawner
+
     private void Awake()
     {
         if (instance == null)
