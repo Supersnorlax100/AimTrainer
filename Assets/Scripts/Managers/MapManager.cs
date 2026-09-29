@@ -65,10 +65,6 @@ public class MapManager : MonoBehaviour
     {
         pastRooms.Add(currentRoom);
         MakeMap();
-        foreach (GameObject mapNode in nodeMap.Values)
-        {
-            Debug.Log(mapNode.name);
-        }
     }
 
     void Update()
@@ -147,18 +143,6 @@ public class MapManager : MonoBehaviour
             return RoomType.EVENT;
         else
             return RoomType.COMBAT;
-
-        // switch (roomPos.y)
-        // {
-        //     case 0:
-        //         return RoomType.COMBAT;
-        //     case 1:
-        //         return RoomType.SHOP;
-        //     case 2:
-        //         return RoomType.MINIBOSS;
-        //     default:
-        //         return RoomType.HOME;
-        // }
     }
 
     public Sprite GetRoomSprite(Vector2 roomPosition)

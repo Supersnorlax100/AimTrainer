@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,9 @@ public class GameManager : MonoBehaviour
     public float comboMult;
     public float comboMultDivisor = 10;
 
+    float roomScore;
+    public int score;
+
     private void Awake()
     {
         if (instance == null)
@@ -43,6 +47,8 @@ public class GameManager : MonoBehaviour
 
         EventHandeler.onPetalDeath += AddScore;
         EventHandeler.onPetalDeath += RefreshCombo;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void Start()
@@ -68,6 +74,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        EventHandeler.updateUI?.Invoke();
+    }
+
     public void RefreshCombo()
     {
         comboValue += 1;
@@ -79,11 +90,11 @@ public class GameManager : MonoBehaviour
         comboMult = 1 + comboValue/comboMultDivisor;
         if (stageType == TargetType.TRACKING)
         {
-            PlayerControler.instance.roomScore += PlayerControler.instance.target.GetComponent<EnemyScript>().scoreValue / 10 * comboMult;
+            roomScore += PlayerControler.instance.target.GetComponent<EnemyScript>().scoreValue / 10 * comboMult;
         }
         else
         {
-            PlayerControler.instance.roomScore += PlayerControler.instance.target.GetComponent<EnemyScript>().scoreValue * comboMult;
+            roomScore += PlayerControler.instance.target.GetComponent<EnemyScript>().scoreValue * comboMult;
         }
     }
 

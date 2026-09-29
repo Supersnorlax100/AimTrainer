@@ -3,14 +3,10 @@ using UnityEngine;
 
 public class ShopManager : MonoBehaviour
 {
-    static ShopManager instance;
+    public static ShopManager instance;
 
     // public ScriptableObject[] attatchmentPool;
-    [SerializeField] Attatchment attatchment;
-
-    [SerializeField] TMP_Text priceText;
-    [SerializeField] TMP_Text attatchmentName;
-    [SerializeField] TMP_Text statValue;
+    [SerializeField] TMP_Text scoreText;
 
     void Awake()
     {
@@ -22,12 +18,22 @@ public class ShopManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        EventHandeler.updateUI += UpdateUI;
     }
 
-    void Start()
+    void UpdateUI()
     {
-        attatchmentName.text = attatchment.name;
-        statValue.text = attatchment.damage.ToString();
-        priceText.text = attatchment.price.ToString();
+        scoreText.text = "Score: " + GameManager.instance.score.ToString();
+    }
+
+    public void Purchase(Attatchment attatchment)
+    {
+        if (GameManager.instance.score < (int)Mathf.Round(attatchment.price))
+        {
+            Debug.Log("brokie");
+            return;
+        }
+        GameManager.instance.score -= (int)Mathf.Round(attatchment.price);
+        EventHandeler.updateUI?.Invoke();
     }
 }
