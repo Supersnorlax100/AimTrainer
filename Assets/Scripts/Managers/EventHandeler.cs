@@ -14,6 +14,6 @@ public class EventHandeler : MonoBehaviour
     public delegate void OnPetalDeath();
     public static OnPetalDeath onPetalDeath;
 
-    public delegate void UpdateUI();
-    public static UpdateUI updateUI;
+    public delegate void Purchase();
+    public static Purchase purchase;
 }

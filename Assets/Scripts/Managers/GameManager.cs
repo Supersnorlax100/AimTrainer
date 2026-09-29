@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance;
 
+    public Attatchment[] attatchmentPool;
+
     public int targetCount;
 
     public int minutesGiven;
@@ -50,7 +52,6 @@ public class GameManager : MonoBehaviour
         EventHandeler.onPetalDeath += AddScore;
         EventHandeler.onPetalDeath += RefreshCombo;
 
-        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void Start()
@@ -74,11 +75,6 @@ public class GameManager : MonoBehaviour
             }
             UiManager.instance?.UpdateComboUI(activeComboTimer, comboValue);
         }
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        EventHandeler.updateUI?.Invoke();
     }
 
     public void RefreshCombo()

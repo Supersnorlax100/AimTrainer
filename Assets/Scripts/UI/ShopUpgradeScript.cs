@@ -3,7 +3,7 @@ using TMPro;
 
 public class ShopUpgradeScript : MonoBehaviour
 {
-    [SerializeField] Attatchment attatchment;
+    public Attatchment attatchment;
     
     [SerializeField] TMP_Text priceText;
     [SerializeField] TMP_Text attatchmentName;
