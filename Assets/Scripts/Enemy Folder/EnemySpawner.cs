@@ -132,7 +132,7 @@ public class EnemySpawner : MonoBehaviour
                 GameObject _target = Instantiate(enemy, targetPos, Quaternion.identity, enemyParent.transform);
                 _target = _target.transform.GetChild(0).gameObject;
                 _target.GetComponent<EnemyScript>().health = randomHealth;
-                if (enemy.name == "Blinky")
+                if (enemy.GetComponentInChildren<BlinkyModScript>())
                 {
                     GeneratBlinkyPoses(_target);
                 }
@@ -174,14 +174,14 @@ public class EnemySpawner : MonoBehaviour
 
     private void GeneratBlinkyPoses(GameObject blunk)
     {
-        for (float f = blunk.GetComponent<BlinkyScript>().health+1; f >= 0; f--)
+        for (float f = blunk.GetComponent<EnemyScript>().health+1; f >= 0; f--)
         {
             for(int j = 0; j < 100000; j++)
             {
                 Vector3 targetPos = GenerateSpawnLocation();
                 if (targetPos != Vector3.zero)
                 {
-                    blunk.GetComponent<BlinkyScript>().blinkPositions.Add(targetPos);
+                    blunk.GetComponent<BlinkyModScript>().blinkPositions.Add(targetPos);
                     break;
                 }
             }
