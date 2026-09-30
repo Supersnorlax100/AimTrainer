@@ -51,25 +51,6 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private void RandomEnemeyChoice(TargetType enemyType)
-    {
-        switch (enemyType)
-        {
-            case TargetType.CLICKING:
-                enemy = clikingEnemies[Random.Range(0, clikingEnemies.Length)];
-                break;
-            case TargetType.SWITCHING:
-                enemy = switchingEnemies[Random.Range(0, switchingEnemies.Length)];
-                break;
-            case TargetType.TRACKING:
-                enemy = trakingEnemies[Random.Range(0, trakingEnemies.Length)];
-                break;
-            default:
-                Debug.LogError("Error in RandomEnemeyChoice: Invalid enemy type.");
-                break;
-        }
-    }
-
 
 
     public void PickEnemy()
@@ -116,9 +97,10 @@ public class EnemySpawner : MonoBehaviour
         //Debug.Log("spawnable collisions length: " + spawnableCollisions.Length);
         //Debug.Log("spawnable collisions layer: " + spawnableCollisions[0].gameObject.layer);
         //Debug.Log("colliders: ");
+        //foreach (Collider coll in spawnableCollisions) { Debug.Log("spawn coll: " + coll.name); }
         #endregion
 
-        foreach (Collider coll in spawnableCollisions) { Debug.Log("spawn coll: " + coll.name); }
+
 
         if (spawnableCollisions.Length == 1 && spawnableCollisions[0].gameObject.layer == 9 && targetCollisions.Length > 0 && (targetCollisions[0].gameObject.layer != 6 || targetCollisions[1].gameObject.layer != 6))
         {
@@ -129,12 +111,24 @@ public class EnemySpawner : MonoBehaviour
 
     public void Spawn()
     {
+        if (numberOfSpawnedEnemys >= maxEnemyCount && GameManager.instance.targetCount <= 0)
+        {            
+            Debug.Log("exit room");
+            EventHandeler.exitRoom?.Invoke();
+            return; // temp to stop spawning
 
+        }
+        else if (numberOfSpawnedEnemys >= maxEnemyCount)
+        {
+            return;
+        }
         for (int i = 0; i < attemptsToSpawn; i++)
         {
             Vector3 targetPos = GenerateSpawnLocation();
             if (targetPos != Vector3.zero)
             {
+                numberOfSpawnedEnemys++;
+                GameManager.instance.targetCount++;
                 GameObject _target = Instantiate(enemy, targetPos, Quaternion.identity, enemyParent.transform);
                 _target = _target.transform.GetChild(0).gameObject;
                 _target.GetComponent<EnemyScript>().health = randomHealth;
@@ -158,6 +152,8 @@ public class EnemySpawner : MonoBehaviour
                 {
                     if (spawnableCollisions.Length >= 1 && spawnableCollisions[0].gameObject.layer == 9)
                     {
+                        numberOfSpawnedEnemys++;
+                        GameManager.instance.targetCount++;
                         GameObject _target = Instantiate(enemy, targetPos, Quaternion.identity, enemyParent.transform);
                         _target = _target.transform.GetChild(0).gameObject;
                         if (areEnemysMoving)
@@ -178,7 +174,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void GeneratBlinkyPoses(GameObject blunk)
     {
-        for (float f = blunk.GetComponent<BlinkyScript>().health; f >= 0; f--)
+        for (float f = blunk.GetComponent<BlinkyScript>().health+1; f >= 0; f--)
         {
             for(int j = 0; j < 100000; j++)
             {

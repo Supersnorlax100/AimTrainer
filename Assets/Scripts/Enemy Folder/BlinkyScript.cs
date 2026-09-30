@@ -13,6 +13,10 @@ public class BlinkyScript : EnemyScript
         transform.position = blinkPositions[curentIndex];
         curentIndex = 0;
     }
+    void Update()
+    {
+        healthBarCanvas.transform.position = gameObject.transform.position;
+    }
 
     public override void GetHit(float damage, bool isCrit, float critMultiplier)
     {

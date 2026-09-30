@@ -16,4 +16,7 @@ public class EventHandeler : MonoBehaviour
 
     public delegate void UpdateUI();
     public static UpdateUI updateUI;
+
+    public delegate void ExitRoom();
+    public static ExitRoom exitRoom;
 }

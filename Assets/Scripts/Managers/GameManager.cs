@@ -2,6 +2,15 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum RunType
+{
+    CLICKING,
+    SWITCHING,
+    TRACKING,
+    CLICK_TRACK,
+    TRACK_SWITCH
+
+}
 public class GameManager : MonoBehaviour
 {
     public TargetType stageType;
@@ -26,7 +35,7 @@ public class GameManager : MonoBehaviour
     float roomScore;
     public int score;
 
-    public RoomType runType;
+    public RunType runType;
 
     private void Awake()
     {
@@ -51,17 +60,21 @@ public class GameManager : MonoBehaviour
         EventHandeler.onPetalDeath += RefreshCombo;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        EventHandeler.exitRoom += FinalizeScore;
     }
 
-    void Start()
-    {
-        if (stageType == TargetType.TRACKING)
-        {
-            maxComboTimer = maxComboTimer/10;
-            comboMultDivisor = comboMultDivisor*10;
-        }
-    }
 
+
+    //void Start()
+    //{
+    //    determinTargetType();
+    //    if (stageType == TargetType.TRACKING)
+    //    {
+    //        maxComboTimer = maxComboTimer/10;
+    //        comboMultDivisor = comboMultDivisor*10;
+    //    }
+    //}
     private void Update()
     {
         // Handle Combo Logic
@@ -76,9 +89,53 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void determinTargetType()
+    {
+        switch(runType)
+        {
+            case RunType.CLICKING:
+                stageType = TargetType.CLICKING;
+                break;
+            case RunType.SWITCHING:
+                stageType = TargetType.SWITCHING;
+                break;
+            case RunType.TRACKING:
+                stageType = TargetType.TRACKING;
+                break;
+            case RunType.CLICK_TRACK:
+                int randomnum = UnityEngine.Random.Range(0, 2);
+                if (randomnum == 0)
+                {
+                    stageType = TargetType.CLICKING;
+                }
+                else
+                {
+                    stageType = TargetType.TRACKING;
+                }
+                break;
+            case RunType.TRACK_SWITCH:
+                int randomnum2 = UnityEngine.Random.Range(0, 2);
+                if (randomnum2 == 0)
+                {
+                    stageType = TargetType.TRACKING;
+                }
+                else
+                {
+                    stageType = TargetType.SWITCHING;
+                }
+                break;
+        }
+    }
+
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         EventHandeler.updateUI?.Invoke();
+        determinTargetType();
+        if (stageType == TargetType.TRACKING)
+        {
+            maxComboTimer = maxComboTimer / 10;
+            comboMultDivisor = comboMultDivisor * 10;
+        }
     }
 
     public void RefreshCombo()
@@ -106,6 +163,12 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0;
         forceLock = true;
+    }
+
+    public void FinalizeScore()
+    {
+        score += (int)roomScore;
+        roomScore = 0;
     }
 
     public void Pause(bool isPausing)

@@ -48,6 +48,7 @@ public class FlowerScript : EnemyScript
         for (int i = petalCount; i > 0; i--)
         {
             GameObject newPetal = Instantiate(petal, petalParent.transform);
+            GameManager.instance.targetCount++;
             petalParent.transform.rotation = Quaternion.Euler(0, 0, degreasBetweenPetals * i);
             newPetal.gameObject.transform.position = gameObject.transform.position + petalOfset;
             petals.Add(newPetal);
