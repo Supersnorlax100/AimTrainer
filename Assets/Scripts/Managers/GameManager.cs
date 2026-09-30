@@ -73,7 +73,10 @@ public class GameManager : MonoBehaviour
             {
                 comboValue = 0;
             }
-            UiManager.instance?.UpdateComboUI(activeComboTimer, comboValue);
+            if (UiManager.instance)
+            {
+                UiManager.instance?.UpdateComboUI(activeComboTimer, comboValue);
+            }
         }
     }
 

@@ -12,21 +12,25 @@ public class UiManager : MonoBehaviour
     public GameObject activeMenu = null;
     [SerializeField] List<GameObject> menuOpenOrder;
 
-    [SerializeField] GameObject Timer;
 
-    [SerializeField] TMP_Text scoreText;
-    [SerializeField] TMP_Text finalScore;
 
     [SerializeField] GameObject settingsMenu;
     [SerializeField] GameObject deathScreen;
     [SerializeField] GameObject pauseMenu;
+    
+    #region CombatUI
+    [SerializeField] GameObject combatUI;
 
+    [SerializeField] GameObject Timer;
+
+    [SerializeField] TMP_Text scoreText;
+    [SerializeField] TMP_Text finalScore;
     // Combo stuff
     [SerializeField] TMP_Text comboTextNum;
     [SerializeField] TMP_Text comboTextMult;
     [SerializeField] Slider comboSlider;
     [SerializeField] GameObject comboContainer;
-
+    #endregion
 
 
     private void Awake()
@@ -107,6 +111,12 @@ public class UiManager : MonoBehaviour
         }
 
         menu.SetActive(isOpening);
+    }
+
+// Hides extra ui for when in combat scene and when not (or for when map is open)
+    public void CombatUI(bool isVisible)
+    {
+        combatUI.SetActive(isVisible);
     }
 
     void PauseMenu(bool enabled)

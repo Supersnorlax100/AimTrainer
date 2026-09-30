@@ -39,9 +39,15 @@ public class ShopManager : MonoBehaviour
         int upgrades = Random.Range(1, 4);
         for (int i = 0; i < upgrades; i++)
         {
+            if (GameManager.instance.attatchmentPool.Length <= 0)
+            {
+                Debug.Log("no attatchments");
+                return;   
+            }
+            
             GameObject _shopUpgrade = Instantiate(shopUpgrade, shopUpgradeContainer.transform);
-            Debug.Log("shop upgrade: " + _shopUpgrade.name);
             shopUpgrades.Append(_shopUpgrade);
+
             Attatchment _attatchment = GameManager.instance.attatchmentPool[Random.Range(0, GameManager.instance.attatchmentPool.Length)];
             _shopUpgrade.GetComponent<ShopUpgradeScript>().attatchment = _attatchment;
         }

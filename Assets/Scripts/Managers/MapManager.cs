@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -16,6 +17,8 @@ public enum RoomType
 public class MapManager : MonoBehaviour
 {
     public static MapManager instance;
+    
+    public bool canMove; // Can go to new room
 
     [SerializeField] GameObject map;
 
@@ -36,6 +39,9 @@ public class MapManager : MonoBehaviour
 
     public Sprite[] sprites;
     [SerializeField] GameObject mapNode;
+    GameObject[] availableNodes = new GameObject[3];
+    [SerializeField] GameObject mapNodeContainer;
+    [SerializeField] int nodeSpacing;
 
     // Random Room Type
     public bool canMiniBossSpawn;
@@ -45,7 +51,7 @@ public class MapManager : MonoBehaviour
     public int shopOdds;
     public int eventOdds;
 
-    GameObject[] activeCanvases;
+    // GameObject[] activeCanvases;
 
     public int curentFloor; //Temp Destroy me i am called in EnemySpawner
 
@@ -60,7 +66,7 @@ public class MapManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        // SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Start()
@@ -79,14 +85,25 @@ public class MapManager : MonoBehaviour
         {
             NewMap();
         }
+        if (map.activeSelf)
+        {
+            GameManager.instance.Pause(true);
+        }
+
+        // #TODO: move to happen on stage end
+        foreach (GameObject node in availableNodes)
+        {
+            node.GetComponent<Button>().enabled = canMove;
+        }
     }
 
-    public void GoToRoom(Vector2 room)
+    public async Task GoToRoom(Vector2 room)
     {
-        SceneManager.LoadScene((int)roomMap[room]);
+        await SceneManager.LoadSceneAsync((int)roomMap[room]);
         currentRoom = room;
         pastRooms.Add(room);
         NodeAvailability();
+        MapVisibility(!map.activeSelf);
     }
 
     private void MakeMap()
@@ -117,8 +134,8 @@ public class MapManager : MonoBehaviour
 
     void GenerateMapNode(Vector2 roomPosition)
     {
-        Vector3 mapNodePos = new Vector3(roomPosition.x * 150 - 150, roomPosition.y * 150 - 300, 0);
-        GameObject _mapNode = Instantiate(mapNode, Vector3.zero, Quaternion.identity, map.transform);
+        Vector3 mapNodePos = new Vector3(roomPosition.x * nodeSpacing - nodeSpacing, roomPosition.y * nodeSpacing - nodeSpacing*2 - 100, 0);
+        GameObject _mapNode = Instantiate(mapNode, mapNodeContainer.transform);
         _mapNode.transform.localPosition = mapNodePos;
         _mapNode.GetComponent<MapNodeScript>().roomNum = roomPosition;
         nodeMap.Add(roomPosition, _mapNode);
@@ -161,7 +178,6 @@ public class MapManager : MonoBehaviour
             nodeMap[roomPos].GetComponent<Button>().enabled = false;
             foreach (Vector2 pastPos in pastRooms)
             {
-                Debug.Log("pastPos: " + pastPos);
                 if (roomPos == pastPos)
                 {
                     nodeMap[roomPos].GetComponent<Image>().color = Color.white;
@@ -175,20 +191,24 @@ public class MapManager : MonoBehaviour
         }
 
         // Checks for available nodes
-        if (nodeMap.ContainsKey(new Vector2(currentRoom.x, currentRoom.y + 1)))
-        {
-            nodeMap[new Vector2(currentRoom.x, currentRoom.y + 1)].GetComponent<Button>().enabled = true;
-            nodeMap[new Vector2(currentRoom.x, currentRoom.y + 1)].GetComponent<Image>().color = Color.white;
-        }
+        // Left
         if (nodeMap.ContainsKey(new Vector2(currentRoom.x - 1, currentRoom.y + 1)))
         {
-            nodeMap[new Vector2(currentRoom.x - 1, currentRoom.y + 1)].GetComponent<Button>().enabled = true;
-            nodeMap[new Vector2(currentRoom.x - 1, currentRoom.y + 1)].GetComponent<Image>().color = Color.white;
+            availableNodes[0] = nodeMap[new Vector2(currentRoom.x - 1, currentRoom.y + 1)];
         }
+        // Middle
+        if (nodeMap.ContainsKey(new Vector2(currentRoom.x, currentRoom.y + 1)))
+        {
+            availableNodes[1] = nodeMap[new Vector2(currentRoom.x, currentRoom.y + 1)];
+        }
+        // Right
         if (nodeMap.ContainsKey(new Vector2(currentRoom.x + 1, currentRoom.y + 1)))
         {
-            nodeMap[new Vector2(currentRoom.x + 1, currentRoom.y + 1)].GetComponent<Button>().enabled = true;
-            nodeMap[new Vector2(currentRoom.x + 1, currentRoom.y + 1)].GetComponent<Image>().color = Color.white;
+            availableNodes[2] = nodeMap[new Vector2(currentRoom.x + 1, currentRoom.y + 1)];
+        }
+        foreach (GameObject node in availableNodes)
+        {
+            node.GetComponent<Image>().color = Color.white;
         }
     }
 
@@ -209,17 +229,28 @@ public class MapManager : MonoBehaviour
     }
 
     // Runs automatically whenever any scene finishes loading
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        activeCanvases = GameObject.FindGameObjectsWithTag("Canvas");
-    }
+    // void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    // {
+    //     activeCanvases = GameObject.FindGameObjectsWithTag("Canvas");
+    // }
 
     void MapVisibility(bool isVisible)
     {
-        foreach (GameObject canvas in activeCanvases)
+        // foreach (GameObject canvas in activeCanvases)
+        // {
+        //     canvas.SetActive(!isVisible);
+        // }
+        if (UiManager.instance)
         {
-            canvas.SetActive(!isVisible);
+            UiManager.instance?.CombatUI(!isVisible);
         }
         map.SetActive(isVisible);
+        GameManager.instance.Pause(isVisible);
+    }
+
+    // for button
+    public void OpenMap()
+    {
+        MapVisibility(true);
     }
 }
