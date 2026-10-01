@@ -32,7 +32,7 @@ public class TimerScript : MonoBehaviour
         {
             if (seconds <= 0)
             {
-                --minutes;
+                minutes--;
                 seconds = 59;
                 centiseconds = 99;
             }

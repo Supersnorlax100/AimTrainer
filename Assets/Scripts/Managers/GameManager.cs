@@ -1,4 +1,5 @@
 using System;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -66,17 +67,6 @@ public class GameManager : MonoBehaviour
         EventHandeler.exitRoom += FinalizeScore;
     }
 
-
-
-    //void Start()
-    //{
-    //    DetermineTargetType();
-    //    if (stageType == TargetType.TRACKING)
-    //    {
-    //        maxComboTimer = maxComboTimer/10;
-    //        comboMultDivisor = comboMultDivisor*10;
-    //    }
-    //}
     private void Update()
     {
         // Handle Combo Logic
@@ -181,16 +171,28 @@ public class GameManager : MonoBehaviour
 
     public void Pause(bool isPausing)
     {
-        isPaused = isPausing;
-        if (isPaused)
+        if (! isPausing && ! MapManager.instance.map.activeSelf && 
+        (!UiManager.instance || (UiManager.instance && ! UiManager.instance.activeMenu)) && ! MapManager.instance.canLeaveRoom) 
         {
-            Cursor.lockState = CursorLockMode.None;
-            Time.timeScale = 0;
-        }
-        else
-        {
+            isPaused = false;
             Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1;
+            return;
         }
+        isPaused = true;
+        
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 0;
+        if (MapManager.instance.canLeaveRoom && ! MapManager.instance.map.activeSelf)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+
+    // For button
+    public void GameStart()
+    {
+        MapManager.instance.OpenMap();
+        MapManager.instance.canLeaveRoom = true;
     }
 }

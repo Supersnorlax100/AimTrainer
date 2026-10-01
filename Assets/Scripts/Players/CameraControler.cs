@@ -21,7 +21,7 @@ public class CameraControler : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.isPaused)
+        if (GameManager.instance.isPaused && ! MapManager.instance.canLeaveRoom)
         {
             return;
         }

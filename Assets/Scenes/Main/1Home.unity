@@ -252,6 +252,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 113362170}
   m_CullTransparentMesh: 1
+--- !u!114 &137070048 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
+  m_PrefabInstance: {fileID: 4700918042402810759}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b49988fd5584d4a40a0c3d78860d7d32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
 --- !u!1 &491132170
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,7 +449,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 8
   m_TargetDisplay: 0
 --- !u!224 &506003262
 RectTransform:
@@ -688,17 +699,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 679282196}
   m_CullTransparentMesh: 1
---- !u!114 &772028883 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3437915942662355601, guid: d173ab4fa297c664a95ef4e94478b7ed, type: 3}
-  m_PrefabInstance: {fileID: 8105074636227114904}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1c7de9c0cf18b44bb653ba9b55178a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
 --- !u!1 &827364508
 GameObject:
   m_ObjectHideFlags: 0
@@ -1463,9 +1463,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 772028883}
-        m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
-        m_MethodName: OpenMap
+      - m_Target: {fileID: 137070048}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: GameStart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2921,7 +2921,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 376393591419043075, guid: d173ab4fa297c664a95ef4e94478b7ed, type: 3}
       propertyPath: m_Name
-      value: MapManager/Canvas
+      value: MapManager_Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 376393591419043075, guid: d173ab4fa297c664a95ef4e94478b7ed, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7315030943060223924, guid: d173ab4fa297c664a95ef4e94478b7ed, type: 3}
+      propertyPath: m_SortingOrder
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

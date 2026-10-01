@@ -18,9 +18,9 @@ public class MapManager : MonoBehaviour
 {
     public static MapManager instance;
     
-    public bool canMove; // Can go to new room
+    public bool canLeaveRoom; // Can go to new room
 
-    [SerializeField] GameObject map;
+    public GameObject map;
 
     // Room Types
     // 0 - Home
@@ -66,7 +66,9 @@ public class MapManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        // SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+        EventHandeler.exitRoom += ExitRoom;
     }
 
     private void Start()
@@ -77,6 +79,11 @@ public class MapManager : MonoBehaviour
 
     void Update()
     {
+        // #TODO: Remove, for debug
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            EventHandeler.exitRoom?.Invoke();
+        }
         if (Input.GetKeyDown(KeyCode.M))
         {
             MapVisibility(!map.activeSelf);
@@ -85,16 +92,23 @@ public class MapManager : MonoBehaviour
         {
             NewMap();
         }
-        if (map.activeSelf)
-        {
-            GameManager.instance.Pause(true);
-        }
 
         // #TODO: move to happen on stage end
         foreach (GameObject node in availableNodes)
         {
-            node.GetComponent<Button>().enabled = canMove;
+            node.GetComponent<Button>().enabled = canLeaveRoom;
         }
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        canLeaveRoom = false;
+    }
+
+    void ExitRoom()
+    {
+        canLeaveRoom = true;
+        MapVisibility(true);
     }
 
     public async Task GoToRoom(Vector2 room)
@@ -228,18 +242,8 @@ public class MapManager : MonoBehaviour
         MakeMap();
     }
 
-    // Runs automatically whenever any scene finishes loading
-    // void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    // {
-    //     activeCanvases = GameObject.FindGameObjectsWithTag("Canvas");
-    // }
-
     void MapVisibility(bool isVisible)
     {
-        // foreach (GameObject canvas in activeCanvases)
-        // {
-        //     canvas.SetActive(!isVisible);
-        // }
         if (UiManager.instance)
         {
             UiManager.instance?.CombatUI(!isVisible);
@@ -248,7 +252,7 @@ public class MapManager : MonoBehaviour
         GameManager.instance.Pause(isVisible);
     }
 
-    // for button
+    // called for game start
     public void OpenMap()
     {
         MapVisibility(true);
