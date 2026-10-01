@@ -1,11 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-public enum TargetType
-{
-    CLICKING,
-    SWITCHING,
-    TRACKING
-}
 
 public class TargetScript : MonoBehaviour
 {

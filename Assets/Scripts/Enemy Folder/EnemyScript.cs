@@ -1,5 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+public enum TargetType
+{
+    CLICKING,
+    SWITCHING,
+    TRACKING
+}
 
 public class EnemyScript : MonoBehaviour
 {
@@ -10,9 +17,28 @@ public class EnemyScript : MonoBehaviour
     public GameObject healthBarCanvas;
     private Slider healthBar;
     public bool canGetHit = true;
+    List<MonoBehaviour> modScripts = new List<MonoBehaviour>();
 
+    public void Start()
+    {
+        SetHealthBar();
 
-    public virtual void GetHit(float damage, bool isCrit, float critMultiplier)
+        MonoBehaviour[] tempModArray = GetComponentsInChildren<MonoBehaviour>();
+        foreach (MonoBehaviour tempMod in tempModArray)
+        {
+            if (tempMod is EnemyScript)
+            {
+                continue;
+            }
+            modScripts.Add(tempMod);
+        }
+    }
+
+    public void Update()
+    {
+        healthBarCanvas.gameObject.transform.position = transform.position;
+    }
+    public void GetHit(float damage, bool isCrit, float critMultiplier)
     {
         if (canGetHit)
         {
@@ -24,7 +50,19 @@ public class EnemyScript : MonoBehaviour
             {
                 Destroy(gameObject.transform.parent.gameObject);
                 GameManager.instance.targetCount--;
-                EventHandeler.onEnemyDeath?.Invoke();
+                if (GetComponent<PetalScript>())
+                {
+                    EventHandeler.onPetalDeath?.Invoke();
+                }
+                else
+                {
+                    EventHandeler.onEnemyDeath?.Invoke();
+                }
+            }
+            foreach (MonoBehaviour script in modScripts)
+            {
+                Debug.Log(script);
+                script.Invoke("GetHit",0);
             }
         }
         else

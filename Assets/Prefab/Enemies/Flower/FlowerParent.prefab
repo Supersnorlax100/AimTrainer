@@ -250,7 +250,9 @@ GameObject:
   - component: {fileID: 2281202230932956281}
   - component: {fileID: 8403070609829492771}
   - component: {fileID: 2141373198381004279}
-  - component: {fileID: 878113144022328966}
+  - component: {fileID: 7062073571449759144}
+  - component: {fileID: 2877717290947775630}
+  - component: {fileID: 2683721314199497347}
   m_Layer: 6
   m_Name: Flower
   m_TagString: Untagged
@@ -380,7 +382,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &878113144022328966
+--- !u!114 &7062073571449759144
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -389,21 +391,46 @@ MonoBehaviour:
   m_GameObject: {fileID: 3079731200384745680}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8d022a1dcaa8b549af9cc0a3dc158bb, type: 3}
+  m_Script: {fileID: 11500000, guid: 2bbba2159fb4f0c42a97746d11648123, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FlowerScript
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyScript
+  targetType: 0
   health: 3
   scoreValue: 100
   healthBarCanvas: {fileID: 5513573810910219627}
-  canGetHit: 1
-  isEnemy: 1
-  petal: {fileID: 3577302483299786334, guid: 013d809c2435e1641ac185c253f4a287, type: 3}
+  canGetHit: 0
+--- !u!114 &2877717290947775630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3079731200384745680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5615e1da416f9e4491b5dd24178778e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlowerModScript
+  petal: {fileID: 2107647198852799115, guid: d5f687a105f96534882acbc525e70d4b, type: 3}
   petalCount: 5
   petalParent: {fileID: 8450213246970652177}
-  petalOfset: {x: 0, y: -1, z: 0}
+  petalOfset: {x: 0, y: 1, z: 0}
   petalSpinSpeed: 3
   petalsSpin: 1
   petalRotateVariationMax: 2
+--- !u!114 &2683721314199497347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3079731200384745680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 679be62c3373bfe40b9ca4721b498345, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlinkyModScript
+  blinkPositions: []
 --- !u!1 &4280700831617684343
 GameObject:
   m_ObjectHideFlags: 0
@@ -680,7 +707,7 @@ GameObject:
   - component: {fileID: 7860831505368756150}
   - component: {fileID: 720323680466120908}
   m_Layer: 0
-  m_Name: TargetParentParent
+  m_Name: PetalParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

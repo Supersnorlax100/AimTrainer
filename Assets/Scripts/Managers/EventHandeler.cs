@@ -16,4 +16,7 @@ public class EventHandeler : MonoBehaviour
 
     public delegate void Purchase();
     public static Purchase purchase;
+
+    public delegate void ExitRoom();
+    public static ExitRoom exitRoom;
 }

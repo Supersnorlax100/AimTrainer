@@ -1,8 +1,7 @@
-using NUnit.Framework;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class FlowerScript : EnemyScript
+public class FlowerModScript : MonoBehaviour
 {
     [SerializeField] GameObject petal;
     [SerializeField] int petalCount;
@@ -15,24 +14,31 @@ public class FlowerScript : EnemyScript
 
     [SerializeField] int petalRotateVariationMax;
     int petalRotateVariationCurrent;
+
     private void Awake()
     {
         EventHandeler.onPetalDeath += CheckPetals;
-        
+
     }
+
     private void Start()
     {
         spawnPetals();
-        SetHealthBar();
-        canGetHit = false;
-        petalRotateVariationMax = Random.Range(1,petalRotateVariationMax +1);
+        GetComponent<EnemyScript>().canGetHit = false;
+        petalRotateVariationMax = Random.Range(1, petalRotateVariationMax + 1);
         petalRotateVariationCurrent = petalRotateVariationMax;
     }
-    private void Update()
+
+
+    public void GetHit()
+    {
+
+    }
+
+    public void Update()
     {
         petalParent.transform.position = gameObject.transform.position;
-        healthBarCanvas.transform.position = gameObject.transform.position;
-        if (!canGetHit)
+        if (!GetComponent<EnemyScript>().canGetHit)
         {
             GetComponent<Renderer>().material.color = Color.lightBlue;
         }
@@ -48,13 +54,13 @@ public class FlowerScript : EnemyScript
         for (int i = petalCount; i > 0; i--)
         {
             GameObject newPetal = Instantiate(petal, petalParent.transform);
+            GameManager.instance.targetCount++;
             petalParent.transform.rotation = Quaternion.Euler(0, 0, degreasBetweenPetals * i);
             newPetal.gameObject.transform.position = gameObject.transform.position + petalOfset;
             petals.Add(newPetal);
 
         }
     }
-
 
     public async void CheckPetals()
     {
@@ -77,7 +83,7 @@ public class FlowerScript : EnemyScript
         }
         if (petals.Count == 0)
         {
-            canGetHit = true;
+            GetComponent<EnemyScript>().canGetHit = true;
         }
     }
 }
