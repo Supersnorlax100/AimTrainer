@@ -131,6 +131,7 @@ public class GameManager : MonoBehaviour
                 break;
             default:
                 Debug.Log("run type out of range");
+                break;
         }
     }
 
