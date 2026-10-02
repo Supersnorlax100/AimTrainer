@@ -60,8 +60,8 @@ public class GameManager : MonoBehaviour
         EventHandeler.onEnemyDeath += AddScore;
         EventHandeler.onEnemyDeath += RefreshCombo;
 
-        EventHandeler.onPetalDeath += AddScore;
-        EventHandeler.onPetalDeath += RefreshCombo;
+        EventHandeler.onSubEnemyDeath += AddScore;
+        EventHandeler.onSubEnemyDeath += RefreshCombo;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 

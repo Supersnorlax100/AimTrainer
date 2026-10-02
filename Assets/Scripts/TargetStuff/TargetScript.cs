@@ -20,7 +20,7 @@ public class TargetScript : MonoBehaviour
         healthBarCanvas.transform.position = transform.position;
     }
 
-    public virtual void GetHit(float damage, bool isCrit, float critMultiplier)
+    public void GetHit(float damage, bool isCrit, float critMultiplier)
     {
         UpdateHealthBar();
         if (targetType == TargetType.CLICKING || targetType == TargetType.SWITCHING)

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FlowerModScript : MonoBehaviour
@@ -7,6 +8,7 @@ public class FlowerModScript : MonoBehaviour
     [SerializeField] int petalCount;
     [SerializeField] GameObject petalParent;
     [SerializeField] Vector3 petalOfset;
+    [SerializeField] GameObject[] petalPrefabs;
     List<GameObject> petals = new List<GameObject>();
     [SerializeField] float petalSpinSpeed;
     [SerializeField] bool petalsSpin;
@@ -15,45 +17,40 @@ public class FlowerModScript : MonoBehaviour
     [SerializeField] int petalRotateVariationMax;
     int petalRotateVariationCurrent;
 
+    public GameObject spawnAreaForPetals;
+
     private void Awake()
     {
-        EventHandeler.onPetalDeath += CheckPetals;
+        EventHandeler.onSubEnemyDeath += CheckPetals;
 
     }
 
     private void Start()
     {
-        spawnPetals();
+        SpawnPetals();
         GetComponent<EnemyScript>().canGetHit = false;
         petalRotateVariationMax = Random.Range(1, petalRotateVariationMax + 1);
         petalRotateVariationCurrent = petalRotateVariationMax;
     }
 
 
-    public void GetHit()
-    {
-
-    }
-
     public void Update()
     {
         petalParent.transform.position = gameObject.transform.position;
-        if (!GetComponent<EnemyScript>().canGetHit)
-        {
-            GetComponent<Renderer>().material.color = Color.lightBlue;
-        }
-        else
-        {
-            GetComponent<Renderer>().material.color = Color.red;
-        }
         petalParent.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, petalSpinSpeed);
     }
-    void spawnPetals()
+    public void SpawnPetals()
     {
+
         degreasBetweenPetals = 360 / petalCount;
         for (int i = petalCount; i > 0; i--)
         {
-            GameObject newPetal = Instantiate(petal, petalParent.transform);
+            GameObject petalPrefab = petalPrefabs[Random.Range(0, petalPrefabs.Length)];
+            GameObject newPetal = Instantiate(petalPrefab, petalParent.transform);
+            if (newPetal.GetComponentInChildren<BlinkyModScript>())
+            {
+                newPetal.GetComponentInChildren<BlinkyModScript>().spawnArea = spawnAreaForPetals;
+            }
             GameManager.instance.targetCount++;
             petalParent.transform.rotation = Quaternion.Euler(0, 0, degreasBetweenPetals * i);
             newPetal.gameObject.transform.position = gameObject.transform.position + petalOfset;
@@ -61,6 +58,8 @@ public class FlowerModScript : MonoBehaviour
 
         }
     }
+
+
 
     public async void CheckPetals()
     {

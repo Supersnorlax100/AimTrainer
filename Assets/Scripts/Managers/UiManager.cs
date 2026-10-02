@@ -46,7 +46,7 @@ public class UiManager : MonoBehaviour
         EventHandeler.onPlayerDeath += ActivateDeathScreen;
         EventHandeler.onTargetDeath += UpdateScore;
         EventHandeler.onEnemyDeath += UpdateScore;
-        EventHandeler.onPetalDeath += UpdateScore;
+        EventHandeler.onSubEnemyDeath += UpdateScore;
     }
 
     private void Update()
