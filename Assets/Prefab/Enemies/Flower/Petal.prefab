@@ -588,8 +588,8 @@ GameObject:
   - component: {fileID: 101406672910265580}
   - component: {fileID: 8429087060318232286}
   - component: {fileID: 7498952483011345583}
-  - component: {fileID: 8981118345931807785}
   - component: {fileID: 5260709339418998362}
+  - component: {fileID: 3069406074906544985}
   m_Layer: 6
   m_Name: Target
   m_TagString: Untagged
@@ -692,18 +692,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8981118345931807785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8512490620149325523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c872ea294cd20a4a9f87141dcb5997e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PetalScript
 --- !u!114 &5260709339418998362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -721,3 +709,16 @@ MonoBehaviour:
   scoreValue: 1
   healthBarCanvas: {fileID: 3348844644937970564}
   canGetHit: 1
+  respawns: 1
+--- !u!114 &3069406074906544985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8512490620149325523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c463fae702d0eec44a54af7a21075938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SubEnemyScript

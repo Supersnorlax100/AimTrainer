@@ -58,25 +58,14 @@ public class GameManager : MonoBehaviour
         EventHandeler.onEnemyDeath += AddScore;
         EventHandeler.onEnemyDeath += RefreshCombo;
 
-        EventHandeler.onPetalDeath += AddScore;
-        EventHandeler.onPetalDeath += RefreshCombo;
+        EventHandeler.onSubEnemyDeath += AddScore;
+        EventHandeler.onSubEnemyDeath += RefreshCombo;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 
         EventHandeler.exitRoom += FinalizeScore;
     }
 
-
-
-    //void Start()
-    //{
-    //    DetermineTargetType();
-    //    if (stageType == TargetType.TRACKING)
-    //    {
-    //        maxComboTimer = maxComboTimer/10;
-    //        comboMultDivisor = comboMultDivisor*10;
-    //    }
-    //}
     private void Update()
     {
         // Handle Combo Logic

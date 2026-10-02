@@ -134,7 +134,12 @@ public class EnemySpawner : MonoBehaviour
                 _target.GetComponent<EnemyScript>().health = randomHealth;
                 if (enemy.GetComponentInChildren<BlinkyModScript>())
                 {
-                    GeneratBlinkyPoses(_target);
+                    
+                    _target.GetComponent<BlinkyModScript>().spawnArea = spawnArea;
+                }
+                if (enemy.GetComponentInChildren<FlowerModScript>())
+                {
+                    _target.GetComponentInChildren<FlowerModScript>().spawnAreaForPetals = spawnArea;
                 }
                 if (areEnemysMoving)
                 {
@@ -156,6 +161,14 @@ public class EnemySpawner : MonoBehaviour
                         GameManager.instance.targetCount++;
                         GameObject _target = Instantiate(enemy, targetPos, Quaternion.identity, enemyParent.transform);
                         _target = _target.transform.GetChild(0).gameObject;
+                        if (enemy.GetComponentInChildren<BlinkyModScript>())
+                        {
+                            enemy.GetComponentInChildren<BlinkyModScript>().spawnArea = spawnArea;
+                        }
+                        if (enemy.GetComponentInChildren<FlowerModScript>())
+                        {
+                            enemy.GetComponentInChildren<FlowerModScript>().spawnAreaForPetals = spawnArea;
+                        }
                         if (areEnemysMoving)
                         {
                             Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
@@ -171,22 +184,6 @@ public class EnemySpawner : MonoBehaviour
 
     }
 
-
-    private void GeneratBlinkyPoses(GameObject blunk)
-    {
-        for (float f = blunk.GetComponent<EnemyScript>().health+1; f >= 0; f--)
-        {
-            for(int j = 0; j < 100000; j++)
-            {
-                Vector3 targetPos = GenerateSpawnLocation();
-                if (targetPos != Vector3.zero)
-                {
-                    blunk.GetComponent<BlinkyModScript>().blinkPositions.Add(targetPos);
-                    break;
-                }
-            }
-        }
-    }
 
     public void RespawnAll()
     {

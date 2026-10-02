@@ -12,7 +12,7 @@ public class EventHandeler : MonoBehaviour
     public static OnEnemyDeath onEnemyDeath;
 
     public delegate void OnPetalDeath();
-    public static OnPetalDeath onPetalDeath;
+    public static OnPetalDeath onSubEnemyDeath;
 
     public delegate void Purchase();
     public static Purchase purchase;
