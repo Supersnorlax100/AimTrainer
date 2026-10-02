@@ -71,7 +71,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 523}
+  m_AnchoredPosition: {x: 0, y: 600}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4853917074310358506
@@ -421,6 +421,7 @@ MonoBehaviour:
   petalSpinSpeed: 3
   petalsSpin: 1
   petalRotateVariationMax: 2
+  spawnAreaForPetals: {fileID: 0}
 --- !u!1 &4280700831617684343
 GameObject:
   m_ObjectHideFlags: 0
@@ -532,7 +533,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.05}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &3472771927167834323

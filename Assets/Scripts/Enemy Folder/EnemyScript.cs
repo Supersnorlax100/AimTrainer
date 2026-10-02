@@ -38,7 +38,7 @@ public class EnemyScript : MonoBehaviour
 
     public void Update()
     {
-        healthBarCanvas.gameObject.transform.position = transform.position;
+        healthBarCanvas.gameObject.transform.position = new Vector3(transform.position.x, transform.position.y + 0.3f, transform.position.z);
         if (!GetComponent<EnemyScript>().canGetHit)
         {
             GetComponent<Renderer>().material.color = Color.lightBlue;
