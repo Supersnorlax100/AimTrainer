@@ -2761,6 +2761,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
+      propertyPath: curTime
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
+      propertyPath: secondsGiven
+      value: 67
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

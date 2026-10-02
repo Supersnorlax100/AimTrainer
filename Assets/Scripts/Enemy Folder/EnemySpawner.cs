@@ -16,8 +16,8 @@ public class EnemySpawner : MonoBehaviour
 
 
     [SerializeField] int attemptsToSpawn = 1000;
-    public Collider[] targetCollisions;
-    public Collider[] spawnableCollisions;
+    Collider[] targetCollisions;
+    Collider[] spawnableCollisions;
     public float enemySpace;
 
     [SerializeField] GameObject spawnArea;
@@ -52,7 +52,6 @@ public class EnemySpawner : MonoBehaviour
     }
 
 
-
     public void PickEnemy()
     {
         switch(GameManager.instance.stageType)
@@ -85,7 +84,7 @@ public class EnemySpawner : MonoBehaviour
         float targetZ = spawnArea.transform.position.z + enemy.transform.GetChild(0).gameObject.GetComponent<SphereCollider>().radius - .2f;
         Vector3 targetPos = new Vector3(targetX, targetY, targetZ);
 
-        // Test a collider in given area
+        // Test a collider in a given area
         targetCollisions = Physics.OverlapSphere(targetPos, enemy.GetComponentInChildren<SphereCollider>().radius + enemySpace);
         spawnableCollisions = Physics.OverlapSphere(targetPos, 0.1f);
 

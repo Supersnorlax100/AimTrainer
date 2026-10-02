@@ -4,19 +4,36 @@ public class TimerScript : MonoBehaviour
 {
     [SerializeField] TMP_Text timerTextUI;
 
-    int seconds;
     int minutes;
-    int centiseconds =0 ;
-    string[] timerText = new string[4];
+    int seconds;
+    int centiseconds;
+
+    void Awake()
+    {
+        EventHandeler.exitRoom += StoreTime;
+    }
 
     void Start()
     {
-        seconds = GameManager.instance.secondsGiven;
-        minutes = GameManager.instance.minutesGiven;
-        centiseconds = 0;
+        int time = GameManager.instance.curTime;
+
+        if (time >= 100)
+        {
+            seconds = Mathf.FloorToInt(time/100);
+            centiseconds = time - (seconds * 100);
+        }
+        if (seconds >= 60)
+        {
+             minutes = Mathf.FloorToInt(seconds/60);
+        }
+        seconds = seconds - (minutes * 60);
         UpdateTimer();
         InvokeRepeating("UpdateTimer", 0.01f, 0.01f);
-        UpdateText();
+    }
+
+    public void StoreTime()
+    {
+        GameManager.instance.curTime = ((minutes * 60) + seconds) * 100 + centiseconds;
     }
 
 
@@ -47,15 +64,7 @@ public class TimerScript : MonoBehaviour
             centiseconds--;
         }
 
-        UpdateText();
-    }
-
-    void UpdateText()
-    {
-        timerText[0] = "Timer: ";
-        timerText[1] = minutes.ToString("00");
-        timerText[2] = seconds.ToString("00");
-        timerText[3] = centiseconds.ToString("00");
-        timerTextUI.text = timerText[0] + timerText[1] + ":" + timerText[2] + ":" + timerText[3];
+        // UpdateText();
+        timerTextUI.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, centiseconds);
     }
 }

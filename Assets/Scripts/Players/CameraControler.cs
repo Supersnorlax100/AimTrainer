@@ -21,8 +21,21 @@ public class CameraControler : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.isPaused && ! MapManager.instance.canLeaveRoom)
+        // if (UiManager.instance && UiManager.instance.activeMenu)
+        // {
+        //     Debug.Log("menu exists");
+        // }
+        // if (GameManager.instance.isPaused)
+        // {
+        //     Debug.Log("is paused");
+        // }
+        // if (GameManager.instance.isPaused && UiManager.instance && ! UiManager.instance.activeMenu)
+        // {
+        //     Debug.Log("is paused and no menu");
+        // }
+        if (GameManager.instance.isPaused && (! UiManager.instance || (UiManager.instance && UiManager.instance.activeMenu)))
         {
+            Debug.Log("return");
             return;
         }
         float horizontal = Input.GetAxis("Mouse X") * PlayerControler.instance.mouseSens;

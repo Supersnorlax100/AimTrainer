@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -22,8 +23,8 @@ public class GameManager : MonoBehaviour
 
     public int targetCount;
 
-    public int minutesGiven;
     public int secondsGiven;
+    public int curTime; // in centiseconds
 
     public bool isPaused {get; private set;}
     public bool forceLock { get; private set; }
@@ -65,6 +66,13 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
 
         EventHandeler.exitRoom += FinalizeScore;
+        
+        curTime = secondsGiven * 100;
+    }
+
+    void Start()
+    {
+        Pause(true);
     }
 
     private void Update()
@@ -171,8 +179,8 @@ public class GameManager : MonoBehaviour
 
     public void Pause(bool isPausing)
     {
-        if (! isPausing && ! MapManager.instance.map.activeSelf && 
-        (!UiManager.instance || (UiManager.instance && ! UiManager.instance.activeMenu)) && ! MapManager.instance.canLeaveRoom) 
+        if (! isPausing && ! MapManager.instance.map.activeSelf &&
+        (!UiManager.instance || (UiManager.instance && ! UiManager.instance.activeMenu)))
         {
             isPaused = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -180,13 +188,8 @@ public class GameManager : MonoBehaviour
             return;
         }
         isPaused = true;
-        
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0;
-        if (MapManager.instance.canLeaveRoom && ! MapManager.instance.map.activeSelf)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
     }
 
     // For button
