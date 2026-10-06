@@ -11,31 +11,22 @@ public class CameraControler : MonoBehaviour
 
     float xRotation;
     float yRotation = 180;
-    Transform rootTransform;
 
     private void Start()
     {
         player = PlayerControler.instance.gameObject;
         Cursor.lockState = CursorLockMode.Locked;
+        transform.position = player.transform.position + offset;
     }
 
     private void Update()
     {
-        // if (UiManager.instance && UiManager.instance.activeMenu)
-        // {
-        //     Debug.Log("menu exists");
-        // }
-        // if (GameManager.instance.isPaused)
-        // {
-        //     Debug.Log("is paused");
-        // }
-        // if (GameManager.instance.isPaused && UiManager.instance && ! UiManager.instance.activeMenu)
-        // {
-        //     Debug.Log("is paused and no menu");
-        // }
+        if (GameManager.instance.forceLock)
+        {
+            return;
+        }
         if (GameManager.instance.isPaused && (! UiManager.instance || (UiManager.instance && UiManager.instance.activeMenu)))
         {
-            Debug.Log("return");
             return;
         }
         float horizontal = Input.GetAxis("Mouse X") * PlayerControler.instance.mouseSens;
@@ -44,7 +35,6 @@ public class CameraControler : MonoBehaviour
         yRotation += horizontal;
         xRotation += vertical;
 
-        rootTransform = transform.root;
         // Camera Constraints Along Y-axis
         xRotation = Mathf.Clamp(xRotation, -cameraBounds, cameraBounds);
 
@@ -56,7 +46,7 @@ public class CameraControler : MonoBehaviour
         {
             MoveCamera(new Vector3(xRotation, yRotation, 0f));
 
-            rootTransform.position = player.transform.position + offset;
+            transform.root.position = player.transform.position + offset;
         }
 
 
@@ -64,6 +54,6 @@ public class CameraControler : MonoBehaviour
 
     private void MoveCamera(Vector3 movement)
     {
-        rootTransform.rotation = Quaternion.Euler(new Vector3(movement.x, movement.y, movement.z));
+        transform.root.rotation = Quaternion.Euler(new Vector3(movement.x, movement.y, movement.z));
     }
 }

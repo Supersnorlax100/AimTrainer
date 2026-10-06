@@ -12,8 +12,6 @@ public class UiManager : MonoBehaviour
     public GameObject activeMenu = null;
     [SerializeField] List<GameObject> menuOpenOrder;
 
-
-
     [SerializeField] GameObject settingsMenu;
     [SerializeField] GameObject deathScreen;
     [SerializeField] GameObject pauseMenu;
@@ -25,6 +23,7 @@ public class UiManager : MonoBehaviour
 
     [SerializeField] TMP_Text scoreText;
     [SerializeField] TMP_Text finalScore;
+   
     // Combo stuff
     [SerializeField] TMP_Text comboTextNum;
     [SerializeField] TMP_Text comboTextMult;

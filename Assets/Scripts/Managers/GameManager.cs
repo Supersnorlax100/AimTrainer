@@ -192,6 +192,11 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
     }
 
+    public void ForceLock(bool isLocking)
+    {
+        forceLock = isLocking;
+    }
+
     // For button
     public void GameStart()
     {
