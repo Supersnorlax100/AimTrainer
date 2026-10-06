@@ -165,6 +165,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDie()
     {
+        Debug.Log("player die");
         Destroy(PlayerControler.instance.gameObject);
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0;

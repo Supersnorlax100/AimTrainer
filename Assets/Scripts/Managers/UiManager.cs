@@ -46,6 +46,8 @@ public class UiManager : MonoBehaviour
         EventHandeler.onTargetDeath += UpdateScore;
         EventHandeler.onEnemyDeath += UpdateScore;
         EventHandeler.onSubEnemyDeath += UpdateScore;
+
+        EventHandeler.exitRoom += CloseAllMenus;
     }
 
     private void Update()
@@ -130,11 +132,12 @@ public class UiManager : MonoBehaviour
 
     public void ActivateDeathScreen()
     {
-        deathScreen.SetActive(true); 
-        activeMenu = deathScreen;
-        finalScore.text = "Final " + scoreText.text;
-        Timer.SetActive(false);
-        scoreText.gameObject.SetActive(false);
+        Debug.Log("player death");
+        // deathScreen.SetActive(true); 
+        // activeMenu = deathScreen;
+        // finalScore.text = "Final " + scoreText.text;
+        // Timer.SetActive(false);
+        // scoreText.gameObject.SetActive(false);
        
     }
 
@@ -154,6 +157,13 @@ public class UiManager : MonoBehaviour
         // ^1 is the same as -1 except for some reason it doesn't like -1 so I used ^1
         MenuOpen(menuOpenOrder[^1], true, false);
         menuOpenOrder.Remove(menuOpenOrder[^1]);
+    }
+
+    public void CloseAllMenus()
+    {
+        Debug.Log("close all menus");
+        menuOpenOrder.Clear();
+        MenuOpen(activeMenu, false, false);
     }
 
     public void SettingsMenu()
