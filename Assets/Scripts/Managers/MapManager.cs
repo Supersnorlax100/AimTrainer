@@ -79,11 +79,13 @@ public class MapManager : MonoBehaviour
 
     void Update()
     {
-        // #TODO: Remove, for debug
+        // // #TODO: Remove, for debug
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             EventHandeler.exitRoom?.Invoke();
         }
+        // 
+        
         if (Input.GetKeyDown(KeyCode.M))
         {
             MapVisibility(!map.activeSelf);

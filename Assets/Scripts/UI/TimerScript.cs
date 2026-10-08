@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System;
 public class TimerScript : MonoBehaviour
 {
     [SerializeField] TMP_Text timerTextUI;
@@ -20,14 +21,12 @@ public class TimerScript : MonoBehaviour
 
     void Awake()
     {
-        EventHandeler.exitRoom += StoreTime;
+        // EventHandeler.exitRoom += StoreTime;
     }
 
     void Start()
     {
         int time = GameManager.instance.curTime;
-        Debug.Log("gam cur tim: " + GameManager.instance.curTime);
-        Debug.Log("time: " + time);
 
         if (time >= 100)
         {
@@ -47,11 +46,11 @@ public class TimerScript : MonoBehaviour
 
     public void StoreTime()
     {
-        Debug.Log("store, time: " + GameManager.instance.curTime);
+        // Debug.Log("what store, timescript time: " + ((minutes * 60) + seconds) * 100 + centiseconds);
+        // Debug.Log("store, time: " + GameManager.instance.curTime);
         GameManager.instance.curTime = ((minutes * 60) + seconds) * 100 + centiseconds;
-        Debug.Log("after store: " + GameManager.instance.curTime);
+        // Debug.Log("after store: " + GameManager.instance.curTime);
     }
-
 
     private void UpdateTimer()
     {

@@ -132,12 +132,11 @@ public class UiManager : MonoBehaviour
 
     public void ActivateDeathScreen()
     {
-        Debug.Log("player death");
-        // deathScreen.SetActive(true); 
-        // activeMenu = deathScreen;
-        // finalScore.text = "Final " + scoreText.text;
-        // Timer.SetActive(false);
-        // scoreText.gameObject.SetActive(false);
+        deathScreen.SetActive(true); 
+        activeMenu = deathScreen;
+        finalScore.text = "Final " + scoreText.text;
+        Timer.SetActive(false);
+        scoreText.gameObject.SetActive(false);
        
     }
 
@@ -161,7 +160,6 @@ public class UiManager : MonoBehaviour
 
     public void CloseAllMenus()
     {
-        Debug.Log("close all menus");
         menuOpenOrder.Clear();
         MenuOpen(activeMenu, false, false);
     }
