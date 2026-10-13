@@ -12,7 +12,7 @@ public class ShopUpgradeScript : MonoBehaviour
     void Start()
     {
         attatchmentName.text = attatchment.name;
-        statValue.text = attatchment.damage.ToString();
+        // statValue.text = attatchment.damage.ToString();
         priceText.text = attatchment.price.ToString();
     }
 
