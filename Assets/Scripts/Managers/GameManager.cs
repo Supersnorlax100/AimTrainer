@@ -58,7 +58,6 @@ public class GameManager : MonoBehaviour
         EventHandeler.onEnemyDeath += AddScore;
         EventHandeler.onEnemyDeath += RefreshCombo;
 
-        EventHandeler.onSubEnemyDeath += AddScore;
         EventHandeler.onSubEnemyDeath += RefreshCombo;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -146,10 +145,12 @@ public class GameManager : MonoBehaviour
         comboMult = 1 + comboValue/comboMultDivisor;
         if (stageType == TargetType.TRACKING)
         {
+            Debug.Log("tracking");
             roomScore += PlayerControler.instance.target.GetComponent<EnemyScript>().scoreValue / 10 * comboMult;
         }
         else
         {
+            Debug.Log("not tracking");
             roomScore += PlayerControler.instance.target.GetComponent<EnemyScript>().scoreValue * comboMult;
         }
     }

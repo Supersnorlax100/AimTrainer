@@ -6,7 +6,7 @@ public class FlowerModScript : MonoBehaviour
 {
     [SerializeField] GameObject petal;
     [SerializeField] int petalCount;
-    [SerializeField] GameObject petalParent;
+    GameObject petalParent;
     [SerializeField] Vector3 petalOfset;
     [SerializeField] GameObject[] petalPrefabs;
     List<GameObject> petals = new List<GameObject>();
@@ -27,6 +27,12 @@ public class FlowerModScript : MonoBehaviour
 
     private void Start()
     {
+        petalParent = new GameObject("PetalParent");
+        petalParent.transform.parent = transform.parent;
+        petalParent.transform.localPosition = Vector3.zero;
+        Rigidbody pPRB = petalParent.transform.gameObject.AddComponent<Rigidbody>();
+        pPRB.useGravity = false;
+        pPRB.excludeLayers = ~0;
         SpawnPetals();
         GetComponent<EnemyScript>().canGetHit = false;
         petalRotateVariationMax = Random.Range(1, petalRotateVariationMax + 1);
