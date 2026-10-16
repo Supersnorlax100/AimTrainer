@@ -50,15 +50,15 @@ public class SlimeScript : MonoBehaviour
     }
     GameObject Spawn()
     {
-        GameObject slimeBall_1 = Instantiate(prefab, transform.position, transform.rotation, parent);
-        slimeBall_1.transform.GetChild(0).AddComponent<SlimeScript>();
-        slimeBall_1.transform.GetChild(0).AddComponent<SubEnemyScript>();
+        GameObject newEnemy = Instantiate(prefab, transform.position, transform.rotation, parent);
+        newEnemy.transform.GetChild(0).AddComponent<SlimeScript>();
+        newEnemy.transform.GetChild(0).AddComponent<SubEnemyScript>();
         Vector3 targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
         float targetSpeed = 3;
-        slimeBall_1.GetComponentInChildren<Rigidbody>().AddForce(targetDirection.normalized * targetSpeed, ForceMode.Impulse);
-        slimeBall_1.GetComponentInChildren<SlimeScript>().prefab = prefab;
-        slimeBall_1.GetComponentInChildren<SlimeScript>().parent = parent;
+        newEnemy.GetComponentInChildren<Rigidbody>().AddForce(targetDirection.normalized * targetSpeed, ForceMode.Impulse);
+        newEnemy.GetComponentInChildren<SlimeScript>().prefab = prefab;
+        newEnemy.GetComponentInChildren<SlimeScript>().parent = parent;
 
-        return slimeBall_1;
+        return newEnemy;
     }
 }
