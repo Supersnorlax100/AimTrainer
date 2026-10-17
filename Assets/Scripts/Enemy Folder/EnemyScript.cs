@@ -62,16 +62,18 @@ public class EnemyScript : MonoBehaviour
                 GameManager.instance.targetCount--;
                 if (!respawns)
                 {
+                    Debug.Log("sub enemy died");
                     EventHandeler.onSubEnemyDeath?.Invoke();
                 }
                 else
                 {
+                    Debug.Log("enemy died");
                     EventHandeler.onEnemyDeath?.Invoke();
                 }
             }
             foreach (MonoBehaviour script in modScripts)
             {
-                Debug.Log(script);
+                //Debug.Log(script);
                 script?.Invoke("GetHit",0);
             }
         }

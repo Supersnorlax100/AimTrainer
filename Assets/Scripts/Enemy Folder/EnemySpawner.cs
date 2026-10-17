@@ -5,19 +5,14 @@ using static UnityEngine.GraphicsBuffer;
 public class EnemySpawner : MonoBehaviour
 {
 
-
-
-    [SerializeField] GameObject[] trakingEnemies;
-    [SerializeField] GameObject[] switchingEnemies;
-    [SerializeField] GameObject[] clikingEnemies;
-    GameObject enemy;
+    [SerializeField] GameObject testEnemy;
 
     float randomHealth;
 
 
     [SerializeField] int attemptsToSpawn = 1000;
-    Collider[] targetCollisions;
-    Collider[] spawnableCollisions;
+    public Collider[] targetCollisions;
+    public Collider[] spawnableCollisions;
     public float enemySpace;
 
     [SerializeField] GameObject spawnArea;
@@ -44,32 +39,12 @@ public class EnemySpawner : MonoBehaviour
         YspawnAreaScale = spawnArea.transform.localScale.y;
 
         generateRandomHealth();
-        PickEnemy();
         for (int i = 0; i < initialEnemyCount; i++)
         {
             Spawn();
         }
     }
 
-
-    public void PickEnemy()
-    {
-        switch(GameManager.instance.stageType)
-        {
-            case TargetType.CLICKING:
-                enemy = clikingEnemies[Random.Range(0, clikingEnemies.Length)];
-                break;
-            case TargetType.SWITCHING:
-                enemy = switchingEnemies[Random.Range(0, switchingEnemies.Length)];
-                break;
-            case TargetType.TRACKING:
-                enemy = trakingEnemies[Random.Range(0, trakingEnemies.Length)];
-                break;
-            default:
-                Debug.LogError("Error in PickEnemyPool: Invalid stage type.");
-                break;
-        }
-    }
     private void generateRandomHealth()
     {
         float maxHealth = Mathf.Pow(1.3f, MapManager.instance.curentFloor) *5;
@@ -81,11 +56,11 @@ public class EnemySpawner : MonoBehaviour
         // The sqrt is to out to if a square was rotated 45             
         float targetX = spawnArea.transform.position.x + Random.Range(-(XspawnAreaScale / 2) + XspawnAreaScale / 25, XspawnAreaScale / 2 - XspawnAreaScale / 25);
         float targetY = spawnArea.transform.position.y + Random.Range(-(YspawnAreaScale / 2), YspawnAreaScale / 2);
-        float targetZ = spawnArea.transform.position.z + enemy.transform.GetChild(0).gameObject.GetComponent<SphereCollider>().radius - .2f;
+        float targetZ = spawnArea.transform.position.z + testEnemy.transform.GetChild(0).gameObject.GetComponent<SphereCollider>().radius - .2f;
         Vector3 targetPos = new Vector3(targetX, targetY, targetZ);
 
-        // Test a collider in a given area
-        targetCollisions = Physics.OverlapSphere(targetPos, enemy.GetComponentInChildren<SphereCollider>().radius + enemySpace);
+        // Test a collider in given area
+        targetCollisions = Physics.OverlapSphere(targetPos, testEnemy.GetComponentInChildren<SphereCollider>().radius + enemySpace);
         spawnableCollisions = Physics.OverlapSphere(targetPos, 0.1f);
 
         #region Debugs
@@ -112,6 +87,7 @@ public class EnemySpawner : MonoBehaviour
     {
         if (numberOfSpawnedEnemys >= maxEnemyCount && GameManager.instance.targetCount <= 0)
         {            
+            //Debug.Log("exit room");
             EventHandeler.exitRoom?.Invoke();
             return; // temp to stop spawning
 
@@ -127,17 +103,21 @@ public class EnemySpawner : MonoBehaviour
             {
                 numberOfSpawnedEnemys++;
                 GameManager.instance.targetCount++;
-                GameObject _target = Instantiate(enemy, targetPos, Quaternion.identity, enemyParent.transform);
+                GameObject _target = Instantiate(testEnemy, targetPos, Quaternion.identity, enemyParent.transform);
                 _target = _target.transform.GetChild(0).gameObject;
                 _target.GetComponent<EnemyScript>().health = randomHealth;
-                if (enemy.GetComponentInChildren<BlinkyModScript>())
+                if (testEnemy.GetComponentInChildren<BlinkyModScript>())
                 {
                     
                     _target.GetComponent<BlinkyModScript>().spawnArea = spawnArea;
                 }
-                if (enemy.GetComponentInChildren<FlowerModScript>())
+                if (testEnemy.GetComponentInChildren<FlowerModScript>())
                 {
                     _target.GetComponentInChildren<FlowerModScript>().spawnAreaForPetals = spawnArea;
+                }
+                if (testEnemy.GetComponentInChildren<SlimeScript>())
+                {
+                    _target.GetComponentInChildren<SlimeScript>().numberOFSplit = Random.Range(1, 4);
                 }
                 if (areEnemysMoving)
                 {
@@ -157,15 +137,15 @@ public class EnemySpawner : MonoBehaviour
                     {
                         numberOfSpawnedEnemys++;
                         GameManager.instance.targetCount++;
-                        GameObject _target = Instantiate(enemy, targetPos, Quaternion.identity, enemyParent.transform);
+                        GameObject _target = Instantiate(testEnemy, targetPos, Quaternion.identity, enemyParent.transform);
                         _target = _target.transform.GetChild(0).gameObject;
-                        if (enemy.GetComponentInChildren<BlinkyModScript>())
+                        if (testEnemy.GetComponentInChildren<BlinkyModScript>())
                         {
-                            enemy.GetComponentInChildren<BlinkyModScript>().spawnArea = spawnArea;
+                            testEnemy.GetComponentInChildren<BlinkyModScript>().spawnArea = spawnArea;
                         }
-                        if (enemy.GetComponentInChildren<FlowerModScript>())
+                        if (testEnemy.GetComponentInChildren<FlowerModScript>())
                         {
-                            enemy.GetComponentInChildren<FlowerModScript>().spawnAreaForPetals = spawnArea;
+                            testEnemy.GetComponentInChildren<FlowerModScript>().spawnAreaForPetals = spawnArea;
                         }
                         if (areEnemysMoving)
                         {
