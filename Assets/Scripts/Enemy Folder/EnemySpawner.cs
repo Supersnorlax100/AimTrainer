@@ -88,7 +88,7 @@ public class EnemySpawner : MonoBehaviour
         if (numberOfSpawnedEnemys >= maxEnemyCount && GameManager.instance.targetCount <= 0)
         {            
             //Debug.Log("exit room");
-            EventHandeler.exitRoom?.Invoke();
+            // EventHandeler.exitRoom?.Invoke(); //#TODO uncomment when not testing
             return; // temp to stop spawning
 
         }

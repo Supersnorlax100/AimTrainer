@@ -11,6 +11,16 @@ public enum Rarity
     LEGENDARY
 }
 
+public enum AttachmentType
+{
+    Lazer,
+    Trigger,
+    Barrel,
+    Grip,
+    Optic,
+    Mag
+}
+
 public enum ModifierType
 {
     DamageIncrease,
@@ -30,29 +40,100 @@ public enum ModifierType
 public class Modifier
 {
     public ModifierType type;
-    public int value;
+    public float value;
 }
 
-public abstract class Attatchment : ScriptableObject
+public abstract class Attachment : ScriptableObject
 {
     public Rarity rarity;
     public int id;
     public float price;
+    public AttachmentType type;
 
-    public List<Modifier> modifiers = new();
+    public List<Modifier> modifiers;
 
-    public int GetModifier(ModifierType type)
+
+    public void RollStats()
     {
-        // for (int i = 0; i < Enum.GetNames(typeof(ModifierType)).Length; i++)
-        // {
-        //     Debug.Log("ugh");
-        // }
+        Debug.Log("Roll stats");
         foreach (Modifier modifier in modifiers)
         {
-            if (modifier.type == type)
-                return modifier.value;
+            Vector2 rollLimits = GetRollLimits(modifier.type);
+            modifier.value =  UnityEngine.Random.Range(rollLimits.x, rollLimits.y);
         }
-
-        return 0;
     }
+
+
+    Vector2 GetRollLimits(ModifierType modifierType)
+    {
+        switch(modifierType)
+        {
+            case ModifierType.ComboTime:
+                Debug.Log("roll comboTime");
+                switch(rarity)
+                {
+                    case Rarity.COMMON:
+                        Debug.Log("common");
+                        return new Vector2(0,1);
+                    case Rarity.UNCOMMON:
+                        Debug.Log("uncommon");
+                        return new Vector2(0,2);
+                    default:
+                        return Vector2.zero;
+                }
+            case ModifierType.DamageIncrease:
+                Debug.Log("roll damageInc");
+                switch(rarity)
+                {
+                    case Rarity.COMMON:
+                        Debug.Log("common");
+                        return new Vector2(0,5);
+                    case Rarity.UNCOMMON:
+                        Debug.Log("uncommon");
+                        return new Vector2(0,10);
+                    default:
+                        return Vector2.zero;
+                }
+            case ModifierType.DamageMult:
+                Debug.Log("roll DamageMult");
+                switch(rarity)
+                {
+                    case Rarity.COMMON:
+                        Debug.Log("common");
+                        return new Vector2(0,1.1f);
+                    case Rarity.UNCOMMON:
+                        Debug.Log("uncommon");
+                        return new Vector2(0,3);
+                    default:
+                        return Vector2.zero;
+                }
+            case ModifierType.BulletSize:
+                Debug.Log("roll ButteltSize");
+                switch(rarity)
+                {
+                    case Rarity.COMMON:
+                        Debug.Log("common");
+                        return new Vector2(0,1);
+                    case Rarity.UNCOMMON:
+                        Debug.Log("uncommon");
+                        return new Vector2(0,2);
+                    default:
+                        return Vector2.zero;
+                }
+            default:
+                return Vector2.zero;
+        }
+    }
+
+    // public int GetModifier(ModifierType type)
+    // {
+
+    //     foreach (Modifier modifier in modifiers)
+    //     {
+    //         if (modifier.type == type)
+    //             return modifier.value;
+    //     }
+
+    //     return 0;
+    // }
 }

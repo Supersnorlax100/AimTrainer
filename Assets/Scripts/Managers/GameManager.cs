@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance;
 
-    public Attatchment[] attatchmentPool;
+    public Attachment[] attachmentPool;
 
     public int targetCount;
 

@@ -36,31 +36,40 @@ public class ShopManager : MonoBehaviour
 
     void GenerateUI()
     {
-        int upgrades = Random.Range(1, 4);
-        for (int i = 0; i < upgrades; i++)
+        int numOfUpgrades = Random.Range(1, 4);
+        for (int i = 0; i < numOfUpgrades; i++)
         {
-            if (GameManager.instance.attatchmentPool.Length <= 0)
+            if (GameManager.instance.attachmentPool.Length <= 0)
             {
-                Debug.Log("no attatchments");
+                Debug.Log("no attachments");
                 return;   
             }
             
             GameObject _shopUpgrade = Instantiate(shopUpgrade, shopUpgradeContainer.transform);
             shopUpgrades.Append(_shopUpgrade);
 
-            Attatchment _attatchment = GameManager.instance.attatchmentPool[Random.Range(0, GameManager.instance.attatchmentPool.Length)];
-            _shopUpgrade.GetComponent<ShopUpgradeScript>().attatchment = _attatchment;
+            Attachment _attachment = CreateAttachment();
+            _shopUpgrade.GetComponent<ShopUpgradeScript>().attachment = _attachment;
         }
     }
 
-    public void Purchase(Attatchment attatchment)
+    Attachment CreateAttachment()
     {
-        if (GameManager.instance.score < (int)Mathf.Round(attatchment.price))
+        Attachment _attachment = Instantiate(GameManager.instance.attachmentPool[Random.Range(0, GameManager.instance.attachmentPool.Length)]);
+        _attachment.rarity = (Rarity)Random.Range(0,2);
+        _attachment.RollStats();
+
+        return _attachment;
+    }
+
+    public void Purchase(Attachment attachment)
+    {
+        if (GameManager.instance.score < (int)Mathf.Round(attachment.price))
         {
             Debug.Log("brokie");
             return;
         }
-        GameManager.instance.score -= (int)Mathf.Round(attatchment.price);
+        GameManager.instance.score -= (int)Mathf.Round(attachment.price);
         EventHandeler.purchase?.Invoke();
         UpdateUI();
     }

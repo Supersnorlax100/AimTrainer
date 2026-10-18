@@ -2769,6 +2769,18 @@ PrefabInstance:
       propertyPath: secondsGiven
       value: 67
       objectReference: {fileID: 0}
+    - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
+      propertyPath: attachmentPool.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
+      propertyPath: 'attachmentPool.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: caf9600fe9f52284593f80a7a43328f9, type: 2}
+    - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
+      propertyPath: 'attachmentPool.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: b81c53a86054327448a2a29e124ae16d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

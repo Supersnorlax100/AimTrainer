@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class ItemBoxScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] Attatchment attatchment;
+    [SerializeField] Attachment attachment;
     [SerializeField] TMP_Text text;
 
     InventoryScript inventoryScript;

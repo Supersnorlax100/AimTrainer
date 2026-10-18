@@ -48,6 +48,7 @@ public class UiManager : MonoBehaviour
         EventHandeler.onSubEnemyDeath += UpdateScore;
 
         EventHandeler.exitRoom += CloseAllMenus;
+        EventHandeler.exitRoom += ExitRoom;
     }
 
     private void Update()
@@ -161,7 +162,8 @@ public class UiManager : MonoBehaviour
     public void CloseAllMenus()
     {
         menuOpenOrder.Clear();
-        MenuOpen(activeMenu, false, false);
+        if (activeMenu)
+            MenuOpen(activeMenu, false, false);
     }
 
     public void SettingsMenu()
@@ -170,4 +172,9 @@ public class UiManager : MonoBehaviour
     }
 
     #endregion
+
+    public void ExitRoom()
+    {
+        Debug.Log("exit room");
+    }
 }
