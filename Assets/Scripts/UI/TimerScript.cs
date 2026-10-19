@@ -17,15 +17,28 @@ public class TimerScript : MonoBehaviour
     int seconds;
     int centiseconds;
 
-    int countdownTimer = 4;
+    int countdownTimer = 0 + 1;
 
     void Awake()
     {
         // EventHandeler.exitRoom += StoreTime;
+        EventHandeler.enterRoom += Timer;
     }
 
-    void Start()
+    public void Timer()
     {
+        Debug.Log("enter room");
+        RoomType curRoomType = MapManager.instance.currentRoomType;
+        if (curRoomType != RoomType.COMBAT && curRoomType != RoomType.MINIBOSS && curRoomType != RoomType.BOSS)
+        {
+            Debug.Log("no time");
+            return;
+        }
+        else
+        {
+            Debug.Log("time");
+        }
+
         int time = GameManager.instance.curTime;
 
         if (time >= 100)
@@ -39,7 +52,6 @@ public class TimerScript : MonoBehaviour
         }
         seconds = seconds - (minutes * 60);
         UpdateTimer();
-
         GameManager.instance.ForceLock(true);
         InvokeRepeating("CountdownTimer", 0, 1);
     }
@@ -54,7 +66,7 @@ public class TimerScript : MonoBehaviour
 
     private void UpdateTimer()
     {
-
+        // if (MapManager.instance.currentRoomType == RoomType.SHOP)
         if (seconds <= 0 && minutes <= 0 && centiseconds <= 0)
         {
             CancelInvoke("UpdateTimer");
@@ -113,6 +125,7 @@ public class TimerScript : MonoBehaviour
             TimerValueObj.SetActive(true);
             ScoreObj.SetActive(true);
             InvokeRepeating("UpdateTimer", 0.01f, 0.01f);
+            countdownTimer = 0 + 1;
             CancelInvoke("CountdownTimer");
         }
     }

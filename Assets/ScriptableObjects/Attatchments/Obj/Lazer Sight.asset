@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cb28aa9617fdb049badf8e93d6c7527, type: 3}
   m_Name: Lazer Sight
   m_EditorClassIdentifier: Assembly-CSharp::LazerSight
+  attachmentName: type
   rarity: 0
   id: 0
-  price: 0
+  price: 100
   type: 0
-  modifiers: []
+  modifiers:
+  - type: 8
+    value: 0

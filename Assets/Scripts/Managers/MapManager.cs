@@ -34,7 +34,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] private int floorsNumber;
     [SerializeField] private int RoomsPerFloor;
 
-    Vector2 currentRoom = new Vector2(1,-1);
+    public Vector2 currentRoom = new Vector2(1,-1);
+    public RoomType currentRoomType;
     List<Vector2> pastRooms = new List<Vector2>(1);
 
     public Sprite[] sprites;
@@ -117,9 +118,11 @@ public class MapManager : MonoBehaviour
     {
         await SceneManager.LoadSceneAsync((int)roomMap[room]);
         currentRoom = room;
+        currentRoomType = GetRoomType(room);
         pastRooms.Add(room);
         NodeAvailability();
         MapVisibility(!map.activeSelf);
+        EventHandeler.enterRoom?.Invoke();
     }
 
     private void MakeMap()
@@ -253,6 +256,13 @@ public class MapManager : MonoBehaviour
         map.SetActive(isVisible);
         GameManager.instance.Pause(isVisible);
     }
+
+
+    public RoomType GetRoomType(Vector2 roomPos)
+    {
+        return roomMap[roomPos];
+    }
+
 
     // called for game start
     public void OpenMap()

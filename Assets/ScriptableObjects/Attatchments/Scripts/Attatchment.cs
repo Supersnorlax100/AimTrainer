@@ -39,16 +39,19 @@ public enum ModifierType
 [Serializable]
 public class Modifier
 {
-    public ModifierType type;
-    public float value;
+    [HideInInspector] public ModifierType type;
+    [HideInInspector] public float value;
 }
 
 public abstract class Attachment : ScriptableObject
 {
+    public string attachmentName;
     public Rarity rarity;
     public int id;
     public float price;
     public AttachmentType type;
+
+    [Header("NO TOUCH NO TOUCH NO TOUCH NO TOUCH NO TOUCH NO TOUCH ")] // Don't touch modifiers in editor
 
     public List<Modifier> modifiers;
 

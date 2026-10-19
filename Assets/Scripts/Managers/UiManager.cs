@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
+// Intentionally useless on start menu
 public class UiManager : MonoBehaviour
 {
     public static UiManager instance;
@@ -15,6 +16,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] GameObject settingsMenu;
     [SerializeField] GameObject deathScreen;
     [SerializeField] GameObject pauseMenu;
+    [SerializeField] GameObject inventoryMenu;
     
     #region CombatUI
     [SerializeField] GameObject combatUI;
@@ -37,23 +39,30 @@ public class UiManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
+
         EventHandeler.onPlayerDeath += ActivateDeathScreen;
         EventHandeler.onTargetDeath += UpdateScore;
         EventHandeler.onEnemyDeath += UpdateScore;
         EventHandeler.onSubEnemyDeath += UpdateScore;
 
         EventHandeler.exitRoom += CloseAllMenus;
-        EventHandeler.exitRoom += ExitRoom;
+        EventHandeler.enterRoom += EnterRoom;
+    }
+
+    void Start()
+    {
+        InventoryManager.instance.inventoryUi = inventoryMenu;
     }
 
     private void Update()
     {
-        if (GameManager.instance.forceLock)
+        if (GameManager.instance.forceLock || MapManager.instance.currentRoomType == RoomType.HOME)
         {
             return;
         }
@@ -141,6 +150,19 @@ public class UiManager : MonoBehaviour
        
     }
 
+    public void EnterRoom()
+    {
+        RoomType curRoomType = MapManager.instance.currentRoomType;
+        if (curRoomType == RoomType.COMBAT || curRoomType == RoomType.MINIBOSS || curRoomType == RoomType.BOSS)
+        {
+            CombatUI(true);
+        }
+        else
+        {
+            CombatUI(false);
+        }
+    }
+
     #region Button Functions
     public void MainMenuOpen()
     {
@@ -172,9 +194,4 @@ public class UiManager : MonoBehaviour
     }
 
     #endregion
-
-    public void ExitRoom()
-    {
-        Debug.Log("exit room");
-    }
 }

@@ -16,7 +16,7 @@ public class ShopUpgradeScript : MonoBehaviour
     
     void Start()
     {
-        attachmentName.text = attachment.name;
+        attachmentName.text = attachment.attachmentName;
         // statValue.text = attachment.damage.ToString();
         priceText.text = attachment.price.ToString();
 

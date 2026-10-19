@@ -12,8 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fdd37c79353f1446909c1f30f1ae39a, type: 3}
   m_Name: Barrel
   m_EditorClassIdentifier: Assembly-CSharp::Barrel
+  attachmentName: type
   rarity: 0
   id: 0
-  price: 0
+  price: 200
   type: 2
-  modifiers: []
+  modifiers:
+  - type: 0
+    value: 0
+  - type: 1
+    value: 0
+  - type: 5
+    value: 0

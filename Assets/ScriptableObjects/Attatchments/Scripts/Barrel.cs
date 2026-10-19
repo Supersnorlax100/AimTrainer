@@ -7,6 +7,8 @@ public class Barrel : Attachment
     // For attatchment available mods
     void Awake()
     {
+        attachmentName = nameof(AttachmentType.Barrel);
+
         Modifier _modifier = new Modifier{type = ModifierType.DamageIncrease};
         Modifier _modifier2 = new Modifier{type = ModifierType.DamageMult};
         Modifier _modifier3 = new Modifier{type = ModifierType.BulletSize};

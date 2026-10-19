@@ -56,7 +56,7 @@ public class ShopManager : MonoBehaviour
     Attachment CreateAttachment()
     {
         Attachment _attachment = Instantiate(GameManager.instance.attachmentPool[Random.Range(0, GameManager.instance.attachmentPool.Length)]);
-        _attachment.rarity = (Rarity)Random.Range(0,2);
+        _attachment.rarity = (Rarity)Random.Range(0,2); // #TODO: rarity calculation
         _attachment.RollStats();
 
         return _attachment;
@@ -64,12 +64,17 @@ public class ShopManager : MonoBehaviour
 
     public void Purchase(Attachment attachment)
     {
-        if (GameManager.instance.score < (int)Mathf.Round(attachment.price))
+        if (InventoryManager.instance.CheckInventorySlots(attachment.type) == -1 || InventoryManager.instance.GetEquipedAttachment(attachment.type) != null)
+        {
+            Debug.Log("inventory full");
+        }
+        if (GameManager.instance.score < Mathf.CeilToInt(attachment.price))
         {
             Debug.Log("brokie");
             return;
         }
-        GameManager.instance.score -= (int)Mathf.Round(attachment.price);
+        GameManager.instance.score -= Mathf.CeilToInt(attachment.price);
+        InventoryManager.instance.EquipAttachment(attachment);
         EventHandeler.purchase?.Invoke();
         UpdateUI();
     }

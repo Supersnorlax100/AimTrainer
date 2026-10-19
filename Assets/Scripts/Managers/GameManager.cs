@@ -15,10 +15,11 @@ public enum RunType
 }
 public class GameManager : MonoBehaviour
 {
-    public TargetType stageType;
 
     public static GameManager instance;
 
+    public TargetType stageType;
+    
     public Attachment[] attachmentPool;
 
     public int targetCount;
@@ -65,6 +66,8 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
 
         EventHandeler.exitRoom += FinalizeScore;
+
+        EventHandeler.enterRoom += EnterRoom;
         
         curTime = secondsGiven * 100;
     }
@@ -89,6 +92,11 @@ public class GameManager : MonoBehaviour
                 UiManager.instance?.UpdateComboUI(activeComboTimer, comboValue);
             }
         }
+    }
+
+    public void EnterRoom()
+    {
+        
     }
 
     void DetermineTargetType()
@@ -186,6 +194,11 @@ public class GameManager : MonoBehaviour
             isPaused = false;
             Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1;
+            // #TODO: Consider if in the shop the game should be "paused"
+            if (MapManager.instance.currentRoomType == RoomType.SHOP)
+            {
+                Cursor.lockState = CursorLockMode.None;
+            }
             return;
         }
         isPaused = true;
