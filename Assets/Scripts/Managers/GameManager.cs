@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
     public float comboMultDivisor = 10;
 
     float roomScore;
-    public int score;
+    public int score = 1000000;
 
     public RunType runType;
 

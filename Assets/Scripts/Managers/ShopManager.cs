@@ -29,6 +29,19 @@ public class ShopManager : MonoBehaviour
         GenerateUI();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown("s"))
+        {
+            // Reroll shop
+            for (int i = 0; i < shopUpgrades.Length; i++)
+            {
+                shopUpgrades[i] = null;
+            }
+            GenerateUI();
+        }
+    }
+
     void UpdateUI()
     {
         scoreText.text = "Score: " + GameManager.instance.score.ToString();
@@ -64,7 +77,7 @@ public class ShopManager : MonoBehaviour
 
     public void Purchase(Attachment attachment)
     {
-        if (InventoryManager.instance.CheckInventorySlots(attachment.type) == -1 || InventoryManager.instance.GetEquipedAttachment(attachment.type) != null)
+        if (InventoryManager.instance.CheckInventorySlots(attachment.type) == -1 && InventoryManager.instance.GetEquipedAttachment(attachment.type) != null)
         {
             Debug.Log("inventory full");
         }
