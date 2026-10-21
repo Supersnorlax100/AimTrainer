@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -36,6 +37,7 @@ public class ShopManager : MonoBehaviour
             // Reroll shop
             for (int i = 0; i < shopUpgrades.Length; i++)
             {
+                Destroy(shopUpgrades[i]);
                 shopUpgrades[i] = null;
             }
             GenerateUI();
@@ -59,7 +61,7 @@ public class ShopManager : MonoBehaviour
             }
             
             GameObject _shopUpgrade = Instantiate(shopUpgrade, shopUpgradeContainer.transform);
-            shopUpgrades.Append(_shopUpgrade);
+            shopUpgrades[i] = _shopUpgrade;
 
             Attachment _attachment = CreateAttachment();
             _shopUpgrade.GetComponent<ShopUpgradeScript>().attachment = _attachment;
@@ -80,6 +82,7 @@ public class ShopManager : MonoBehaviour
         if (InventoryManager.instance.CheckInventorySlots(attachment.type) == -1 && InventoryManager.instance.GetEquipedAttachment(attachment.type) != null)
         {
             Debug.Log("inventory full");
+            return;
         }
         if (GameManager.instance.score < Mathf.CeilToInt(attachment.price))
         {
@@ -90,5 +93,7 @@ public class ShopManager : MonoBehaviour
         InventoryManager.instance.EquipAttachment(attachment);
         EventHandeler.purchase?.Invoke();
         UpdateUI();
+        Debug.Log("inventory after purchase: ");
+        InventoryManager.instance.DebugInventory();
     }
 }

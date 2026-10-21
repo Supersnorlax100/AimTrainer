@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        //#TODO replace with invoke repeating and in pause function
         // Handle Combo Logic
         if (!isPaused)
         {
@@ -188,17 +189,13 @@ public class GameManager : MonoBehaviour
 
     public void Pause(bool isPausing)
     {
-        if (! isPausing && ! MapManager.instance.map.activeSelf &&
+        if (! isPausing && ! MapManager.instance.map.activeSelf && MapManager.instance.currentRoomType != RoomType.SHOP &&
         (!UiManager.instance || (UiManager.instance && ! UiManager.instance.activeMenu)))
         {
             isPaused = false;
             Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1;
             // #TODO: Consider if in the shop the game should be "paused"
-            if (MapManager.instance.currentRoomType == RoomType.SHOP)
-            {
-                Cursor.lockState = CursorLockMode.None;
-            }
             return;
         }
         isPaused = true;

@@ -58,11 +58,12 @@ public abstract class Attachment : ScriptableObject
 
     public void RollStats()
     {
-        Debug.Log("Roll stats");
+        // Debug.Log("Roll stats");
+        Debug.Log("mod count: " + modifiers.Count);
         foreach (Modifier modifier in modifiers)
         {
             Vector2 rollLimits = GetRollLimits(modifier.type);
-            modifier.value =  UnityEngine.Random.Range(rollLimits.x, rollLimits.y);
+            modifier.value =  Mathf.Round(UnityEngine.Random.Range(rollLimits.x, rollLimits.y)*100)/100;
         }
     }
 
@@ -72,53 +73,53 @@ public abstract class Attachment : ScriptableObject
         switch(modifierType)
         {
             case ModifierType.ComboTime:
-                Debug.Log("roll comboTime");
+                // Debug.Log("roll comboTime");
                 switch(rarity)
                 {
                     case Rarity.COMMON:
-                        Debug.Log("common");
+                        // Debug.Log("common");
                         return new Vector2(0,1);
                     case Rarity.UNCOMMON:
-                        Debug.Log("uncommon");
+                        // Debug.Log("uncommon");
                         return new Vector2(0,2);
                     default:
                         return Vector2.zero;
                 }
             case ModifierType.DamageIncrease:
-                Debug.Log("roll damageInc");
+                // Debug.Log("roll damageInc");
                 switch(rarity)
                 {
                     case Rarity.COMMON:
-                        Debug.Log("common");
+                        // Debug.Log("common");
                         return new Vector2(0,5);
                     case Rarity.UNCOMMON:
-                        Debug.Log("uncommon");
+                        // Debug.Log("uncommon");
                         return new Vector2(0,10);
                     default:
                         return Vector2.zero;
                 }
             case ModifierType.DamageMult:
-                Debug.Log("roll DamageMult");
+                // Debug.Log("roll DamageMult");
                 switch(rarity)
                 {
                     case Rarity.COMMON:
-                        Debug.Log("common");
+                        // Debug.Log("common");
                         return new Vector2(0,1.1f);
                     case Rarity.UNCOMMON:
-                        Debug.Log("uncommon");
+                        // Debug.Log("uncommon");
                         return new Vector2(0,3);
                     default:
                         return Vector2.zero;
                 }
             case ModifierType.BulletSize:
-                Debug.Log("roll ButteltSize");
+                // Debug.Log("roll ButteltSize");
                 switch(rarity)
                 {
                     case Rarity.COMMON:
-                        Debug.Log("common");
+                        // Debug.Log("common");
                         return new Vector2(0,1);
                     case Rarity.UNCOMMON:
-                        Debug.Log("uncommon");
+                        // Debug.Log("uncommon");
                         return new Vector2(0,2);
                     default:
                         return Vector2.zero;

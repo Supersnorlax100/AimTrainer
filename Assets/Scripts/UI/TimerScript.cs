@@ -27,18 +27,6 @@ public class TimerScript : MonoBehaviour
 
     public void Timer()
     {
-        Debug.Log("enter room");
-        RoomType curRoomType = MapManager.instance.currentRoomType;
-        if (curRoomType != RoomType.COMBAT && curRoomType != RoomType.MINIBOSS && curRoomType != RoomType.BOSS)
-        {
-            Debug.Log("no time");
-            return;
-        }
-        else
-        {
-            Debug.Log("time");
-        }
-
         int time = GameManager.instance.curTime;
 
         if (time >= 100)

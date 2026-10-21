@@ -11,7 +11,7 @@ public class InventoryManager : MonoBehaviour
 
     public Attachment[] equipedAttachments;
 
-    Dictionary<AttachmentType, List<Attachment>> inventory = new Dictionary<AttachmentType, List<Attachment>>();
+    Dictionary<AttachmentType, Attachment[]> inventory = new Dictionary<AttachmentType, Attachment[]>();
 
     void Awake()
     {
@@ -24,18 +24,10 @@ public class InventoryManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        // Debug.Log(inventory.Count);
-
-        // inventory.Add(AttachmentType.Lazer, new List<Attachment>(2));
-
-        // Debug.Log(inventory.Count);
-
         for (int i = 0; i < Enum.GetNames(typeof(AttachmentType)).Length; i++)
         {
-            inventory[(AttachmentType)i] = new List<Attachment>(2);
-            inventory[(AttachmentType)i].Append(GameManager.instance.attachmentPool[0]);
-            Debug.Log("list length: " + inventory[(AttachmentType)i].Count);
+            inventory.Add((AttachmentType)i, new Attachment[]{null,null});
+            Debug.Log("list length: " + inventory[(AttachmentType)i].Length);
         }
         equipedAttachments = new Attachment[Enum.GetNames(typeof(AttachmentType)).Length];
     }
@@ -43,14 +35,7 @@ public class InventoryManager : MonoBehaviour
 
     public void AddAttachment(Attachment attachment)
     {
-        Debug.Log("attach id: " + attachment.id);
-        Debug.Log("attach type: " + attachment.type);
         int freeSlot = CheckInventorySlots(attachment.type);
-        if (freeSlot == -1)
-        {
-            Debug.Log("inventory is full");
-            return;
-        }
         Debug.Log("adding to inventory, slot: " + freeSlot);
         inventory[attachment.type][freeSlot] = attachment;
     }
@@ -80,7 +65,7 @@ public class InventoryManager : MonoBehaviour
         return equipedAttachments[(int)attachmentType];
     }
 
-    public List<Attachment> GetAttachments(AttachmentType attachmentType)
+    public Attachment[] GetAttachments(AttachmentType attachmentType)
     {
         return inventory[attachmentType];
     }
@@ -99,7 +84,7 @@ public class InventoryManager : MonoBehaviour
 
     public int GetAttachmentSlot(Attachment attachment)
     {
-        for (int i = 0; i < inventory[attachment.type].Count; i++)
+        for (int i = 0; i < inventory[attachment.type].Length; i++)
         {
             if (inventory[attachment.type][i] == attachment)
             {
@@ -116,25 +101,35 @@ public class InventoryManager : MonoBehaviour
         // Debug.Log("count: " + inventory[attachmentType].Count);
         if (! inventory[attachmentType][0])
         {
-            Debug.Log("0 is free");
+            // Debug.Log("0 is free");
             return 0;
         }
-        // if (inventory[attachmentType].Count == 0 || inventory[attachmentType][0] == null)
-        // {
-        //     Debug.Log("0 is free");
-        //     return 0;
-        // }
         if (! inventory[attachmentType][1])
         {
-            Debug.Log("1 is free");
+            // Debug.Log("1 is free");
             return 1;
         }
         if (! equipedAttachments[(int)attachmentType])
         {
-            Debug.Log("equip is free");
+            // Debug.Log("equip is free");
             return 2;
         }
-        Debug.Log("no free slots");
+        // Debug.Log("no free slots");
         return -1;
+    }
+
+    public void DebugInventory()
+    {
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (inventory[(AttachmentType)i][0])
+            {
+                Debug.Log((AttachmentType)i + " 0: " + inventory[(AttachmentType)i][0].id);
+            }
+            if (inventory[(AttachmentType)i][1])
+            {
+                Debug.Log((AttachmentType)i + " 1: " + inventory[(AttachmentType)i][1].id);
+            }
+        }
     }
 }

@@ -8,16 +8,24 @@ public class ShopUpgradeScript : MonoBehaviour
     
     [SerializeField] TMP_Text priceText;
     [SerializeField] TMP_Text attachmentName;
-    [SerializeField] TMP_Text statValue;
 
     [SerializeField] Image background;
     [SerializeField] Color commonColor;
     [SerializeField] Color unCommonColor;
     
+    [SerializeField] GameObject statContainer;
+    [SerializeField] GameObject statBox;
+    
     void Start()
     {
+        foreach (Modifier mod in attachment.modifiers)
+        {
+            GameObject _statBox = Instantiate(statBox, statContainer.transform);
+            // _statBox.GetComponent<StatBoxScript>().statName.text = mod.type.ToString();
+            // _statBox.GetComponent<StatBoxScript>().statValue.text = mod.value.ToString();
+            _statBox.GetComponent<StatBoxScript>().statName.text = "+" + mod.value.ToString() + " " + mod.type.ToString();
+        }
         attachmentName.text = attachment.attachmentName;
-        // statValue.text = attachment.damage.ToString();
         priceText.text = attachment.price.ToString();
 
         switch(attachment.rarity)
