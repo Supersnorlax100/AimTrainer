@@ -15,6 +15,6 @@ MonoBehaviour:
   attachmentName: Lazer
   rarity: 0
   id: 0
-  price: 0
+  price: 200
   type: 0
   modifiers: []

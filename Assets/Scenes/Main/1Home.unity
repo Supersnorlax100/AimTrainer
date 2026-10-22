@@ -1678,6 +1678,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   inventoryUi: {fileID: 0}
+  equipedAttachments: []
 --- !u!4 &1066746028
 Transform:
   m_ObjectHideFlags: 0
@@ -3377,7 +3378,7 @@ PrefabInstance:
     - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
       propertyPath: 'attachmentPool.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: caf9600fe9f52284593f80a7a43328f9, type: 2}
+      objectReference: {fileID: 11400000, guid: cdd94ee23eb0c1142a43c0f994d9b361, type: 2}
     - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
       propertyPath: 'attachmentPool.Array.data[1]'
       value: 
