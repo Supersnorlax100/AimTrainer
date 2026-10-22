@@ -151,10 +151,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -129
       objectReference: {fileID: 0}
-    - target: {fileID: 832721775486102795, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
-      propertyPath: inventoryMenu
-      value: 
-      objectReference: {fileID: 1146987003}
     - target: {fileID: 1629579155292352630, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -230,10 +226,6 @@ PrefabInstance:
     - target: {fileID: 2144204331568294122, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
       propertyPath: m_Name
       value: UiManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 2144204331568294122, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2655713519174611274, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
       propertyPath: m_AnchorMax.y
@@ -655,8 +647,7 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -129
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3537837750056591910, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1968,11 +1959,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!1 &1146987003 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7187941039985570493, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
-  m_PrefabInstance: {fileID: 13797340}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1228220208
 GameObject:
   m_ObjectHideFlags: 0

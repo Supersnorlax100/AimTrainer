@@ -3,12 +3,18 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemBoxScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+// public class ItemBoxScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ItemBoxScript : MonoBehaviour
 {
-    [SerializeField] Attachment attachment;
+    [HideInInspector] public Attachment attachment;
     [SerializeField] TMP_Text text;
 
     InventoryScript inventoryScript;
+
+    public void EquipItem()
+    {
+        inventoryScript.EquipItem(attachment);
+    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -19,4 +25,6 @@ public class ItemBoxScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         Debug.Log("on pointer exit");
     }
+
+    // OnPointerClick
 }

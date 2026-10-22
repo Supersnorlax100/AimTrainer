@@ -2,14 +2,16 @@ using UnityEngine;
 
 public class InventoryScript : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    GameObject[][] attachmentSlots;
+
+    GameObject[] equipedAttachmentSlots;
+    public void EquipItem(Attachment attachment)
     {
-        
+        InventoryManager.instance.EquipAttachment(attachment);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateUI()
     {
         
     }

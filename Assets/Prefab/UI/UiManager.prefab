@@ -2112,6 +2112,7 @@ MonoBehaviour:
   settingsMenu: {fileID: 2748692852545151399}
   deathScreen: {fileID: 2498032261384791174}
   pauseMenu: {fileID: 3536708976289938842}
+  inventoryMenu: {fileID: 7187941039985570493}
   combatUI: {fileID: 5389676717699755846}
   Timer: {fileID: 5529955664340544865}
   scoreText: {fileID: 342959819003746165}
@@ -4331,7 +4332,6 @@ GameObject:
   - component: {fileID: 2556163048516412250}
   - component: {fileID: 6955762045893372846}
   - component: {fileID: 6236140001380583410}
-  - component: {fileID: 3537837750056591910}
   m_Layer: 5
   m_Name: TimerValue
   m_TagString: Untagged
@@ -4458,25 +4458,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &3537837750056591910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5529955664340544865}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10cdf06b94d89504d88c8ce6210eba09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TimerScript
-  timerTextUI: {fileID: 6236140001380583410}
-  countdownTimerText: {fileID: 0}
-  countDownScreen: {fileID: 0}
-  crosshair: {fileID: 0}
-  TimerValueObj: {fileID: 0}
-  ScoreObj: {fileID: 0}
-  ComboObj: {fileID: 0}
 --- !u!1 &5818454244683993979
 GameObject:
   m_ObjectHideFlags: 0
@@ -9913,6 +9894,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4194343453083202913, guid: 18fe6c4c60f74f14da3a76f224810b0d, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6233765713995846300, guid: 18fe6c4c60f74f14da3a76f224810b0d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -9936,6 +9921,10 @@ PrefabInstance:
     - target: {fileID: 6233765713995846300, guid: 18fe6c4c60f74f14da3a76f224810b0d, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6902329609771950061, guid: 18fe6c4c60f74f14da3a76f224810b0d, type: 3}
+      propertyPath: m_text
+      value: Lazser
       objectReference: {fileID: 0}
     - target: {fileID: 8838791514221343490, guid: 18fe6c4c60f74f14da3a76f224810b0d, type: 3}
       propertyPath: m_Name
