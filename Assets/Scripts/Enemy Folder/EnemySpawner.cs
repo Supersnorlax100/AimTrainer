@@ -74,8 +74,6 @@ public class EnemySpawner : MonoBehaviour
         //foreach (Collider coll in spawnableCollisions) { Debug.Log("spawn coll: " + coll.name); }
         #endregion
 
-
-
         if (spawnableCollisions.Length == 1 && spawnableCollisions[0].gameObject.layer == 9 && targetCollisions.Length > 0 && (targetCollisions[0].gameObject.layer != 6 || targetCollisions[1].gameObject.layer != 6))
         {
             return targetPos;
@@ -113,7 +111,7 @@ public class EnemySpawner : MonoBehaviour
                 }
                 if (testEnemy.GetComponentInChildren<FlowerModScript>())
                 {
-                    _target.GetComponentInChildren<FlowerModScript>().spawnAreaForPetals = spawnArea;
+                    _target.GetComponentInChildren<FlowerModScript>().spawnArea = spawnArea;
                 }
                 if (testEnemy.GetComponentInChildren<SlimeScript>())
                 {
@@ -145,7 +143,7 @@ public class EnemySpawner : MonoBehaviour
                         }
                         if (testEnemy.GetComponentInChildren<FlowerModScript>())
                         {
-                            testEnemy.GetComponentInChildren<FlowerModScript>().spawnAreaForPetals = spawnArea;
+                            testEnemy.GetComponentInChildren<FlowerModScript>().spawnArea = spawnArea;
                         }
                         if (areEnemysMoving)
                         {

@@ -17,7 +17,7 @@ public class FlowerModScript : MonoBehaviour
     [SerializeField] int petalRotateVariationMax;
     int petalRotateVariationCurrent;
 
-    public GameObject spawnAreaForPetals;
+    public GameObject spawnArea;
 
     private void Awake()
     {
@@ -55,7 +55,7 @@ public class FlowerModScript : MonoBehaviour
             GameObject newPetal = Instantiate(petalPrefab, petalParent.transform);
             if (newPetal.GetComponentInChildren<BlinkyModScript>())
             {
-                newPetal.GetComponentInChildren<BlinkyModScript>().spawnArea = spawnAreaForPetals;
+                newPetal.GetComponentInChildren<BlinkyModScript>().spawnArea = spawnArea;
             }
             GameManager.instance.targetCount++;
             petalParent.transform.rotation = Quaternion.Euler(0, 0, degreasBetweenPetals * i);

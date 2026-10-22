@@ -202,6 +202,6 @@ public class GameManager : MonoBehaviour
     public void GameStart()
     {
         MapManager.instance.OpenMap();
-        MapManager.instance.canLeaveRoom = true;
+        MapManager.instance.canMove = true;
     }
 }
