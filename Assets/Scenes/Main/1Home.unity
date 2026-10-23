@@ -151,6 +151,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -129
       objectReference: {fileID: 0}
+    - target: {fileID: 480419272427827150, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
+      propertyPath: m_Name
+      value: AttachmentSlots
+      objectReference: {fileID: 0}
     - target: {fileID: 1629579155292352630, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -622,6 +626,10 @@ PrefabInstance:
     - target: {fileID: 7979086754007711885, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -168
+      objectReference: {fileID: 0}
+    - target: {fileID: 8473426071656577596, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
+      propertyPath: m_Name
+      value: EquipedAtatchmentSlots
       objectReference: {fileID: 0}
     - target: {fileID: 8948496208065871457, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1670,6 +1678,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   inventoryUi: {fileID: 0}
   equipedAttachments: []
+  rarityColors:
+  - {r: 0, g: 0.46666667, b: 0, a: 0}
 --- !u!4 &1066746028
 Transform:
   m_ObjectHideFlags: 0

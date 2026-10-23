@@ -267,6 +267,7 @@ public class MapManager : MonoBehaviour
         }
         nodeMap.Clear();
         MakeMap();
+        MapVisibility(true);
     }
     void MapVisibility(bool isVisible)
     {

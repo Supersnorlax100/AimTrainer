@@ -11,6 +11,13 @@ public class InventoryManager : MonoBehaviour
 
     public Attachment[] equipedAttachments;
 
+    public Color[] rarityColors;
+    // COMMON,
+    // UNCOMMON,
+    // RARE,
+    // EPIC,
+    // LEGENDARY
+
     Dictionary<AttachmentType, Attachment[]> inventory = new Dictionary<AttachmentType, Attachment[]>();
 
     void Awake()

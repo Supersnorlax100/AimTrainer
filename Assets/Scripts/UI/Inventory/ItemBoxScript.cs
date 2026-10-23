@@ -10,10 +10,22 @@ public class ItemBoxScript : MonoBehaviour
     [SerializeField] TMP_Text text;
 
     InventoryScript inventoryScript;
+    
+    
+    void Awake()
+    {
+        EventHandeler.purchase += UpdateUI;
+    }
+
 
     public void EquipItem()
     {
         inventoryScript.EquipItem(attachment);
+    }
+
+    public void UpdateUI()
+    {
+        text.text = attachment.attachmentName; 
     }
 
     public void OnPointerEnter(PointerEventData eventData)
