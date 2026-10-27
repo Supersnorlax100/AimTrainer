@@ -10,8 +10,8 @@ public class ShopUpgradeScript : MonoBehaviour
     [SerializeField] TMP_Text attachmentName;
 
     [SerializeField] Image background;
-    [SerializeField] Color commonColor;
-    [SerializeField] Color unCommonColor;
+    // [SerializeField] Color commonColor;
+    // [SerializeField] Color unCommonColor;
     
     [SerializeField] GameObject statContainer;
     [SerializeField] GameObject statBox;
@@ -28,18 +28,7 @@ public class ShopUpgradeScript : MonoBehaviour
         attachmentName.text = attachment.attachmentName;
         priceText.text = attachment.price.ToString();
 
-        switch(attachment.rarity)
-        {
-            case Rarity.COMMON:
-                background.color = commonColor;
-                break;
-            case Rarity.UNCOMMON:
-                background.color = unCommonColor;
-                break;
-            default:
-                background.color = Color.white;
-                break;
-        }
+        background.color = InventoryManager.instance.rarityColors[(int)attachment.rarity];
     }
 
     public void Purchase()

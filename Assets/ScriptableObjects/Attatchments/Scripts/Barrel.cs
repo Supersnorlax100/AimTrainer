@@ -9,6 +9,14 @@ public class Barrel : Attachment
     {
         attachmentName = nameof(AttachmentType.Barrel);
 
+        if (modifiers.Count == 0)
+        {
+            CreateModifiers();
+        }
+    }
+
+    public override void CreateModifiers()
+    {
         Modifier _modifier = new Modifier{type = ModifierType.DamageIncrease};
         Modifier _modifier2 = new Modifier{type = ModifierType.DamageMult};
         Modifier _modifier3 = new Modifier{type = ModifierType.BulletSize};

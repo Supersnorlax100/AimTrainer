@@ -55,6 +55,12 @@ public abstract class Attachment : ScriptableObject
 
     public List<Modifier> modifiers;
 
+    void Awake()
+    {
+        CreateModifiers();
+    }
+
+    public abstract void CreateModifiers();
 
     public void RollStats()
     {

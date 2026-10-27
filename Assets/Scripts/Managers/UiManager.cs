@@ -67,19 +67,30 @@ public class UiManager : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown("escape") || Input.GetKeyDown("tab"))
+        if (MapManager.instance.currentRoomType == RoomType.BOSS 
+        || MapManager.instance.currentRoomType == RoomType.MINIBOSS 
+        || MapManager.instance.currentRoomType == RoomType.COMBAT)
         {
-           if (activeMenu == pauseMenu)
-           {
-                MenuOpen(pauseMenu, false, true);
+            if (Input.GetKeyDown("escape") || Input.GetKeyDown("tab"))
+            {
+                if (!activeMenu)
+                {
+                    MenuOpen(pauseMenu, true, true);
+                    return;
+                }
+                else if (Input.GetKeyDown("escape") || activeMenu == pauseMenu) Back();
+            }
+        }
+        // else if (Input.GetKeyDown("escape")) Back();
+
+        if (Input.GetKeyDown("i"))
+        {
+            if (activeMenu == inventoryMenu)
+            {
+                Back();
                 return;
-           }
-           else if (!activeMenu)
-           {
-                MenuOpen(pauseMenu, true, true);
-           }
-            // if active menu that is not pause menu 
-           else if (Input.GetKeyDown("escape")) Back();
+            }
+            MenuOpen(inventoryMenu, true, true);
         }
     }
 
@@ -176,6 +187,13 @@ public class UiManager : MonoBehaviour
 
     public void Back()
     {
+        if (menuOpenOrder.Count == 0)
+        {
+            activeMenu.SetActive(false);
+            activeMenu = null;
+            GameManager.instance.Pause(false);
+            return;
+        }
         // ^1 is the same as -1 except for some reason it doesn't like -1 so I used ^1
         MenuOpen(menuOpenOrder[^1], true, false);
         menuOpenOrder.Remove(menuOpenOrder[^1]);
@@ -184,8 +202,7 @@ public class UiManager : MonoBehaviour
     public void CloseAllMenus()
     {
         menuOpenOrder.Clear();
-        if (activeMenu)
-            MenuOpen(activeMenu, false, false);
+        if (activeMenu) MenuOpen(activeMenu, false, false);
     }
 
     public void SettingsMenu()

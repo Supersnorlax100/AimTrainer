@@ -18,7 +18,7 @@ public class MapManager : MonoBehaviour
 {
     public static MapManager instance;
     
-    public bool canMove; // Can go to new room
+    public bool canLeaveRoom; // Can go to new room
 
     public GameObject map;
 
@@ -37,6 +37,7 @@ public class MapManager : MonoBehaviour
     public Vector2 currentRoom = new Vector2(1,-1);
     public RoomType currentRoomType;
     List<Vector2> pastRooms = new List<Vector2>(1);
+    public int curentFloor; //Temp Destroy me i am called in EnemySpawner
 
     public Sprite[] sprites;
     [SerializeField] GameObject mapNode;
@@ -56,16 +57,6 @@ public class MapManager : MonoBehaviour
     [SerializeField] int specalRoomOdds = 5; // aka miniBoss and shop
     [SerializeField] int shopOdds = 70;
     [SerializeField] int eventOdds = 25;
-    //public bool canMiniBossSpawn;
-    //public bool canShopSpawn;
-    //public bool canEventSpawn;
-    //public int miniBossOdds;
-    //public int shopOdds;
-    //public int eventOdds;
-
-    // GameObject[] activeCanvases;
-
-    public int curentFloor; //Temp Destroy me i am called in EnemySpawner
 
     private void Awake()
     {
@@ -79,6 +70,8 @@ public class MapManager : MonoBehaviour
             Destroy(gameObject);
         }
         // SceneManager.sceneLoaded += OnSceneLoaded;
+
+        EventHandeler.exitRoom += ExitRoom;
     }
 
     private void Start()
@@ -89,6 +82,10 @@ public class MapManager : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            EventHandeler.exitRoom?.Invoke();
+        }
         if (Input.GetKeyDown(KeyCode.M))
         {
             MapVisibility(!map.activeSelf);
@@ -101,12 +98,12 @@ public class MapManager : MonoBehaviour
         {
             GameManager.instance.Pause(true);
         }
+    }
 
-        // #TODO: move to happen on stage end
-        foreach (GameObject node in availableNodes)
-        {
-            node.GetComponent<Button>().enabled = canMove;
-        }
+    void ExitRoom()
+    {
+        canLeaveRoom = true;
+        MapVisibility(true);
     }
 
     public async Task GoToRoom(Vector2 room)
@@ -211,27 +208,6 @@ public class MapManager : MonoBehaviour
                 return RoomType.COMBAT;
             }
         }
-
-
-        //if (roomPos.y >= Mathf.Floor(floorsNumber/2))
-        //{
-        //    canMiniBossSpawn = true;
-        //}
-        //if (roomPos.y >= Mathf.Floor(floorsNumber/3))
-        //{
-        //    canShopSpawn = true;
-        //    canEventSpawn = true;
-        //}
-
-        //int randNum = Random.Range(0,101);
-        //if (randNum >= miniBossOdds && canMiniBossSpawn)
-        //    return RoomType.MINIBOSS;
-        //else if (randNum >= shopOdds && canShopSpawn)
-        //    return RoomType.SHOP;
-        //else if (randNum >= eventOdds && canEventSpawn)
-        //    return RoomType.EVENT;
-        //else
-        //    return RoomType.COMBAT;
     } 
 
     public Sprite GetRoomSprite(Vector2 roomPosition)
@@ -291,23 +267,20 @@ public class MapManager : MonoBehaviour
         }
         nodeMap.Clear();
         MakeMap();
+        MapVisibility(true);
     }
-
-    // Runs automatically whenever any scene finishes loading
-    // void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    // {
-    //     activeCanvases = GameObject.FindGameObjectsWithTag("Canvas");
-    // }
-
     void MapVisibility(bool isVisible)
     {
-        // foreach (GameObject canvas in activeCanvases)
-        // {
-        //     canvas.SetActive(!isVisible);
-        // }
         if (UiManager.instance)
         {
             UiManager.instance?.CombatUI(!isVisible);
+        }
+        if (isVisible)
+        {
+            foreach (GameObject node in availableNodes)
+            {
+                node.GetComponent<Button>().enabled = canLeaveRoom;
+            }
         }
         map.SetActive(isVisible);
         GameManager.instance.Pause(isVisible);
