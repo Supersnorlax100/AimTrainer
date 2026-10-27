@@ -9,7 +9,7 @@ public class ItemBoxScript : MonoBehaviour
     [HideInInspector] public Attachment attachment;
     [SerializeField] TMP_Text text;
 
-    InventoryScript inventoryScript;
+    InventoryUIScript inventoryScript;
     
     
     void Awake()

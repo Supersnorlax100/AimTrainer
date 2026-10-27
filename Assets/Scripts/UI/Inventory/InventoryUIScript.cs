@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryScript : MonoBehaviour
+public class InventoryUIScript : MonoBehaviour
 {
 
     ItemBoxScript[,] attachmentSlots = new ItemBoxScript[,]
