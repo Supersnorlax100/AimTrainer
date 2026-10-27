@@ -17,6 +17,11 @@ public class TimerScript : MonoBehaviour
     int seconds;
     int centiseconds;
 
+
+    int bonusMinutes;
+    int bonusSeconds;
+    int bonusCentiseconds;
+
     int countdownTimer = 0 + 1;
 
     void Awake()
@@ -42,6 +47,21 @@ public class TimerScript : MonoBehaviour
         UpdateTimer();
         GameManager.instance.ForceLock(true);
         InvokeRepeating("CountdownTimer", 0, 1);
+
+        if(GameManager.instance.bonusTime > 0 || GameManager.instance.timeMult >0)
+        {
+            int bonusTime = GameManager.instance.bonusTime + (GameManager.instance.curTime * GameManager.instance.timeMult);
+            if (bonusTime >= 100)
+            {
+                bonusSeconds = Mathf.FloorToInt(bonusTime / 100);
+                bonusCentiseconds = bonusTime - (bonusSeconds * 100);
+            }
+            if (bonusSeconds >= 60)
+            {
+                bonusMinutes = Mathf.FloorToInt(bonusSeconds / 60);
+            }
+            bonusSeconds = bonusSeconds - (bonusMinutes * 60);
+        }
     }
 
     public void StoreTime()
@@ -55,32 +75,63 @@ public class TimerScript : MonoBehaviour
     private void UpdateTimer()
     {
         // if (MapManager.instance.currentRoomType == RoomType.SHOP)
-        if (seconds <= 0 && minutes <= 0 && centiseconds <= 0)
+        if (GameManager.instance.bonusTime > 0 || GameManager.instance.timeMult > 0)
         {
-            CancelInvoke("UpdateTimer");
-            EventHandeler.onPlayerDeath?.Invoke();
-        }
-        if (centiseconds <= 0)
-        {
-            if (seconds <= 0)
+            if (bonusSeconds <= 0 && bonusMinutes <= 0 && bonusCentiseconds <= 0)
             {
-                minutes--;
-                seconds = 59;
-                centiseconds = 99;
+                CancelInvoke("UpdateTimer");
+                EventHandeler.onPlayerDeath?.Invoke();
+            }
+            if (bonusCentiseconds <= 0)
+            {
+                if (bonusSeconds <= 0)
+                {
+                    bonusMinutes--;
+                    bonusSeconds = 59;
+                    bonusCentiseconds = 99;
+                }
+                else
+                {
+                    bonusSeconds--;
+                    bonusCentiseconds = 99;
+                }
             }
             else
             {
-                seconds--;
-                centiseconds = 99;
+                bonusCentiseconds--;
             }
+            // UpdateText();
+            timerTextUI.text = string.Format("{0:00}:{1:00}:{2:00}", bonusMinutes, bonusSeconds, bonusCentiseconds);
         }
         else
         {
-            centiseconds--;
+            if (seconds <= 0 && minutes <= 0 && centiseconds <= 0)
+            {
+                CancelInvoke("UpdateTimer");
+                EventHandeler.onPlayerDeath?.Invoke();
+            }
+            if (centiseconds <= 0)
+            {
+                if (seconds <= 0)
+                {
+                    minutes--;
+                    seconds = 59;
+                    centiseconds = 99;
+                }
+                else
+                {
+                    seconds--;
+                    centiseconds = 99;
+                }
+            }
+            else
+            {
+                centiseconds--;
+            }
+            // UpdateText();
+            timerTextUI.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, centiseconds);
         }
 
-        // UpdateText();
-        timerTextUI.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, centiseconds);
     }
 
     public void CountdownTimer()
