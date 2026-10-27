@@ -391,9 +391,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b49988fd5584d4a40a0c3d78860d7d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  damageIncrease: 0
-  damageMult: 1
-  critMult: 1.5
   stageType: 0
   attachmentPool: []
   targetCount: 0
@@ -476,24 +473,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 520022007623337680, guid: e10ceab2a57207643ad288dae6d42e02, type: 3}
-      propertyPath: testEnemy
-      value: 
-      objectReference: {fileID: 318077380457098247, guid: 060204c43046e1d4fa9a7efc0b2cb6cb, type: 3}
-    - target: {fileID: 520022007623337680, guid: e10ceab2a57207643ad288dae6d42e02, type: 3}
       propertyPath: enemySpace
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 520022007623337680, guid: e10ceab2a57207643ad288dae6d42e02, type: 3}
-      propertyPath: maxEnemyCount
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 520022007623337680, guid: e10ceab2a57207643ad288dae6d42e02, type: 3}
       propertyPath: attemptsToSpawn
       value: 2000
-      objectReference: {fileID: 0}
-    - target: {fileID: 520022007623337680, guid: e10ceab2a57207643ad288dae6d42e02, type: 3}
-      propertyPath: initialEnemyCount
-      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1217072546807628294, guid: e10ceab2a57207643ad288dae6d42e02, type: 3}
       propertyPath: m_Name
