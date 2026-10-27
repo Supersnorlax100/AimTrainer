@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager instance;
-    
+       
     public GameObject inventoryUi;
 
     public Attachment[] equipedAttachments;

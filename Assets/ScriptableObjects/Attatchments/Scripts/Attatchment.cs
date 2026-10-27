@@ -13,12 +13,12 @@ public enum Rarity
 
 public enum AttachmentType
 {
-    Lazer,
-    Trigger,
-    Barrel,
-    Grip,
     Optic,
-    Mag
+    Grip,
+    Mag,
+    Barrel,
+    Lazer,
+    Trigger
 }
 
 public enum ModifierType

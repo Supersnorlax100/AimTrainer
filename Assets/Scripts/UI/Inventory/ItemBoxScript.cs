@@ -8,9 +8,9 @@ public class ItemBoxScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [HideInInspector] public Attachment attachment;
     [SerializeField] TMP_Text text;
 
-    Image attImage;
+    [SerializeField] Image attImage;
 
-    InventoryUIScript inventoryScript;
+    [HideInInspector] public InventoryUIScript inventoryScript;
 
     public void EquipItem()
     {

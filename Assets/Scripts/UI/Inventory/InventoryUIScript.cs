@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class InventoryUIScript : MonoBehaviour
 {
+    bool madeStartStuff;
 
+    EquipedAttBoxScript[] equipedAttBoxes;
     ItemBoxScript[,] attachmentSlots = new ItemBoxScript[,]
     {{null, null},
     {null, null},
@@ -12,14 +15,14 @@ public class InventoryUIScript : MonoBehaviour
     {null, null},
     {null, null}};
 
-    [SerializeField] GameObject[] equipedAttachmentSlots;
+    // [SerializeField] GameObject[] equipedAttachmentSlots;
 
-    [SerializeField] Image[] equipedAttSlotsRarityImg;
+    // [SerializeField] Image[] equipedAttSlotsRarityImg;
 
-    void Awake()
-    {
-        EventHandeler.purchase += UpdateUI;
-    }
+    // void Awake()
+    // {
+    //     EventHandeler.purchase += UpdateUI;
+    // }
 
     void Start()
     {
@@ -35,6 +38,17 @@ public class InventoryUIScript : MonoBehaviour
             attachmentSlots[j,1] = _itemBoxes[i];
             j++;
         }
+        Debug.Log("start is prolly find");
+        madeStartStuff = true;
+    }
+
+    void OnEnable()
+    {
+        if (madeStartStuff) UpdateUI();
+        else
+        {
+            Debug.Log("not made");
+        }
     }
 
     public void EquipItem(Attachment attachment)
@@ -46,20 +60,25 @@ public class InventoryUIScript : MonoBehaviour
 
     public void UpdateUI()
     {
+        Debug.Log("updateUI");
         // EquipedUI
-        for (int i = 0; i < equipedAttachmentSlots.Length; i++)
+        for (int i = 0; i < Enum.GetNames(typeof(AttachmentType)).Length; i++)
         {
-            if (InventoryManager.instance.equipedAttachments[i])
-            {
-                equipedAttSlotsRarityImg[i].enabled = true;
-                equipedAttSlotsRarityImg[i].color = InventoryManager.instance.rarityColors[(int)InventoryManager.instance.equipedAttachments[i].rarity];
-            }
-            else
-            {
-                equipedAttSlotsRarityImg[i].enabled = false;
-            }
+            equipedAttBoxes[i].inventoryScript = this;
+            equipedAttBoxes[i].UpdateUI();
         }
-
+        // for (int i = 0; i < equipedAttachmentSlots.Length; i++)
+        // {
+        //     if (InventoryManager.instance.equipedAttachments[i])
+        //     {
+        //         equipedAttSlotsRarityImg[i].enabled = true;
+        //         equipedAttSlotsRarityImg[i].color = InventoryManager.instance.rarityColors[(int)InventoryManager.instance.equipedAttachments[i].rarity];
+        //     }
+        //     else
+        //     {
+        //         equipedAttSlotsRarityImg[i].enabled = false;
+        //     }
+        // }
         // Attachment Slots
         Debug.Log("att slots length: " + attachmentSlots.GetLength(2));
         for (int i = 0; i < attachmentSlots.GetLength(2); i++)
@@ -67,6 +86,11 @@ public class InventoryUIScript : MonoBehaviour
             Debug.Log("run, i: " + i);
             attachmentSlots[0, i].attachment = InventoryManager.instance.GetAttachments((AttachmentType)i)[0];
             attachmentSlots[1, i].attachment = InventoryManager.instance.GetAttachments((AttachmentType)i)[1];
+        }
+        foreach (ItemBoxScript itemBox in attachmentSlots)
+        {
+            itemBox.inventoryScript = this;
+            itemBox.UpdateUI();
         }
     }
 

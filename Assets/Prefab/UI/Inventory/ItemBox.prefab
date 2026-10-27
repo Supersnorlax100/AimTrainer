@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 47.25, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &357739510406579267
@@ -149,12 +149,12 @@ GameObject:
   - component: {fileID: 2872940157696600732}
   - component: {fileID: 3486239166400187818}
   m_Layer: 5
-  m_Name: Item
+  m_Name: AttImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &419435960117401049
 RectTransform:
   m_ObjectHideFlags: 0
@@ -171,7 +171,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -56.5, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2872940157696600732
@@ -241,8 +241,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 419435960117401049}
   - {fileID: 2748410928944052144}
+  - {fileID: 419435960117401049}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -264,6 +264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   attachment: {fileID: 0}
   text: {fileID: 0}
+  attImage: {fileID: 3486239166400187818}
 --- !u!1 &6961876887106451577
 GameObject:
   m_ObjectHideFlags: 0
