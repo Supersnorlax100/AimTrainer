@@ -23,17 +23,16 @@ public enum AttachmentType
 
 public enum ModifierType
 {
-    DamageIncrease,
-    DamageMult,
-    CritChance,
-    CritMult,
+    DamageIncrease, //damageIncrease 
+    DamageMult, //damageMult 
+    CritMult,  //critMult 
     CritSize,
     BulletSize,
-    TimeIncrease,
-    TimeMult,
-    ComboTime,
-    ComboIncrease,
-    ComboMult
+    TimeIncrease, //Just add to bonusTime
+    TimeMult, // timeMult
+    ComboTime, //maxComboTimer 
+    ComboIncrease, // comboIncrease 
+    ComboMult // comboMultAddition 
 }
 
 [Serializable]
