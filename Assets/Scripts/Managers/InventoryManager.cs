@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -17,6 +17,9 @@ public class InventoryManager : MonoBehaviour
     // RARE,
     // EPIC,
     // LEGENDARY
+
+    public Sprite[] attachmentImages; // TODO: Prolly temp var
+    
 
     Dictionary<AttachmentType, Attachment[]> inventory = new Dictionary<AttachmentType, Attachment[]>();
 

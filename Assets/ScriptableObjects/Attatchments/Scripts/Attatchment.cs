@@ -65,7 +65,7 @@ public abstract class Attachment : ScriptableObject
     public void RollStats()
     {
         // Debug.Log("Roll stats");
-        Debug.Log("mod count: " + modifiers.Count);
+        // Debug.Log("mod count: " + modifiers.Count);
         foreach (Modifier modifier in modifiers)
         {
             Vector2 rollLimits = GetRollLimits(modifier.type);
