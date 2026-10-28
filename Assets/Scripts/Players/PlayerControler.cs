@@ -16,7 +16,7 @@ public class PlayerControler : MonoBehaviour
 
     public float mouseSens;
 
-    public float damage = 1;
+    public float baceDamage = 1;
     public float critMultiplier = 1.5f;
 
     public int score = 0;
@@ -72,6 +72,7 @@ public class PlayerControler : MonoBehaviour
 
     void Shoot()
     {
+
         gunRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         Debug.DrawRay(gunRay.origin, gunRay.direction * 100f, Color.red, 1f);
         if (Physics.Raycast(gunRay, out targetHit, 9999999, targetCritMask))
@@ -82,7 +83,10 @@ public class PlayerControler : MonoBehaviour
                 target = target.transform.parent.gameObject;
             }
 
-            target.GetComponent<EnemyScript>().GetHit(damage, true, critMultiplier);
+
+            Debug.Log("Crit Hit");
+
+            target.GetComponent<EnemyScript>().GetHit(DamageCalc() * GameManager.instance.critMult, true, critMultiplier);
         }
         else if (Physics.Raycast(gunRay, out targetHit, 99999999, targetHitMask))
         {
@@ -91,7 +95,17 @@ public class PlayerControler : MonoBehaviour
             {
                 target = target.transform.parent.gameObject;
             }
-            target.GetComponent<EnemyScript>().GetHit(damage, false, critMultiplier);
+            target.GetComponent<EnemyScript>().GetHit(DamageCalc(), false, critMultiplier);
+
+            Debug.Log("Hit");
         }
+    }
+
+    float DamageCalc()
+    {
+        float damage = baceDamage + GameManager.instance.damageIncrease;
+        damage *= GameManager.instance.damageMult;
+        Debug.Log("Damage: " + damage);
+        return damage;
     }
 }

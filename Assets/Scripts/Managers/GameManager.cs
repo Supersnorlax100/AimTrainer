@@ -18,6 +18,10 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance;
 
+    public float damageIncrease = 0;
+    public float damageMult = 1;
+    public float critMult = 1.5f;
+
     public TargetType stageType;
     
     public Attachment[] attachmentPool;
@@ -26,6 +30,8 @@ public class GameManager : MonoBehaviour
 
     public int secondsGiven;
     public int curTime; // in centiseconds
+    public int bonusTime = 0; // in centiseconds
+    public float timeMult;
 
     public bool isPaused {get; private set;}
     public bool forceLock { get; private set; }
@@ -34,8 +40,10 @@ public class GameManager : MonoBehaviour
     public float activeComboTimer;
 
     public int comboValue;
+    public float comboIncrease = 1;
     public float comboMult;
     public float comboMultDivisor = 10;
+    public float comboMultAddition = 0;
 
     float roomScore;
     public int score = 1000000;
@@ -75,29 +83,21 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Pause(true);
-    }
 
-    private void Update()
-    {
-        //#TODO replace with invoke repeating and in pause function
-        // Handle Combo Logic
-        if (!isPaused)
-        {
-            activeComboTimer -= Time.deltaTime;
-            if (activeComboTimer <= 0)
-            {
-                comboValue = 0;
-            }
-            if (UiManager.instance)
-            {
-                UiManager.instance?.UpdateComboUI(activeComboTimer, comboValue);
-            }
-        }
     }
-
     public void EnterRoom()
     {
         
+    }
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        EventHandeler.updateUI?.Invoke();
+        DetermineTargetType();
+        if (stageType == TargetType.TRACKING)
+        {
+            maxComboTimer = maxComboTimer / 10;
+            comboMultDivisor = comboMultDivisor * 10;
+        }
     }
 
     void DetermineTargetType()
@@ -141,26 +141,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        EventHandeler.updateUI?.Invoke();
-        DetermineTargetType();
-        if (stageType == TargetType.TRACKING)
-        {
-            maxComboTimer = maxComboTimer / 10;
-            comboMultDivisor = comboMultDivisor * 10;
-        }
-    }
-
+    #region Combo Stuff
     public void RefreshCombo()
     {
-        comboValue += 1;
-        activeComboTimer = Mathf.Clamp(maxComboTimer / Mathf.Clamp(comboValue * 0.05f, 1, 10), 0.4f, 5);
+        comboValue += (int)comboIncrease;
+        activeComboTimer = Mathf.Clamp(maxComboTimer / Mathf.Clamp(comboValue * 0.05f, 1, 10), 0.4f, maxComboTimer);
     }
 
+    public void ComboTimer()
+    {
+        if (isPaused) CancelInvoke("ComboTimer");
+        activeComboTimer -= .01f;
+        if (activeComboTimer <= 0)   comboValue = 0;
+        if (UiManager.instance)  UiManager.instance?.UpdateComboUI(activeComboTimer, comboValue);
+    }
+    #endregion
+
+    #region Score
     public void AddScore()
     {
-        comboMult = 1 + comboValue/comboMultDivisor;
+        comboMult = (1 + comboValue/comboMultDivisor) + comboMultAddition;
         if (stageType == TargetType.TRACKING)
         {
             Debug.Log("tracking");
@@ -173,18 +173,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void FinalizeScore()
+    {
+        score += (int)roomScore;
+        roomScore = 0;
+    }
+    #endregion
     public void PlayerDie()
     {
         Destroy(PlayerControler.instance.gameObject);
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0;
         forceLock = true;
-    }
-
-    public void FinalizeScore()
-    {
-        score += (int)roomScore;
-        roomScore = 0;
     }
 
     public void Pause(bool isPausing)
@@ -195,7 +195,7 @@ public class GameManager : MonoBehaviour
             isPaused = false;
             Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1;
-            // #TODO: Consider if in the shop the game should be "paused"
+            Invoke("ComboTimer", 0.01f);
             return;
         }
         isPaused = true;

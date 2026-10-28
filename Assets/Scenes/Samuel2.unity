@@ -2640,6 +2640,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimerScript
   timerTextUI: {fileID: 649868905}
+  countdownTimerText: {fileID: 0}
+  countDownScreen: {fileID: 0}
+  crosshair: {fileID: 0}
+  TimerValueObj: {fileID: 0}
+  ScoreObj: {fileID: 0}
+  ComboObj: {fileID: 0}
 --- !u!114 &649868905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4966,11 +4972,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b49988fd5584d4a40a0c3d78860d7d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  damageIncrease: 0
+  damageMult: 1
+  critMult: 1.5
   stageType: 0
-  attatchmentPool: []
+  attachmentPool: []
   targetCount: 0
-  minutesGiven: 10
   secondsGiven: 10
+  curTime: 0
   maxComboTimer: 3
   activeComboTimer: 0
   comboValue: 0
@@ -6181,6 +6190,7 @@ MonoBehaviour:
   settingsMenu: {fileID: 1337469756}
   deathScreen: {fileID: 1414771989}
   pauseMenu: {fileID: 289092520}
+  inventoryMenu: {fileID: 0}
   combatUI: {fileID: 0}
   Timer: {fileID: 649868902}
   scoreText: {fileID: 25062526}
