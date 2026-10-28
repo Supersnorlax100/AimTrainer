@@ -5,22 +5,21 @@ using UnityEngine.UI;
 
 public class EquipedAttBoxScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [HideInInspector] public Attachment attachment;
+    public Attachment attachment;
     [SerializeField] TMP_Text text;
 
     [SerializeField] Image attImage;
 
     [HideInInspector] public InventoryUIScript inventoryScript;
 
-
     public void UnequipItem()
     {
-        // inventoryScript.EquipItem(attachment);
-        Debug.Log("unequip");
+        inventoryScript.UnequipAttachment(attachment);
     }
 
     public void UpdateUI()
     {
+        if (! attachment) return;
         text.text = attachment.attachmentName; 
         attImage.sprite = InventoryManager.instance.attachmentImages[(int)attachment.type];
     }

@@ -37,7 +37,6 @@ public class InventoryManager : MonoBehaviour
         for (int i = 0; i < Enum.GetNames(typeof(AttachmentType)).Length; i++)
         {
             inventory.Add((AttachmentType)i, new Attachment[]{null,null});
-            Debug.Log("list length: " + inventory[(AttachmentType)i].Length);
         }
         equipedAttachments = new Attachment[Enum.GetNames(typeof(AttachmentType)).Length];
     }
@@ -46,7 +45,6 @@ public class InventoryManager : MonoBehaviour
     public void AddAttachment(Attachment attachment)
     {
         int freeSlot = CheckInventorySlots(attachment.type);
-        Debug.Log("adding to inventory, slot: " + freeSlot);
         inventory[attachment.type][freeSlot] = attachment;
     }
 
@@ -67,6 +65,25 @@ public class InventoryManager : MonoBehaviour
         if (curEquiped)
         {
             inventory[attachment.type][GetAttachmentSlot(attachment)] = curEquiped;
+        }
+    }
+
+    public void UnequipAttachment(Attachment attachment)
+    {
+        if (GetEquipedAttachment(attachment.type) != attachment)
+        {
+            Debug.LogError("Unequip attachment mismatch");
+            return;
+        }
+        int freeSlot = CheckInventorySlots(attachment.type); 
+        if (freeSlot >= 0)
+        {
+            equipedAttachments[(int)attachment.type] = null;
+            AddAttachment(attachment);
+        }
+        else
+        {
+            EquipAttachment(inventory[attachment.type][0]);
         }
     }
 
@@ -108,23 +125,18 @@ public class InventoryManager : MonoBehaviour
     // return 2 if equip is empty
     public int CheckInventorySlots(AttachmentType attachmentType)
     {
-        // Debug.Log("count: " + inventory[attachmentType].Count);
         if (! inventory[attachmentType][0])
         {
-            // Debug.Log("0 is free");
             return 0;
         }
         if (! inventory[attachmentType][1])
         {
-            // Debug.Log("1 is free");
             return 1;
         }
         if (! equipedAttachments[(int)attachmentType])
         {
-            // Debug.Log("equip is free");
             return 2;
         }
-        // Debug.Log("no free slots");
         return -1;
     }
 

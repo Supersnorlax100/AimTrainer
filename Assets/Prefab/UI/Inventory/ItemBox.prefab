@@ -263,8 +263,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   attachment: {fileID: 0}
-  text: {fileID: 0}
+  text: {fileID: 7784230351290554892}
   attImage: {fileID: 3486239166400187818}
+  inventoryScript: {fileID: 0}
 --- !u!1 &6961876887106451577
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,13 +387,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4216460747675371441}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 2987246130316678775}
+        m_TargetAssemblyTypeName: ItemBoxScript, Assembly-CSharp
+        m_MethodName: EquipItem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

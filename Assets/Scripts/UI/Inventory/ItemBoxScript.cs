@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -5,7 +6,7 @@ using UnityEngine.UI;
 
 public class ItemBoxScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [HideInInspector] public Attachment attachment;
+    public Attachment attachment;
     [SerializeField] TMP_Text text;
 
     [SerializeField] Image attImage;
@@ -14,11 +15,12 @@ public class ItemBoxScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void EquipItem()
     {
-        inventoryScript.EquipItem(attachment);
+        inventoryScript.EquipAttachment(attachment);
     }
 
     public void UpdateUI()
     {
+        if (! attachment) return;
         text.text = attachment.attachmentName; 
         attImage.sprite = InventoryManager.instance.attachmentImages[(int)attachment.type];
     }

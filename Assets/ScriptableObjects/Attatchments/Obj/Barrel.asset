@@ -16,5 +16,11 @@ MonoBehaviour:
   rarity: 0
   id: 0
   price: 300
-  type: 2
-  modifiers: []
+  type: 3
+  modifiers:
+  - type: 0
+    value: 0
+  - type: 1
+    value: 0
+  - type: 4
+    value: 0
