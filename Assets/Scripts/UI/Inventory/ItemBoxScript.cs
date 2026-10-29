@@ -28,10 +28,12 @@ public class ItemBoxScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerEnter(PointerEventData eventData)
     {
         // Debug.Log("on pointer enter");
+        if (attachment) inventoryScript.HoverStats(attachment);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         // Debug.Log("on pointer exit");
+        inventoryScript.HoverStats(null);
     }
 }
