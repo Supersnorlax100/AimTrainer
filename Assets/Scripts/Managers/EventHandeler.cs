@@ -23,6 +23,9 @@ public class EventHandeler : MonoBehaviour
     public delegate void EnterRoom();
     public static EnterRoom enterRoom;
 
+    public delegate void LvCleared(); // todo not realy used but may be used later
+    public static LvCleared lvCleared;
+
     public delegate void ExitRoom();
     public static ExitRoom exitRoom;
 }

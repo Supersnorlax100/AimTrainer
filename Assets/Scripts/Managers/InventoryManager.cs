@@ -164,4 +164,133 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
+
+
+    public void UpdateStates(Attachment equiped, Attachment unEquip)
+    {
+        if (unEquip == null)
+        {
+            foreach (Modifier modifier in equiped.modifiers)
+            {
+                switch (modifier.type)
+                {
+                    case ModifierType.DamageIncrease:
+                        GameManager.instance.damageIncrease += modifier.value;
+                        break;
+                    case ModifierType.DamageMult:
+                        GameManager.instance.damageMult += modifier.value;
+                        break;
+                    case ModifierType.CritMult:
+                        GameManager.instance.critMult += modifier.value;
+                        break;
+                    case ModifierType.CritSize:
+                        GameManager.instance.critSize += modifier.value;
+                        break;
+                    case ModifierType.BulletSize:
+                        //toDo make bullet size modifier stuff
+                        break;
+                    case ModifierType.TimeIncrease:
+                        GameManager.instance.bonusTime += (int) MathF.Ceiling(modifier.value);
+                        break;
+                    case ModifierType.TimeMult:
+                        GameManager.instance.timeMult += modifier.value;
+                        break;
+                    case ModifierType.ComboTime:
+                        GameManager.instance.maxComboTimer += modifier.value;
+                        break;
+                    case ModifierType.ComboIncrease:
+                        GameManager.instance.comboIncrease += modifier.value;
+                        break;
+                    case ModifierType.ComboMult:
+                        GameManager.instance.comboMultAddition += modifier.value;
+                        break;
+                    default:
+                        Debug.Log("Modifier type not found in update states");
+                        break;
+                }
+            }
+            return;
+            
+        }
+        foreach (Modifier modifier in equiped.modifiers)
+        {
+            switch (modifier.type)
+            {
+                case ModifierType.DamageIncrease:
+                    GameManager.instance.damageIncrease += modifier.value;
+                    break;
+                case ModifierType.DamageMult:
+                    GameManager.instance.damageMult += modifier.value;
+                    break;
+                case ModifierType.CritMult:
+                    GameManager.instance.critMult += modifier.value;
+                    break;
+                case ModifierType.CritSize:
+                    GameManager.instance.critSize += modifier.value;
+                    break;
+                case ModifierType.BulletSize:
+                    //toDo make bullet size modifier stuff
+                    break;
+                case ModifierType.TimeIncrease:
+                    GameManager.instance.bonusTime += (int)MathF.Ceiling(modifier.value);
+                    break;
+                case ModifierType.TimeMult:
+                    GameManager.instance.timeMult += modifier.value;
+                    break;
+                case ModifierType.ComboTime:
+                    GameManager.instance.maxComboTimer += modifier.value;
+                    break;
+                case ModifierType.ComboIncrease:
+                    GameManager.instance.comboIncrease += modifier.value;
+                    break;
+                case ModifierType.ComboMult:
+                    GameManager.instance.comboMultAddition += modifier.value;
+                    break;
+                default:
+                    Debug.Log("Modifier type not found in update states");
+                    break;
+            }
+        }
+        foreach (Modifier modifer in unEquip.modifiers)
+        {
+            switch (modifer.type)
+            {
+                case ModifierType.DamageIncrease:
+                    GameManager.instance.damageIncrease -= modifer.value;
+                    break;
+                case ModifierType.DamageMult:
+                    GameManager.instance.damageMult -= modifer.value;
+                    break;
+                case ModifierType.CritMult:
+                    GameManager.instance.critMult -= modifer.value;
+                    break;
+                case ModifierType.CritSize:
+                    GameManager.instance.critSize -= modifer.value;
+                    break;
+                case ModifierType.BulletSize:
+                    //toDo make bullet size modifier stuff
+                    break;
+                case ModifierType.TimeIncrease:
+                    GameManager.instance.bonusTime -= (int)MathF.Ceiling(modifer.value);
+                    break;
+                case ModifierType.TimeMult:
+                    GameManager.instance.timeMult -= modifer.value;
+                    break;
+                case ModifierType.ComboTime:
+                    GameManager.instance.maxComboTimer -= modifer.value;
+                    break;
+                case ModifierType.ComboIncrease:
+                    GameManager.instance.comboIncrease -= modifer.value;
+                    break;
+                case ModifierType.ComboMult:
+                    GameManager.instance.comboMultAddition -= modifer.value;
+                    break;
+                default:
+                    Debug.Log("Modifier type not found in update states");
+                    break;
+            }
+        }
+
+
+    }
 }
