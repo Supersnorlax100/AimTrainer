@@ -159,7 +159,7 @@ public class InventoryManager : MonoBehaviour
                         GameManager.instance.critMult += modifier.value;
                         break;
                     case ModifierType.CritSize:
-                        //toDo make crit size modifier stuff
+                        GameManager.instance.critSize += modifier.value;
                         break;
                     case ModifierType.BulletSize:
                         //toDo make bullet size modifier stuff
@@ -201,7 +201,7 @@ public class InventoryManager : MonoBehaviour
                     GameManager.instance.critMult += modifier.value;
                     break;
                 case ModifierType.CritSize:
-                    //toDo make crit size modifier stuff
+                    GameManager.instance.critSize += modifier.value;
                     break;
                 case ModifierType.BulletSize:
                     //toDo make bullet size modifier stuff
@@ -240,7 +240,7 @@ public class InventoryManager : MonoBehaviour
                     GameManager.instance.critMult -= modifer.value;
                     break;
                 case ModifierType.CritSize:
-                    //toDo make crit size modifier stuff
+                    GameManager.instance.critSize -= modifer.value;
                     break;
                 case ModifierType.BulletSize:
                     //toDo make bullet size modifier stuff

@@ -23,10 +23,11 @@ public enum AttachmentType
 
 public enum ModifierType
 {
+    // what they are called in GameManager
     DamageIncrease, //damageIncrease 
     DamageMult, //damageMult 
     CritMult,  //critMult 
-    CritSize,
+    CritSize, //critSize
     BulletSize,
     TimeIncrease, //Just add to bonusTime
     TimeMult, // timeMult

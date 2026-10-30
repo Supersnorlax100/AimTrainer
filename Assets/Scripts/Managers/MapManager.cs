@@ -37,7 +37,8 @@ public class MapManager : MonoBehaviour
     public Vector2 currentRoom = new Vector2(1,-1);
     public RoomType currentRoomType;
     List<Vector2> pastRooms = new List<Vector2>(1);
-    public int curentFloor; //Temp Destroy me i am called in EnemySpawner
+    public int curentFloor;
+    public int currnetLvl; // todo if i want to have some insurnce code
 
     public Sprite[] sprites;
     [SerializeField] GameObject mapNode;

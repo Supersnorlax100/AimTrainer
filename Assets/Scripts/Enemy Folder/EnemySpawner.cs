@@ -5,10 +5,10 @@ using static UnityEngine.GraphicsBuffer;
 public class EnemySpawner : MonoBehaviour
 {
 
-    [SerializeField] GameObject testEnemy;
-
+    [SerializeField] GameObject enemyPrefab;
     float randomHealth;
 
+    Component[] modScripts;
 
     [SerializeField] int attemptsToSpawn = 1000;
     public Collider[] targetCollisions;
@@ -37,12 +37,9 @@ public class EnemySpawner : MonoBehaviour
     {
         XspawnAreaScale = spawnArea.transform.localScale.x;
         YspawnAreaScale = spawnArea.transform.localScale.y;
-
+        modScripts = GameManager.instance.modScriptsUnlocked.ToArray();
         generateRandomHealth();
-        for (int i = 0; i < initialEnemyCount; i++)
-        {
-            Spawn();
-        }
+        for (int i = 0; i < initialEnemyCount;)  Spawn();
     }
 
     private void generateRandomHealth()
@@ -53,14 +50,14 @@ public class EnemySpawner : MonoBehaviour
     public Vector3 GenerateSpawnLocation()
     {
         // The + YtargetSpawnAreaScale/10 is because the target spawns a little too low than what it should so I added an offset
-        // The sqrt is to out to if a square was rotated 45             
+        // The sqrt is to out to if a square was rotated 45
         float targetX = spawnArea.transform.position.x + Random.Range(-(XspawnAreaScale / 2) + XspawnAreaScale / 25, XspawnAreaScale / 2 - XspawnAreaScale / 25);
         float targetY = spawnArea.transform.position.y + Random.Range(-(YspawnAreaScale / 2), YspawnAreaScale / 2);
-        float targetZ = spawnArea.transform.position.z + testEnemy.transform.GetChild(0).gameObject.GetComponent<SphereCollider>().radius - .2f;
+        float targetZ = spawnArea.transform.position.z + enemyPrefab.transform.GetChild(0).gameObject.GetComponent<SphereCollider>().radius - .2f;
         Vector3 targetPos = new Vector3(targetX, targetY, targetZ);
 
         // Test a collider in given area
-        targetCollisions = Physics.OverlapSphere(targetPos, testEnemy.GetComponentInChildren<SphereCollider>().radius + enemySpace);
+        targetCollisions = Physics.OverlapSphere(targetPos, enemyPrefab.GetComponentInChildren<SphereCollider>().radius + enemySpace);
         spawnableCollisions = Physics.OverlapSphere(targetPos, 0.1f);
 
         #region Debugs
@@ -92,83 +89,52 @@ public class EnemySpawner : MonoBehaviour
         }
         else if (numberOfSpawnedEnemys >= maxEnemyCount)
         {
-            return;
+            return; // have spawnd all enemys it has but player has not killed all of them yet.
         }
         for (int i = 0; i < attemptsToSpawn; i++)
         {
             Vector3 targetPos = GenerateSpawnLocation();
             if (targetPos != Vector3.zero)
             {
-                numberOfSpawnedEnemys++;
-                GameManager.instance.targetCount++;
-                GameObject _target = Instantiate(testEnemy, targetPos, Quaternion.identity, enemyParent.transform);
-                _target = _target.transform.GetChild(0).gameObject;
-                _target.GetComponent<EnemyScript>().health = randomHealth;
-                if (testEnemy.GetComponentInChildren<BlinkyModScript>())
-                {
-                    
-                    _target.GetComponent<BlinkyModScript>().spawnArea = spawnArea;
-                }
-                if (testEnemy.GetComponentInChildren<FlowerModScript>())
-                {
-                    _target.GetComponentInChildren<FlowerModScript>().spawnArea = spawnArea;
-                }
-                if (testEnemy.GetComponentInChildren<SlimeScript>())
-                {
-                    _target.GetComponentInChildren<SlimeScript>().numberOFSplit = Random.Range(1, 4);
-                }
-                if (areEnemysMoving)
-                {
-                    Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
-                    float _targetSpeed = enemySpeed + Random.Range(-(enemySpeedVariability), enemySpeedVariability);
-                    _target.GetComponent<Rigidbody>().AddForce(_targetDirection.normalized * _targetSpeed, ForceMode.Impulse);
-
-                }
+                MakeEnemy(targetPos);
                 return;
             }
             if (i == attemptsToSpawn - 1)
             {
                 Debug.Log("force");
-                for (int j = 0; j < 1000000; j++)
-                {
-                    if (spawnableCollisions.Length >= 1 && spawnableCollisions[0].gameObject.layer == 9)
-                    {
-                        numberOfSpawnedEnemys++;
-                        GameManager.instance.targetCount++;
-                        GameObject _target = Instantiate(testEnemy, targetPos, Quaternion.identity, enemyParent.transform);
-                        _target = _target.transform.GetChild(0).gameObject;
-                        if (testEnemy.GetComponentInChildren<BlinkyModScript>())
-                        {
-                            testEnemy.GetComponentInChildren<BlinkyModScript>().spawnArea = spawnArea;
-                        }
-                        if (testEnemy.GetComponentInChildren<FlowerModScript>())
-                        {
-                            testEnemy.GetComponentInChildren<FlowerModScript>().spawnArea = spawnArea;
-                        }
-                        if (areEnemysMoving)
-                        {
-                            Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
-                            float _targetSpeed = enemySpeed + Random.Range(-(enemySpeedVariability), enemySpeedVariability);
-                            _target.GetComponent<Rigidbody>().AddForce(_targetDirection.normalized * _targetSpeed, ForceMode.Impulse);
-                        }
-                        return;
-                    }
-                }
-                Debug.LogError("Could not spawn target.");
+                GenerateSpawnLocation();
+                MakeEnemy(targetPos);
+                return;
             }
         }
-
     }
 
-
-    public void RespawnAll()
+    void MakeEnemy(Vector3 pos)
     {
-        for (int i = 0; i < initialEnemyCount; i++)
+        numberOfSpawnedEnemys++;
+        GameManager.instance.targetCount++;
+        GameObject newEnemy =Instantiate(enemyPrefab, pos, Quaternion.identity, enemyParent.transform);
+        newEnemy = newEnemy.transform.GetChild(0).gameObject;
+        newEnemy.GetComponent<EnemyScript>().health = randomHealth;
+        foreach(Component script in modScripts)
         {
-            Spawn();
+            newEnemy.AddComponent(script.GetType());
+        }
+        if (GameManager.instance.critSize != .4f)
+        {
+            newEnemy.gameObject.transform.GetChild(0).gameObject.transform.localScale = new Vector3(GameManager.instance.critSize, GameManager.instance.critSize, GameManager.instance.critSize);
+        }
+        if (areEnemysMoving)
+        {
+            Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
+            float _targetSpeed = enemySpeed + Random.Range(-(enemySpeedVariability), enemySpeedVariability);
+            newEnemy.GetComponent<Rigidbody>().AddForce(_targetDirection.normalized * _targetSpeed, ForceMode.Impulse);
         }
     }
-
+    public void RespawnAll()
+    {
+        for (int i = 0; i < initialEnemyCount; i++)  Spawn();
+    }
     public void ClearEnemys()
     {
         EnemyScript[] allenemys = GetComponentsInChildren<EnemyScript>();
@@ -177,6 +143,4 @@ public class EnemySpawner : MonoBehaviour
             Destroy(_enemy.gameObject.transform.parent.gameObject);
         }
     }
-
 }
-

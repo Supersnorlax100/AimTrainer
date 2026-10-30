@@ -1,6 +1,5 @@
-using System;
-using NUnit.Framework;
-using Unity.VisualScripting;
+
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,7 +22,7 @@ public class GameManager : MonoBehaviour
     public float critMult = 1.5f;
 
     public TargetType stageType;
-    
+
     public Attachment[] attachmentPool;
 
     public int targetCount;
@@ -33,7 +32,9 @@ public class GameManager : MonoBehaviour
     public int bonusTime = 0; // in centiseconds
     public float timeMult;
 
-    public bool isPaused {get; private set;}
+    public float critSize = .4f; // based of initial crit size may need to change later.
+
+    public bool isPaused { get; private set; }
     public bool forceLock { get; private set; }
 
     public float maxComboTimer = 1;
@@ -44,6 +45,11 @@ public class GameManager : MonoBehaviour
     public float comboMult;
     public float comboMultDivisor = 10;
     public float comboMultAddition = 0;
+
+    [SerializeField] List<Component> modScripts;
+    public List<Component> modScriptsUnlocked;
+    public List<Component> modScriptsToLock;
+
 
     float roomScore;
     public int score = 1000000;
@@ -87,7 +93,86 @@ public class GameManager : MonoBehaviour
     }
     public void EnterRoom()
     {
-        
+        bool loop = true;
+        switch (MapManager.instance.currentRoomType)
+        {
+            case RoomType.COMBAT:
+                while (loop)
+                {
+                    if (modScriptsUnlocked.Count == modScripts.Count)
+                    {
+                        loop = false;
+                        break;
+                    }
+                    int randomNum = UnityEngine.Random.Range(0, modScripts.Count);
+                    bool modNotUnlocked = true;
+                    foreach (Component script in modScriptsUnlocked)
+                    {
+                        if (script == modScripts[randomNum])
+                        {
+                            modNotUnlocked = false;
+                            break;
+                        }
+                    }
+                    if (modNotUnlocked)
+                    {
+                        modScriptsUnlocked.Add(modScripts[randomNum]);
+                        modScripts.Remove(modScripts[randomNum]);
+                        loop = false;
+                    }
+                    else
+                    {
+                        Debug.LogError("Error: Mod:" + modScripts[randomNum].name + " already unlocked but is not removed from ModScripts");
+                    }
+                }
+                break;
+            case RoomType.MINIBOSS:
+                int iterations = 0;
+                while (loop)
+                {
+                    if (iterations > 1000)
+                    {
+                        Debug.Log("Error: GameManager EnterRoom: Could not find a mod to unlock");
+                        loop = false;
+                        break;
+                    }
+                    if (modScriptsUnlocked.Count == modScripts.Count)
+                    {
+                        loop = false;
+                        break;
+                    }
+                    int randomNum = UnityEngine.Random.Range(0, modScripts.Count);
+                    bool modNotUnlocked = true;
+                    foreach (Component script in modScriptsUnlocked)
+                    {
+                        if (script == modScripts[randomNum])
+                        {
+                            modNotUnlocked = false;
+                            break;
+                        }
+                    }
+                    if (modNotUnlocked)
+                    {
+                        modScriptsUnlocked.Add(modScripts[randomNum]);
+                        modScriptsToLock.Add(modScripts[randomNum]);
+                        loop = false;
+                    }
+                    iterations++;
+                }
+                break;
+            case RoomType.BOSS:
+                break;
+            case RoomType.EVENT:
+                break;
+            case RoomType.SHOP:
+                break;
+            default:
+                Debug.Log("Room type out of range GameManger EnterRoom");
+                break;
+        }
+
+
+
     }
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -189,8 +274,8 @@ public class GameManager : MonoBehaviour
 
     public void Pause(bool isPausing)
     {
-        if (! isPausing && ! MapManager.instance.map.activeSelf && MapManager.instance.currentRoomType != RoomType.SHOP &&
-        (!UiManager.instance || (UiManager.instance && ! UiManager.instance.activeMenu)))
+        if (! isPausing && ! MapManager.instance.map.activeSelf && MapManager.instance.currentRoomType != RoomType.SHOP
+        && MapManager.instance.currentRoomType != RoomType.EVENT && (!UiManager.instance || (UiManager.instance && ! UiManager.instance.activeMenu)))
         {
             isPaused = false;
             Cursor.lockState = CursorLockMode.Locked;
