@@ -89,7 +89,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Pause(true);
-
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("AutoHide"))
+        {
+            obj.SetActive(false);
+        }
     }
     public void EnterRoom()
     {
