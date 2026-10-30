@@ -72,7 +72,7 @@ public class ShopManager : MonoBehaviour
     Attachment CreateAttachment()
     {
         Attachment _attachment = Instantiate(GameManager.instance.attachmentPool[Random.Range(0, GameManager.instance.attachmentPool.Length)]);
-        _attachment.rarity = (Rarity)Random.Range(0,2); // #TODO: rarity calculation
+        _attachment.rarity = (Rarity)Random.Range(0,5); // #TODO: rarity calculation
         _attachment.RollStats();
 
         return _attachment;

@@ -15,7 +15,7 @@ MonoBehaviour:
   attachmentName: Barrel
   rarity: 0
   id: 0
-  price: 300
+  price: 700
   type: 3
   modifiers:
   - type: 0

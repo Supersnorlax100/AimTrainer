@@ -19,10 +19,10 @@ public class Barrel : Attachment
     {
         Modifier _modifier = new Modifier{type = ModifierType.DamageIncrease};
         Modifier _modifier2 = new Modifier{type = ModifierType.DamageMult};
-        Modifier _modifier3 = new Modifier{type = ModifierType.BulletSize};
+        // Modifier _modifier3 = new Modifier{type = ModifierType.BulletSize}; 
 
         modifiers.Add(_modifier);
         modifiers.Add(_modifier2);
-        modifiers.Add(_modifier3);
+        // modifiers.Add(_modifier3);
     }
 }

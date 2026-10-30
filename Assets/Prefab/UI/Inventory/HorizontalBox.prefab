@@ -122,6 +122,14 @@ PrefabInstance:
       propertyPath: m_SortingLayer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2748410928944052144, guid: 9d43edb3afdcc144e9bca40c29ce0cda, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 97.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2748410928944052144, guid: 9d43edb3afdcc144e9bca40c29ce0cda, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -45.625
+      objectReference: {fileID: 0}
     - target: {fileID: 2952887831276860305, guid: 9d43edb3afdcc144e9bca40c29ce0cda, type: 3}
       propertyPath: m_SortingLayer
       value: 0

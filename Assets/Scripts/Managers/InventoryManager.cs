@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -37,6 +36,16 @@ public class InventoryManager : MonoBehaviour
             inventory.Add((AttachmentType)i, new Attachment[]{null,null});
         }
         equipedAttachments = new Attachment[Enum.GetNames(typeof(AttachmentType)).Length];
+    }
+
+    public bool IsModTypePercentage(ModifierType modType)
+    {
+        if (modType == ModifierType.DamageMult || modType == ModifierType.CritMult || modType == ModifierType.CritSize
+        || modType == ModifierType.BulletSize || modType == ModifierType.TimeMult || modType == ModifierType.ComboMult)
+        {
+            return true;
+        }
+        return false;
     }
 
 

@@ -77,7 +77,7 @@ public class InventoryUIScript : MonoBehaviour
             {
                 minutes = Mathf.FloorToInt(seconds/60);
             }
-            seconds = seconds - (minutes * 60);
+            seconds -= minutes * 60;
         }
         time.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, centiseconds);;
         
@@ -104,9 +104,10 @@ public class InventoryUIScript : MonoBehaviour
 
     public void HoverStats(Attachment attachment)
     {
-        // Will hide if null
+        // Will 'hide' all text if null
         if (attachment == null)
         {
+            attachmentName.text = "";
             foreach (TMP_Text text in hoveredAttStats)
             {
                 text.text = "";
@@ -128,7 +129,12 @@ public class InventoryUIScript : MonoBehaviour
                 hoveredAttStats[i].text = "";   
                 return;
             }
-            hoveredAttStats[i].text = "+" + curMod.value.ToString() + " " + curMod.type.ToString();
+            // if returns value as a percentage
+            if (InventoryManager.instance.IsModTypePercentage(curMod.type))
+            {
+                hoveredAttStats[i].text = "+" + curMod.value.ToString() + "% " + curMod.type.ToString();
+            }
+            else hoveredAttStats[i].text = "+" + curMod.value.ToString() + " " + curMod.type.ToString();
         }
         Attachment equipedAtt = InventoryManager.instance.equipedAttachments[(int)attachment.type];
         if (equipedAtt == null)
@@ -148,15 +154,28 @@ public class InventoryUIScript : MonoBehaviour
             // These ifs add the + or - green/red for the att that is being hovered compared to the equiped
             if (attachment.modifiers[i].value == curMod.value)
             {
+                Debug.Log("equal");
                 return;
             }
             if (attachment.modifiers[i].value > curMod.value)
             {
+                if (InventoryManager.instance.IsModTypePercentage(curMod.type))
+                {
+                    equipedAttStats[i].text = "+" + Mathf.Round(attachment.modifiers[i].value - curMod.value).ToString() + "%";
+                    equipedAttStats[i].color = Color.green; 
+                    return;
+                }
                 equipedAttStats[i].text = "+" + (Mathf.Round((attachment.modifiers[i].value - curMod.value) * 100)/100).ToString();
                 equipedAttStats[i].color = Color.green;   
             }
             else 
             {
+                if (InventoryManager.instance.IsModTypePercentage(curMod.type))
+                {
+                    equipedAttStats[i].text = "-" + Mathf.Round(curMod.value - attachment.modifiers[i].value).ToString() + "%";
+                    equipedAttStats[i].color = Color.red; 
+                    return;
+                }
                 equipedAttStats[i].text = "-" + (Math.Round((curMod.value - attachment.modifiers[i].value) * 100)/100).ToString();
                 equipedAttStats[i].color = Color.red; 
             }
