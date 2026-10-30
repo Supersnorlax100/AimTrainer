@@ -3,6 +3,7 @@ using TMPro;
 using System;
 public class TimerScript : MonoBehaviour
 {
+    // #TODO: Make a function inside game manager that does the string formatting (maybe), it would be useful for other scripts that need the format but not have to copy all code
     [SerializeField] TMP_Text timerTextUI;
     [SerializeField] TMP_Text countdownTimerText;
     [SerializeField] GameObject countDownScreen;
@@ -128,7 +129,6 @@ public class TimerScript : MonoBehaviour
             {
                 centiseconds--;
             }
-            // UpdateText();
             timerTextUI.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, centiseconds);
         }
 

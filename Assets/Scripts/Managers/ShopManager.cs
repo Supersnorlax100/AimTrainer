@@ -46,6 +46,7 @@ public class ShopManager : MonoBehaviour
 
     void UpdateUI()
     {
+        Debug.Log("update ui, game score: " + GameManager.instance.score.ToString());
         scoreText.text = "Score: " + GameManager.instance.score.ToString();
     }
 

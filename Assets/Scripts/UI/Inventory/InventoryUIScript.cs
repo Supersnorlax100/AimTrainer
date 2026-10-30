@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class InventoryUIScript : MonoBehaviour
 {
+    [SerializeField] TMP_Text score;
+    [SerializeField] TMP_Text time;
+
     [SerializeField] ItemBoxScript[] itemBoxes;
 
     [SerializeField] EquipedAttBoxScript[] equipedAttBoxes;
@@ -17,6 +20,8 @@ public class InventoryUIScript : MonoBehaviour
     {null, null},
     {null, null}};
 
+    public GameObject[] attachmentImages;
+    public GameObject[] gripImages;
     [SerializeField] TMP_Text attachmentName; // att stats att name
     [SerializeField] TMP_Text[] hoveredAttStats;
     [SerializeField] TMP_Text[] equipedAttStats;
@@ -55,6 +60,27 @@ public class InventoryUIScript : MonoBehaviour
 
     public void UpdateUI()
     {
+        score.text = GameManager.instance.score.ToString();
+        // Handel time text
+        int minutes = 0;
+        int seconds = 0;
+        int centiseconds = 0;
+        {
+            int _time = GameManager.instance.curTime;
+
+            if (_time >= 100)
+            {
+                seconds = Mathf.FloorToInt(_time/100);
+                centiseconds = _time - (seconds * 100);
+            }
+            if (seconds >= 60)
+            {
+                minutes = Mathf.FloorToInt(seconds/60);
+            }
+            seconds = seconds - (minutes * 60);
+        }
+        time.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, centiseconds);;
+        
         // EquipedUI
         for (int i = 0; i < Enum.GetNames(typeof(AttachmentType)).Length; i++)
         {
@@ -95,7 +121,7 @@ public class InventoryUIScript : MonoBehaviour
         attachmentName.text = attachment.attachmentName;
         for (int i = 0; i < attachment.modifiers.Count; i++)
         {
-            Debug.Log("i: " + i );
+            // Debug.Log("i: " + i );
             Modifier curMod = attachment.modifiers[i];
             if (attachment.modifiers[i] == null) 
             {
@@ -104,9 +130,14 @@ public class InventoryUIScript : MonoBehaviour
             }
             hoveredAttStats[i].text = "+" + curMod.value.ToString() + " " + curMod.type.ToString();
         }
+        Attachment equipedAtt = InventoryManager.instance.equipedAttachments[(int)attachment.type];
+        if (equipedAtt == null)
+        {
+            return;
+        }
         for (int i = 0; i < InventoryManager.instance.equipedAttachments[(int)attachment.type].modifiers.Count; i++)
         {
-            Attachment equipedAtt = InventoryManager.instance.equipedAttachments[(int)attachment.type];
+            
             Modifier curMod = equipedAtt.modifiers[i];
             if (equipedAtt == null || curMod == null) 
             {

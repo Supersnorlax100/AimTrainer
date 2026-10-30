@@ -17,8 +17,6 @@ public class InventoryManager : MonoBehaviour
     // RARE,
     // EPIC,
     // LEGENDARY
-
-    public Sprite[] attachmentImages; // TODO: Prolly temp var
     
 
     Dictionary<AttachmentType, Attachment[]> inventory = new Dictionary<AttachmentType, Attachment[]>();
@@ -50,22 +48,24 @@ public class InventoryManager : MonoBehaviour
 
     public void EquipAttachment(Attachment attachment)
     {
+        //#TODO: if there is a earlier free spot, it does not take it, but instead swaps locations with the item in the inventory, maybe want to reconsider but not important
         Attachment curEquiped = equipedAttachments[(int)attachment.type];
         if (GetAttachmentSlot(attachment) == -1) // if being equiped from not an item slot (on purchase)
         {
+            Debug.Log("outside inventory");
             if (curEquiped)
             {
+                Debug.Log("something is cur equiped");
                 AddAttachment(curEquiped); 
             }
+            Debug.Log("equiping new");
             equipedAttachments[(int)attachment.type] = attachment;
             return;
         }
+        Debug.Log("inside inventory");
         Attachment toEquip = inventory[attachment.type][GetAttachmentSlot(attachment)];
         equipedAttachments[(int)attachment.type] = toEquip;
-        if (curEquiped)
-        {
-            inventory[attachment.type][GetAttachmentSlot(attachment)] = curEquiped;
-        }
+        inventory[attachment.type][GetAttachmentSlot(attachment)] = curEquiped;
     }
 
     public void UnequipAttachment(Attachment attachment)
@@ -78,6 +78,7 @@ public class InventoryManager : MonoBehaviour
         int freeSlot = CheckInventorySlots(attachment.type); 
         if (freeSlot >= 0)
         {
+            Debug.Log("free slot: " + freeSlot.ToString());
             equipedAttachments[(int)attachment.type] = null;
             AddAttachment(attachment);
         }

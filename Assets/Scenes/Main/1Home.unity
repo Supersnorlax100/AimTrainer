@@ -127,6 +127,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 196542410814786309, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
+      propertyPath: m_Name
+      value: Trigger
+      objectReference: {fileID: 0}
     - target: {fileID: 267117316164936183, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -539,6 +543,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4230594693115269608, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
+      propertyPath: m_Name
+      value: Optic
+      objectReference: {fileID: 0}
     - target: {fileID: 4371770589804393076, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -611,6 +619,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4796355379841376531, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
+      propertyPath: m_Name
+      value: Grip
+      objectReference: {fileID: 0}
     - target: {fileID: 4851407858124253013, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -682,6 +694,10 @@ PrefabInstance:
     - target: {fileID: 4939783086276149903, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4993956503234495689, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
+      propertyPath: m_Name
+      value: Lazer
       objectReference: {fileID: 0}
     - target: {fileID: 5049515565325282611, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
       propertyPath: m_AnchorMax.y
@@ -907,17 +923,9 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6893323364803038009, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6893323364803038009, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
-      propertyPath: priceText
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6893323364803038009, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
-      propertyPath: background
-      value: 
+    - target: {fileID: 7138508825949434635, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
+      propertyPath: m_Name
+      value: Barrel
       objectReference: {fileID: 0}
     - target: {fileID: 7232265002187668831, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1134,6 +1142,10 @@ PrefabInstance:
     - target: {fileID: 8225581408815634959, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8805312044429581821, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
+      propertyPath: m_Name
+      value: Mag
       objectReference: {fileID: 0}
     - target: {fileID: 8948496208065871457, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1184,8 +1196,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 5107030139262894183, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c698c8c41eaef4b4397b89b4c56909cc, type: 3}
@@ -2213,13 +2224,6 @@ MonoBehaviour:
   - {r: 0, g: 0.50304997, b: 1, a: 1}
   - {r: 0.69359434, g: 0, b: 1, a: 1}
   - {r: 1, g: 0.7276479, b: 0, a: 1}
-  attachmentImages:
-  - {fileID: 21300000, guid: f293eabfeb22efa42812c4f6fb1b8828, type: 3}
-  - {fileID: 21300000, guid: 4aa593b2d2c9207499bd57b7518c3b6d, type: 3}
-  - {fileID: 21300000, guid: 6443c77acf83138409ff0869d11df890, type: 3}
-  - {fileID: 21300000, guid: 1ae74d6a17cde854fb6000d7fc4769e3, type: 3}
-  - {fileID: 21300000, guid: dcaa89a7a9764124aab977e38fefc896, type: 3}
-  - {fileID: 21300000, guid: 7c371031f27fa934cb3cddc96307ee78, type: 3}
 --- !u!4 &1066746028
 Transform:
   m_ObjectHideFlags: 0
