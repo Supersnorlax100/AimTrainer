@@ -399,11 +399,19 @@ MonoBehaviour:
   targetCount: 0
   secondsGiven: 0
   curTime: 0
+  bonusTime: 0
+  timeMult: 0
+  critSize: 0.4
   maxComboTimer: 1
   activeComboTimer: 0
   comboValue: 0
+  comboIncrease: 1
   comboMult: 0
   comboMultDivisor: 10
+  comboMultAddition: 0
+  modScripts: []
+  modScriptsUnlocked: []
+  modScriptsToLock: []
   score: 0
   runType: 0
 --- !u!1001 &1200720250
@@ -483,6 +491,10 @@ PrefabInstance:
       propertyPath: enemySpace
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 520022007623337680, guid: e10ceab2a57207643ad288dae6d42e02, type: 3}
+      propertyPath: enemyPrefab
+      value: 
+      objectReference: {fileID: 8687399965595076811, guid: 95a7abdf00a8b51429fff6ccbb9e230a, type: 3}
     - target: {fileID: 520022007623337680, guid: e10ceab2a57207643ad288dae6d42e02, type: 3}
       propertyPath: maxEnemyCount
       value: 10

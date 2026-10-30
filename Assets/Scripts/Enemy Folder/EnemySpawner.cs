@@ -39,7 +39,7 @@ public class EnemySpawner : MonoBehaviour
         YspawnAreaScale = spawnArea.transform.localScale.y;
         modScripts = GameManager.instance.modScriptsUnlocked.ToArray();
         generateRandomHealth();
-        for (int i = 0; i < initialEnemyCount;)  Spawn();
+        for (int i = 0; i < initialEnemyCount;i++)  Spawn();
     }
 
     private void generateRandomHealth()
