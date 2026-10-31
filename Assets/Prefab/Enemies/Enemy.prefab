@@ -286,7 +286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyScript
   targetType: 0
   health: 1
-  scoreValue: 1
+  scoreValue: 5
   healthBarCanvas: {fileID: 5154670183188312931}
   canGetHit: 1
   respawns: 1

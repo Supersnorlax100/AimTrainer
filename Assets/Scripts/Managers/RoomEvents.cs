@@ -76,45 +76,18 @@ public class RoomEvents : MonoBehaviour
 
     void ApliyModifiers(List<EventModifier> modifiers)
     {
-        foreach (EventModifier modifier in modifiers)
+        for (int i = 0; i < modifiers.Count; i++)
         {
-            switch (modifier.type)
+            if (modifiers[i].type == EventModTypes.Score)
             {
-                case EventModTypes.Score:
-                    GameManager.instance.score += (int)modifier.value;
-                    break;
-                case EventModTypes.Damage:
-                    GameManager.instance.damageIncrease += modifier.value;
-                    break;
-                case EventModTypes.DamageMult:
-                    GameManager.instance.damageMult += modifier.value;
-                    break;
-                case EventModTypes.CritMult:
-                    GameManager.instance.critMult += modifier.value;
-                    break;
-                case EventModTypes.CritSize:
-                    GameManager.instance.critSize += modifier.value;
-                    break;
-                case EventModTypes.BulletSize:
-                    // toDo: Implement bullet size modification logic
-                    break;
-                case EventModTypes.TimeIncrease:
-                    GameManager.instance.bonusTime += (int)modifier.value;
-                    break;
-                case EventModTypes.TimeMult:
-                    GameManager.instance.timeMult += modifier.value;
-                    break;
-                case EventModTypes.ComboTime:
-                    GameManager.instance.maxComboTimer += modifier.value;
-                    break;
-                case EventModTypes.ComboIncrease:
-                    GameManager.instance.comboIncrease += modifier.value;
-                    break;
-                case EventModTypes.ComboMult:
-                    GameManager.instance.comboMultAddition += modifier.value;
-                    break;
+                GameManager.instance.score += (int)modifiers[i].value;
+            }
+            else 
+            {
+                GameManager.instance.playerStats[(int)modifiers[i].type] += modifiers[i].value;
             }
         }
+        GameManager.instance.UpdateStats();
         EventHandeler.enterRoom?.Invoke();
     }
 }

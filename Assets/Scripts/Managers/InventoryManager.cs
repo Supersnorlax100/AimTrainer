@@ -66,9 +66,11 @@ public class InventoryManager : MonoBehaviour
             {
                 Debug.Log("something is cur equiped");
                 AddAttachment(curEquiped); 
+                UpdateStats(curEquiped, false);
             }
             Debug.Log("equiping new");
             equipedAttachments[(int)attachment.type] = attachment;
+            UpdateStats(attachment, true);
             return;
         }
         Debug.Log("inside inventory");
@@ -165,132 +167,22 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-
-    public void UpdateStates(Attachment equiped, Attachment unEquip)
+    public void UpdateStats(Attachment attachment, bool isEquiping)
     {
-        if (unEquip == null)
+        if (! isEquiping)
         {
-            foreach (Modifier modifier in equiped.modifiers)
+            for (int i = 0; i < attachment.modifiers.Count; i++)
             {
-                switch (modifier.type)
-                {
-                    case ModifierType.DamageIncrease:
-                        GameManager.instance.damageIncrease += modifier.value;
-                        break;
-                    case ModifierType.DamageMult:
-                        GameManager.instance.damageMult += modifier.value;
-                        break;
-                    case ModifierType.CritMult:
-                        GameManager.instance.critMult += modifier.value;
-                        break;
-                    case ModifierType.CritSize:
-                        GameManager.instance.critSize += modifier.value;
-                        break;
-                    case ModifierType.BulletSize:
-                        //toDo make bullet size modifier stuff
-                        break;
-                    case ModifierType.TimeIncrease:
-                        GameManager.instance.bonusTime += (int) MathF.Ceiling(modifier.value);
-                        break;
-                    case ModifierType.TimeMult:
-                        GameManager.instance.timeMult += modifier.value;
-                        break;
-                    case ModifierType.ComboTime:
-                        GameManager.instance.maxComboTimer += modifier.value;
-                        break;
-                    case ModifierType.ComboIncrease:
-                        GameManager.instance.comboIncrease += modifier.value;
-                        break;
-                    case ModifierType.ComboMult:
-                        GameManager.instance.comboMultAddition += modifier.value;
-                        break;
-                    default:
-                        Debug.Log("Modifier type not found in update states");
-                        break;
-                }
-            }
-            return;
-            
-        }
-        foreach (Modifier modifier in equiped.modifiers)
-        {
-            switch (modifier.type)
-            {
-                case ModifierType.DamageIncrease:
-                    GameManager.instance.damageIncrease += modifier.value;
-                    break;
-                case ModifierType.DamageMult:
-                    GameManager.instance.damageMult += modifier.value;
-                    break;
-                case ModifierType.CritMult:
-                    GameManager.instance.critMult += modifier.value;
-                    break;
-                case ModifierType.CritSize:
-                    GameManager.instance.critSize += modifier.value;
-                    break;
-                case ModifierType.BulletSize:
-                    //toDo make bullet size modifier stuff
-                    break;
-                case ModifierType.TimeIncrease:
-                    GameManager.instance.bonusTime += (int)MathF.Ceiling(modifier.value);
-                    break;
-                case ModifierType.TimeMult:
-                    GameManager.instance.timeMult += modifier.value;
-                    break;
-                case ModifierType.ComboTime:
-                    GameManager.instance.maxComboTimer += modifier.value;
-                    break;
-                case ModifierType.ComboIncrease:
-                    GameManager.instance.comboIncrease += modifier.value;
-                    break;
-                case ModifierType.ComboMult:
-                    GameManager.instance.comboMultAddition += modifier.value;
-                    break;
-                default:
-                    Debug.Log("Modifier type not found in update states");
-                    break;
+                GameManager.instance.playerStats[(int)attachment.modifiers[i].type] -= attachment.modifiers[i].value;
             }
         }
-        foreach (Modifier modifer in unEquip.modifiers)
+        else if (isEquiping)
         {
-            switch (modifer.type)
+            for (int i = 0; i < attachment.modifiers.Count; i++)
             {
-                case ModifierType.DamageIncrease:
-                    GameManager.instance.damageIncrease -= modifer.value;
-                    break;
-                case ModifierType.DamageMult:
-                    GameManager.instance.damageMult -= modifer.value;
-                    break;
-                case ModifierType.CritMult:
-                    GameManager.instance.critMult -= modifer.value;
-                    break;
-                case ModifierType.CritSize:
-                    GameManager.instance.critSize -= modifer.value;
-                    break;
-                case ModifierType.BulletSize:
-                    //toDo make bullet size modifier stuff
-                    break;
-                case ModifierType.TimeIncrease:
-                    GameManager.instance.bonusTime -= (int)MathF.Ceiling(modifer.value);
-                    break;
-                case ModifierType.TimeMult:
-                    GameManager.instance.timeMult -= modifer.value;
-                    break;
-                case ModifierType.ComboTime:
-                    GameManager.instance.maxComboTimer -= modifer.value;
-                    break;
-                case ModifierType.ComboIncrease:
-                    GameManager.instance.comboIncrease -= modifer.value;
-                    break;
-                case ModifierType.ComboMult:
-                    GameManager.instance.comboMultAddition -= modifer.value;
-                    break;
-                default:
-                    Debug.Log("Modifier type not found in update states");
-                    break;
+                GameManager.instance.playerStats[(int)attachment.modifiers[i].type] += attachment.modifiers[i].value;
             }
         }
-
-
+        GameManager.instance.UpdateStats();
     }
 }

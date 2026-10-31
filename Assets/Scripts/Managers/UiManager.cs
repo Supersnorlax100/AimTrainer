@@ -148,7 +148,7 @@ public class UiManager : MonoBehaviour
 
     public void UpdateScore()
     {
-        scoreText.text = "Score: " + (Mathf.Round(PlayerControler.instance.roomScore)).ToString();
+        scoreText.text = "Score: " + Mathf.Round(GameManager.instance.roomScore).ToString();
     }
 
     public void ActivateDeathScreen()

@@ -120,10 +120,8 @@ public class EnemySpawner : MonoBehaviour
         {
             newEnemy.AddComponent(script.GetType());
         }
-        if (GameManager.instance.critSize != .4f)
-        {
-            newEnemy.gameObject.transform.GetChild(0).gameObject.transform.localScale = new Vector3(GameManager.instance.critSize, GameManager.instance.critSize, GameManager.instance.critSize);
-        }
+        float _critSize = GameManager.instance.critSize;
+        newEnemy.gameObject.transform.GetChild(0).gameObject.transform.localScale = new Vector3(_critSize, _critSize, _critSize);
         if (areEnemysMoving)
         {
             Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
