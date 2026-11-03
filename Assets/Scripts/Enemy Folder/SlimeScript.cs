@@ -17,6 +17,7 @@ public class SlimeScript : MonoBehaviour
             parent = new GameObject("SlimeParent").transform;
             transform.parent.parent = parent;
         }
+        numberOFSplit = Mathf.Ceil(Mathf.Pow(2f, MapManager.instance.curentFloor) * 1);
     }
     private void OnDestroy()
     {

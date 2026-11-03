@@ -7,7 +7,7 @@ public class FlowerModScript : MonoBehaviour
     public GameObject prefab;
     int petalCount;
     GameObject petalParent;
-    [SerializeField] Vector3 petalOfset;
+    [SerializeField] Vector3 petalOfset = new Vector3(0,1,0);
     [SerializeField] GameObject[] petalPrefabs;
     List<GameObject> petals = new List<GameObject>();
     [SerializeField] float petalSpinSpeed;
@@ -33,7 +33,7 @@ public class FlowerModScript : MonoBehaviour
         Rigidbody pPRB = petalParent.transform.gameObject.AddComponent<Rigidbody>();
         pPRB.useGravity = false;
         pPRB.excludeLayers = ~0;
-        
+        petalCount =(int) Mathf.Pow(1.5f, MapManager.instance.curentFloor) * 3;
         SpawnPetals();
         GetComponent<EnemyScript>().canGetHit = false;
         petalRotateVariationMax = Random.Range(1, petalRotateVariationMax + 1);
@@ -52,10 +52,11 @@ public class FlowerModScript : MonoBehaviour
         degreasBetweenPetals = 360 / petalCount;
         for (int i = petalCount; i > 0; i--)
         {
-            GameObject petalPrefab = petalPrefabs[Random.Range(0, petalPrefabs.Length)];
-            GameObject newPetal = Instantiate(petalPrefab, petalParent.transform);
-            if (newPetal.GetComponentInChildren<BlinkyModScript>())
+            GameObject newPetal = Instantiate(prefab, petalParent.transform);
+            int randomChanceforBlink = Random.Range(0, 1);
+            if (randomChanceforBlink == 1)
             {
+                newPetal.AddComponent<BlinkyModScript>();
                 newPetal.GetComponentInChildren<BlinkyModScript>().spawnArea = spawnArea;
             }
             GameManager.instance.targetCount++;

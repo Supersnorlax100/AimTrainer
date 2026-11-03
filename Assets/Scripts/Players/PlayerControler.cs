@@ -81,22 +81,22 @@ public class PlayerControler : MonoBehaviour
             target = targetHit.collider.transform.gameObject;
             if (target.GetComponent<EnemyScript>() == null)
             {
-                target = target.transform.parent.gameObject;
+                target = target?.transform?.parent?.gameObject;
             }
 
 
             // Debug.Log("Crit Hit");
 
-            target.GetComponent<EnemyScript>().GetHit(DamageCalc(true));
+            target.GetComponent<EnemyScript>()?.GetHit(DamageCalc(true));
         }
         else if (Physics.Raycast(gunRay, out targetHit, 99999999, targetHitMask))
         {
             target = targetHit.collider.transform.gameObject;
             if(target.GetComponent<EnemyScript>() == null)
             {
-                target = target.transform.parent.gameObject;
+                target = target?.transform?.parent?.gameObject;
             }
-            target.GetComponent<EnemyScript>().GetHit(DamageCalc(false));
+            target.GetComponent<EnemyScript>()?.GetHit(DamageCalc(false));
 
             // Debug.Log("Hit");
         }
