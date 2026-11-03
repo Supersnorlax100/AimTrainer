@@ -2,18 +2,18 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingManager : MonoBehaviour
+public class SettingsManager : MonoBehaviour
 {
-    public static SettingManager Instance;
+    public static SettingsManager instance;
 
-    [SerializeField] Slider mouseSensSlider;
-    [SerializeField] TMP_Text mouseSensSliderText;
+    public float mouseSens = 1;
+    public int countdownTime = 3;
 
     void Awake()
     {
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -22,16 +22,14 @@ public class SettingManager : MonoBehaviour
         }
     }
 
-    public void SettingsUpdate()
+    void Start()
     {
-        // Round Values
-        mouseSensSlider.value = Mathf.Round(mouseSensSlider.value * 100) / 100;
-
-        // Change values
-        PlayerControler.instance.mouseSens = mouseSensSlider.value;
-
-        // Update Visual
-        mouseSensSliderText.text = mouseSensSlider.value.ToString();
+        UpdateSettings();
     }
 
+    public void UpdateSettings()
+    {
+        if (PlayerControler.instance) PlayerControler.instance.mouseSens = mouseSens;
+        UiManager.instance.timerScript.countdownTime = countdownTime;
+    }
 }

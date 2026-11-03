@@ -22,12 +22,17 @@ public class TimerScript : MonoBehaviour
     int bonusSeconds;
     int bonusCentiseconds;
 
-    int countdownTimer = 3 + 1;
+    public int countdownTime;
 
     void Awake()
     {
         // EventHandeler.exitRoom += StoreTime;
         EventHandeler.enterRoom += Timer;
+    }
+
+    void Start()
+    {
+        countdownTime = SettingsManager.instance.countdownTime; 
     }
 
     public void Timer()
@@ -48,7 +53,8 @@ public class TimerScript : MonoBehaviour
         RoomType _curRoomType = MapManager.instance.currentRoomType;
         if (_curRoomType == RoomType.COMBAT || _curRoomType == RoomType.MINIBOSS || _curRoomType == RoomType.BOSS)
         {
-            GameManager.instance.ForceLock(true);
+            GameManager.instance.CameraLock(true);
+            countdownTime++; // if 3, becomes 4 so when starting it shows 3 since it subtracts on the start of the function
             InvokeRepeating("CountdownTimer", 0, 1);
         }
 
@@ -145,29 +151,29 @@ public class TimerScript : MonoBehaviour
         TimerValueObj.SetActive(false);
         ScoreObj.SetActive(false);
         
-        countdownTimer--;
-        if (countdownTimer == 3)
+        countdownTime--;
+        if (countdownTime >= 3)
         {
             countdownTimerText.color = Color.red;
         }
-        if (countdownTimer == 2)
+        if (countdownTime == 2)
         {
             countdownTimerText.color = Color.yellow;
         }
-        if (countdownTimer == 1)
+        if (countdownTime == 1)
         {
             countdownTimerText.color = Color.green;
         }
-        countdownTimerText.text = countdownTimer.ToString();
-        if (countdownTimer <= 0)
+        countdownTimerText.text = countdownTime.ToString();
+        if (countdownTime <= 0)
         {
-            GameManager.instance.ForceLock(false);
+            GameManager.instance.CameraLock(false);
             countDownScreen.SetActive(false);
             ComboObj.SetActive(true);
             TimerValueObj.SetActive(true);
             ScoreObj.SetActive(true);
             InvokeRepeating("UpdateTimer", 0.01f, 0.01f);
-            countdownTimer = 3 + 1;
+            countdownTime = SettingsManager.instance.countdownTime;
             CancelInvoke("CountdownTimer");
         }
     }

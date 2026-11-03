@@ -76,7 +76,23 @@ public class InventoryManager : MonoBehaviour
         Debug.Log("inside inventory");
         Attachment toEquip = inventory[attachment.type][GetAttachmentSlot(attachment)];
         equipedAttachments[(int)attachment.type] = toEquip;
-        inventory[attachment.type][GetAttachmentSlot(attachment)] = curEquiped;
+        inventory[attachment.type][GetAttachmentSlot(attachment)] = null;
+        inventory[attachment.type][CheckInventorySlots(attachment.type)] = curEquiped;
+        CycleInventory();
+    }
+
+    public void CycleInventory()
+    {
+        for (int i = 0; i < Enum.GetNames(typeof(AttachmentType)).Length; i++)
+        {
+            Attachment _att1 = inventory[(AttachmentType)i][0];
+            Attachment _att2 = inventory[(AttachmentType)i][1];
+            if (! _att1)
+            {
+                inventory[(AttachmentType)i][0] = _att2;
+                inventory[(AttachmentType)i][1] = null;
+            }
+        }
     }
 
     public void UnequipAttachment(Attachment attachment)
@@ -121,6 +137,7 @@ public class InventoryManager : MonoBehaviour
         return null;
     }
 
+    // Good for swapping attachment locations
     public int GetAttachmentSlot(Attachment attachment)
     {
         for (int i = 0; i < inventory[attachment.type].Length; i++)

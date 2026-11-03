@@ -21,7 +21,7 @@ public class CameraControler : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.forceLock)
+        if (GameManager.instance.forceLock || GameManager.instance.cameraLock)
         {
             return;
         }
