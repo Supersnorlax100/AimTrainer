@@ -56,6 +56,8 @@ public class GameManager : MonoBehaviour
 
     public RunType runType;
 
+    int foo = 0;
+
     private void Awake()
     {
         if (instance == null)
