@@ -129,38 +129,15 @@ public class GameManager : MonoBehaviour
     }
     public void EnterRoom()
     {
+        if (targetCount > 0)
+        {
+            targetCount = 0;
+        }
+        Debug.Log(MapManager.instance.currentRoomType);
         bool loop = true;
         switch (MapManager.instance.currentRoomType)
         {
             case RoomType.COMBAT:
-                while (loop)
-                {
-                    if (modScriptsUnlocked.Count == modScripts.Count)
-                    {
-                        loop = false;
-                        break;
-                    }
-                    int randomNum = UnityEngine.Random.Range(0, modScripts.Count);
-                    bool modNotUnlocked = true;
-                    foreach (Component script in modScriptsUnlocked)
-                    {
-                        if (script == modScripts[randomNum])
-                        {
-                            modNotUnlocked = false;
-                            break;
-                        }
-                    }
-                    if (modNotUnlocked)
-                    {
-                        modScriptsUnlocked.Add(modScripts[randomNum]);
-                        modScripts.Remove(modScripts[randomNum]);
-                        loop = false;
-                    }
-                    else
-                    {
-                        Debug.LogError("Error: Mod:" + modScripts[randomNum].name + " already unlocked but is not removed from ModScripts");
-                    }
-                }
                 break;
             case RoomType.MINIBOSS:
                 int iterations = 0;
@@ -197,6 +174,34 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case RoomType.BOSS:
+                while (loop)
+                {
+                    if (modScriptsUnlocked.Count == modScripts.Count)
+                    {
+                        loop = false;
+                        break;
+                    }
+                    int randomNum = UnityEngine.Random.Range(0, modScripts.Count);
+                    bool modNotUnlocked = true;
+                    foreach (Component script in modScriptsUnlocked)
+                    {
+                        if (script == modScripts[randomNum])
+                        {
+                            modNotUnlocked = false;
+                            break;
+                        }
+                    }
+                    if (modNotUnlocked)
+                    {
+                        modScriptsUnlocked.Add(modScripts[randomNum]);
+                        modScripts.Remove(modScripts[randomNum]);
+                        loop = false;
+                    }
+                    else
+                    {
+                        Debug.LogError("Error: Mod:" + modScripts[randomNum].name + " already unlocked but is not removed from ModScripts");
+                    }
+                }
                 break;
             case RoomType.EVENT:
                 break;

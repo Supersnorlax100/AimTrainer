@@ -27,6 +27,8 @@ public class EnemySpawner : MonoBehaviour
     public float enemySpeed = 1;
     public float enemySpeedVariability = 0;
 
+    [SerializeField] MonoBehaviour[] modScriptsThatNeedSpawnArea;
+
     private void Awake()
     {
         EventHandeler.onEnemyDeath += Spawn;
@@ -39,7 +41,7 @@ public class EnemySpawner : MonoBehaviour
         YspawnAreaScale = spawnArea.transform.localScale.y;
         modScripts = GameManager.instance.modScriptsUnlocked.ToArray();
         generateRandomHealth();
-        for (int i = 0; i < initialEnemyCount;i++)  Spawn();
+        for (int i = 0; i < initialEnemyCount; i++)  Spawn();
     }
 
     private void generateRandomHealth()
@@ -81,11 +83,9 @@ public class EnemySpawner : MonoBehaviour
     public void Spawn()
     {
         if (numberOfSpawnedEnemys >= maxEnemyCount && GameManager.instance.targetCount <= 0)
-        {            
-            //Debug.Log("exit room");
-            // EventHandeler.exitRoom?.Invoke(); //#TODO uncomment when not testing
-            return; // temp to stop spawning
-
+        {
+            Debug.Log(GameManager.instance.targetCount);
+            EventHandeler.exitRoom?.Invoke();
         }
         else if (numberOfSpawnedEnemys >= maxEnemyCount)
         {
@@ -116,10 +116,13 @@ public class EnemySpawner : MonoBehaviour
         GameObject newEnemy =Instantiate(enemyPrefab, pos, Quaternion.identity, enemyParent.transform);
         newEnemy = newEnemy.transform.GetChild(0).gameObject;
         newEnemy.GetComponent<EnemyScript>().health = randomHealth;
-        foreach(Component script in modScripts)
+        foreach(MonoBehaviour script in modScripts)
         {
             newEnemy.AddComponent(script.GetType());
         }
+
+        SetSpawnAreas(newEnemy.gameObject);
+        GiveEnemyPreFab(newEnemy.gameObject);
         float _critSize = GameManager.instance.critSize;
         newEnemy.gameObject.transform.GetChild(0).gameObject.transform.localScale = new Vector3(_critSize, _critSize, _critSize);
         if (areEnemysMoving)
@@ -128,6 +131,39 @@ public class EnemySpawner : MonoBehaviour
             float _targetSpeed = enemySpeed + Random.Range(-(enemySpeedVariability), enemySpeedVariability);
             newEnemy.GetComponent<Rigidbody>().AddForce(_targetDirection.normalized * _targetSpeed, ForceMode.Impulse);
         }
+    }
+
+    void SetSpawnAreas(GameObject enemy)
+    {
+        if (enemy.GetComponent<BlinkyModScript>())
+        {
+            enemy.GetComponent<BlinkyModScript>().spawnArea = spawnArea;
+        }
+        if (enemy.GetComponent<FlowerModScript>())
+        {
+            enemy.GetComponent<FlowerModScript>().spawnArea = spawnArea;
+        }
+    }
+
+    void GiveEnemyPreFab(GameObject enemy)
+    {
+        if (enemy.GetComponent<SlimeScript>())
+        {
+            enemy.GetComponent<SlimeScript>().prefab = enemyPrefab;
+        }
+        if (enemy.GetComponent<SnorlaxMod>())
+        {
+            enemy.GetComponent<SnorlaxMod>().prefab = enemyPrefab;
+        }
+        if (enemy.GetComponent<BobsterMod>())
+        {
+            enemy.GetComponent<BobsterMod>().prefab = enemyPrefab;
+        }
+        if (enemy.GetComponent<FlowerModScript>())
+        {
+            enemy.GetComponent<FlowerModScript>().prefab = enemyPrefab;
+        }
+
     }
     public void RespawnAll()
     {

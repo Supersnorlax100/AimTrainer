@@ -88,6 +88,6 @@ public class RoomEvents : MonoBehaviour
             }
         }
         GameManager.instance.UpdateStats();
-        EventHandeler.enterRoom?.Invoke();
+        EventHandeler.exitRoom?.Invoke();
     }
 }
