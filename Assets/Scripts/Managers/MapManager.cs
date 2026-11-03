@@ -115,7 +115,9 @@ public class MapManager : MonoBehaviour
         pastRooms.Add(room);
         NodeAvailability();
         MapVisibility(!map.activeSelf);
+        canLeaveRoom = false;
         EventHandeler.enterRoom?.Invoke();
+        GameManager.instance.Pause(false);
     }
 
     private void MakeMap()
@@ -270,9 +272,16 @@ public class MapManager : MonoBehaviour
         MakeMap();
         MapVisibility(true);
     }
+    
+    public bool IsUIRoom()
+    {
+        if (currentRoomType == RoomType.SHOP || currentRoomType == RoomType.EVENT || currentRoomType == RoomType.HOME) return true;
+        else return false;
+    }
+
     void MapVisibility(bool isVisible)
     {
-        if (UiManager.instance)
+        if (UiManager.instance && ! IsUIRoom())
         {
             UiManager.instance?.CombatUI(!isVisible);
         }

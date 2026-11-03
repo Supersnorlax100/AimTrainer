@@ -103,11 +103,7 @@ public class InventoryUIScript : MonoBehaviour
             itemBox.UpdateUI();
         }
 
-        // Ensure Assignment in order of player stats array
-        for (int i = 0; i < playerStats.Length; i++)
-        {
-            playerStats[i].text = GameManager.instance.playerStats[i].ToString();
-        }
+        UpdatePlayerStatsUI();
     }
 
     public void HoverStats(Attachment attachment)
@@ -192,6 +188,14 @@ public class InventoryUIScript : MonoBehaviour
 
     public void UpdatePlayerStatsUI()
     {
-        
+        // Ensure Assignment in order of player stats array
+        for (int i = 0; i < playerStats.Length; i++)
+        {
+            if (InventoryManager.instance.IsModTypePercentage((ModifierType)i))
+            {
+                playerStats[i].text = GameManager.instance.playerStats[i].ToString() + "%";
+            }
+            else playerStats[i].text = GameManager.instance.playerStats[i].ToString();
+        }
     }
 }

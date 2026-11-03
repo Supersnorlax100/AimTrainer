@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public bool isPaused { get; private set; }
     [HideInInspector] public bool forceLock { get; private set; }
+    [HideInInspector] public bool cameraLock { get; private set; }
     
     [HideInInspector] public TargetType stageType;
 
@@ -206,9 +207,6 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Room type out of range GameManger EnterRoom");
                 break;
         }
-
-
-
     }
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -235,7 +233,7 @@ public class GameManager : MonoBehaviour
                 stageType = TargetType.TRACKING;
                 break;
             case RunType.CLICK_TRACK:
-                int randomnum = UnityEngine.Random.Range(0, 2);
+                int randomnum = Random.Range(0, 2);
                 if (randomnum == 0)
                 {
                     stageType = TargetType.CLICKING;
@@ -246,7 +244,7 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case RunType.TRACK_SWITCH:
-                int randomnum2 = UnityEngine.Random.Range(0, 2);
+                int randomnum2 = Random.Range(0, 2);
                 if (randomnum2 == 0)
                 {
                     stageType = TargetType.TRACKING;
@@ -311,23 +309,53 @@ public class GameManager : MonoBehaviour
 
     public void Pause(bool isPausing)
     {
-        if (! isPausing && ! MapManager.instance.map.activeSelf && MapManager.instance.currentRoomType != RoomType.SHOP
-        && MapManager.instance.currentRoomType != RoomType.EVENT && (!UiManager.instance || (UiManager.instance && ! UiManager.instance.activeMenu)))
+        Debug.Log("is trying to pause: " + isPausing);
+        // Reqs to unpause
+        if (! isPausing && ! IsActiveUI() && ! MapManager.instance.canLeaveRoom)
         {
             isPaused = false;
             Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1;
             InvokeRepeating("ComboTimer", 0.01f, 0.01f);
+            Debug.Log("not paused");
             return;
         }
         isPaused = true;
-        Cursor.lockState = CursorLockMode.None;
+        if (IsActiveUI()) {Cursor.lockState = CursorLockMode.None; Debug.Log("paused + not locked");}
+        else {Cursor.lockState = CursorLockMode.Locked; Debug.Log("paused + locked");}
         Time.timeScale = 0;
+    }
+
+    // public void EnsureMouseLock()
+    // {
+    //     if (! isPaused)
+    //     {
+    //         Cursor.lockState = CursorLockMode.Locked;
+    //     }
+    //     if (IsActiveUI()) {Cursor.lockState = CursorLockMode.None; Debug.Log("paused + not locked");}
+    //     else {Cursor.lockState = CursorLockMode.Locked; Debug.Log("paused + locked");}
+    // }
+
+    // Checks if in a UI scene or if UI is active
+    public bool IsActiveUI()
+    {
+    //     if (! MapManager.instance.map.activeSelf && MapManager.instance.currentRoomType != RoomType.SHOP
+    //     && MapManager.instance.currentRoomType != RoomType.EVENT && 
+    //     (! UiManager.instance || (UiManager.instance && ! UiManager.instance.activeMenu)))
+        if (MapManager.instance.map.activeSelf || MapManager.instance.IsUIRoom() || 
+        ( UiManager.instance && UiManager.instance.activeMenu))
+        {if (UiManager.instance && UiManager.instance.activeMenu) Debug.Log("ui active menu: " + UiManager.instance?.activeMenu?.name); return true; }
+        else return false;
     }
 
     public void ForceLock(bool isLocking)
     {
         forceLock = isLocking;
+    }
+
+    public void CameraLock(bool isLocking)
+    {
+        cameraLock = isLocking;
     }
 
     // For button

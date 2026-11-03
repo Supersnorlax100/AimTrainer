@@ -132,9 +132,12 @@ public class UiManager : MonoBehaviour
             activeMenu = null;
             menuOpenOrder = new List<GameObject>();
             GameManager.instance.Pause(false);
+            menu.SetActive(isOpening);
+            return;
         }
 
         menu.SetActive(isOpening);
+        GameManager.instance.Pause(true);
     }
 
 // Hides extra ui for when in combat scene and when not (or for when map is open)

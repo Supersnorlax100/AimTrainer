@@ -3688,9 +3688,9 @@ RectTransform:
   m_Children:
   - {fileID: 7929062824701445742}
   - {fileID: 3043074875673474635}
+  - {fileID: 5639167614945755365}
   - {fileID: 6049343223514823633}
   - {fileID: 8780153485324486299}
-  - {fileID: 5639167614945755365}
   - {fileID: 7666577592502735056}
   - {fileID: 2680672543795369311}
   m_Father: {fileID: 0}
@@ -3776,7 +3776,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c90675b5ec593a4aa55446ab5a82447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiManager
-  settingsScript: {fileID: 0}
   timerScript: {fileID: 0}
   activeMenu: {fileID: 0}
   menuOpenOrder: []
@@ -9620,7 +9619,7 @@ MonoBehaviour:
   TimerValueObj: {fileID: 5529955664340544865}
   ScoreObj: {fileID: 5912789088712997668}
   ComboObj: {fileID: 8273407900702187097}
-  countdownTimer: 0
+  countdownTime: 0
 --- !u!1 &6825893798277276741
 GameObject:
   m_ObjectHideFlags: 0
