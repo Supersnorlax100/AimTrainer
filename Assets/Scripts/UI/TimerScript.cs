@@ -22,12 +22,13 @@ public class TimerScript : MonoBehaviour
     int bonusSeconds;
     int bonusCentiseconds;
 
-    int countdownTimer = 3 + 1;
+    public int countdownTimer;
 
     void Awake()
     {
         // EventHandeler.exitRoom += StoreTime;
         EventHandeler.enterRoom += Timer;
+
     }
 
     public void Timer()
@@ -49,6 +50,7 @@ public class TimerScript : MonoBehaviour
         if (_curRoomType == RoomType.COMBAT || _curRoomType == RoomType.MINIBOSS || _curRoomType == RoomType.BOSS)
         {
             GameManager.instance.ForceLock(true);
+            countdownTimer++; // if 3, becomes 4 so when starting it shows 3 since it subtracts on the start of the function
             InvokeRepeating("CountdownTimer", 0, 1);
         }
 
@@ -146,7 +148,7 @@ public class TimerScript : MonoBehaviour
         ScoreObj.SetActive(false);
         
         countdownTimer--;
-        if (countdownTimer == 3)
+        if (countdownTimer >= 3)
         {
             countdownTimerText.color = Color.red;
         }

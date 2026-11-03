@@ -10,6 +10,8 @@ public class UiManager : MonoBehaviour
 {
     public static UiManager instance;
 
+    public TimerScript timerScript;
+
     public GameObject activeMenu = null;
     [SerializeField] List<GameObject> menuOpenOrder;
 

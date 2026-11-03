@@ -35,6 +35,11 @@ public class PlayerControler : MonoBehaviour
         curShotTimer = shotTimer;
     }
 
+    void Start()
+    {
+        mouseSens = SettingsManager.instance.mouseSens;
+    }
+
     private void Update()
     {
         if (GameManager.instance.isPaused || GameManager.instance.forceLock)
