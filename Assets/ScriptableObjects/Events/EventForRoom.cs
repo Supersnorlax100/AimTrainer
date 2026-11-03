@@ -4,17 +4,18 @@ using System.Collections.Generic;
 using System;
 public enum EventModTypes
 {
-    Score,
-    Damage,
-    DamageMult, //damageMult 
-    CritMult,  //critMult 
+    // Should match attachment mods and event specific mods at end (score, etc...)
+    DamageIncrease,
+    DamageMult,
+    CritMult,
     CritSize,
     BulletSize,
-    TimeIncrease, //Just add to bonusTime
-    TimeMult, // timeMult
-    ComboTime, //maxComboTimer 
-    ComboIncrease, // comboIncrease 
-    ComboMult // comboMultAddition 
+    TimeIncrease,
+    TimeMult,
+    ComboTime,
+    ComboIncrease,
+    ComboMult,
+    Score
 }
 [Serializable]
 public class EventModifier

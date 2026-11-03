@@ -14,45 +14,64 @@ public enum RunType
 }
 public class GameManager : MonoBehaviour
 {
-
     public static GameManager instance;
 
-    public float damageIncrease = 0;
-    public float damageMult = 1;
-    public float critMult = 1.5f;
+    [HideInInspector] public float[] playerStats = new float[11];
+    [HideInInspector] public float damageIncreaseStat;
+    [HideInInspector] public float damageMultStat;
+    [HideInInspector] public float comboTimeStat;
+    [HideInInspector] public float comboIncreaseStat;
+    [HideInInspector] public float comboMultStat;
+    [HideInInspector] public float critMultStat;
+    [HideInInspector] public float critSizeStat;
+    [HideInInspector] public float timeIncreaseStat;
+    [HideInInspector] public float timeMultStat;
+    [HideInInspector] public float bulletSizeStat;
+    
 
-    public TargetType stageType;
+
+
+    [HideInInspector] public bool isPaused { get; private set; }
+    [HideInInspector] public bool forceLock { get; private set; }
+    
+    [HideInInspector] public TargetType stageType;
 
     public Attachment[] attachmentPool;
 
     public int targetCount;
 
-    public int secondsGiven;
-    public int curTime; // in centiseconds
-    public int bonusTime = 0; // in centiseconds
-    public float timeMult;
-
-    public float critSize = .4f; // based of initial crit size may need to change later.
-
-    public bool isPaused { get; private set; }
-    public bool forceLock { get; private set; }
-
-    public float maxComboTimer = 1;
-    public float activeComboTimer;
-
-    public int comboValue;
-    public float comboIncrease = 1;
-    public float comboMult;
-    public float comboMultDivisor = 10;
-    public float comboMultAddition = 0;
-
-    [SerializeField] List<MonoBehaviour> modScripts;
-    public List<MonoBehaviour> modScriptsUnlocked;
-    public List<MonoBehaviour> modScriptsToLock;
+    [SerializeField] int secondsGiven;
+    [HideInInspector] public int curTime; // in centiseconds
+    [HideInInspector] public int timeToStore; // in centiseconds, save time on every room clear
 
 
-    float roomScore;
-    public int score = 1000000;
+    [SerializeField] float defaultMaxComboTimer = 1;
+    [HideInInspector] public float maxComboTimer;
+    [HideInInspector] public float activeComboTimer;
+
+    [HideInInspector] public int comboValue;
+    [SerializeField] float defaultComboIncrease = 1;
+    [HideInInspector] public float comboIncrease;
+    [HideInInspector] public float comboMult;
+    [HideInInspector] public float comboMultDivisor = 10;
+    [HideInInspector] public float comboMultAddition = 0;
+
+    float defaultCritSize = 0.4f; // based of initial crit size may need to change later.
+   [HideInInspector]  public float critSize;
+    [SerializeField] float defaultCritMult = 1.5f; 
+    [HideInInspector] public float critMult;
+
+    [SerializeField] float baseDamage = 1;
+    [HideInInspector] public float damage;
+    
+    [HideInInspector] public float roomScore;
+    [HideInInspector] public int score;
+    
+    [SerializeField] List<Component> modScripts;
+    public List<Component> modScriptsUnlocked;
+    public List<Component> modScriptsToLock;
+
+
 
     public RunType runType;
 
@@ -86,6 +105,18 @@ public class GameManager : MonoBehaviour
         EventHandeler.enterRoom += EnterRoom;
         
         curTime = secondsGiven * 100;
+
+        //#TODO: cleaner integration and proper display of player stats
+        playerStats[0] = damageIncreaseStat;
+        playerStats[1] = damageMultStat;
+        playerStats[2] = comboIncreaseStat;
+        playerStats[3] = comboTimeStat;
+        playerStats[4] = comboMultStat;
+        playerStats[5] = critMultStat;
+        playerStats[6] = critSizeStat;
+        playerStats[7] = timeIncreaseStat;
+        playerStats[8] = timeMultStat;
+        playerStats[9] = bulletSizeStat;
     }
 
     void Start()
@@ -95,6 +126,8 @@ public class GameManager : MonoBehaviour
         {
             obj.SetActive(false);
         }
+
+        UpdateStats();
     }
     public void EnterRoom()
     {
@@ -109,7 +142,6 @@ public class GameManager : MonoBehaviour
             case RoomType.COMBAT:
                 break;
             case RoomType.MINIBOSS:
-                Debug.Log("Entering Miniboss Room");
                 int iterations = 0;
                 while (loop)
                 {
@@ -256,7 +288,7 @@ public class GameManager : MonoBehaviour
     #region Score
     public void AddScore()
     {
-        comboMult = (1 + comboValue/comboMultDivisor) + comboMultAddition;
+        comboMult = (1 + comboValue/comboMultDivisor + comboMultAddition) * (1 + comboMultStat);
         if (stageType == TargetType.TRACKING)
         {
             Debug.Log("tracking");
@@ -267,6 +299,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("not tracking");
             roomScore += PlayerControler.instance.target.GetComponent<EnemyScript>().scoreValue * comboMult;
         }
+        UiManager.instance.UpdateScore();
     }
 
     public void FinalizeScore()
@@ -291,7 +324,7 @@ public class GameManager : MonoBehaviour
             isPaused = false;
             Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1;
-            Invoke("ComboTimer", 0.01f);
+            InvokeRepeating("ComboTimer", 0.01f, 0.01f);
             return;
         }
         isPaused = true;
@@ -309,5 +342,14 @@ public class GameManager : MonoBehaviour
     {
         MapManager.instance.canLeaveRoom = true;
         MapManager.instance.OpenMap();
+    }
+
+    public void UpdateStats()
+    {
+        maxComboTimer = defaultMaxComboTimer + comboTimeStat;
+        comboIncrease = defaultComboIncrease + comboIncreaseStat;
+        critMult = defaultCritMult + critMultStat;
+        critSize = defaultCritSize + critSizeStat;
+        damage = (baseDamage + damageIncreaseStat) * (1 + damageMultStat);
     }
 }

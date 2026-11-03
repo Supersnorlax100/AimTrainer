@@ -18,7 +18,7 @@ public class EnemyScript : MonoBehaviour
     private Slider healthBar;
     public bool canGetHit = true;
     public bool respawns = true;
-    List<MonoBehaviour> modScripts = new List<MonoBehaviour>();
+    List<MonoBehaviour> modScripts = new List<MonoBehaviour>(); //#TODO: shouldn't the modScripts have a class since they are inherited? so instead of monobehavior you should use that class right?
 
     public void Start()
     {
@@ -48,13 +48,13 @@ public class EnemyScript : MonoBehaviour
             AssignColor();
         }
     }
-    public void GetHit(float damage, bool isCrit, float critMultiplier)
+    public void GetHit(float damage)
     {
         if (canGetHit)
         {
+            health -= damage;
+
             UpdateHealthBar();
-            if (isCrit) { health -= damage * critMultiplier; }
-            else { health -= damage; }
 
             if (health <= 0)
             {
@@ -103,23 +103,22 @@ public class EnemyScript : MonoBehaviour
     private void AssignColor()
     {
         // Max RGB value is 255, Min is 0
-        float b = 0;
-        float g = 0;
         float r = 0;
+        float g = 0;
+        float b = 0;
 
         // if 9 enemy types 9/3 = 3 255/3 = 85
-        if (GetComponent<BlinkyModScript>())
+        if (GetComponent<SubEnemyScript>())
         {
-            b = 85;
+            r = 85;
         }
-
         if (GetComponent<FlowerModScript>())
         {
             g = 85;
         }
-        if (GetComponent<SubEnemyScript>())
+        if (GetComponent<BlinkyModScript>())
         {
-            r = 85;
+            b = 85;
         }
         // have to devide each value by 255
         Color color = new Color(r/255, g/255, b/255, 1);

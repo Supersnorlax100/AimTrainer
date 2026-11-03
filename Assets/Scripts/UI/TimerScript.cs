@@ -22,7 +22,7 @@ public class TimerScript : MonoBehaviour
     int bonusSeconds;
     int bonusCentiseconds;
 
-    int countdownTimer = 0 + 1;
+    int countdownTimer = 3 + 1;
 
     void Awake()
     {
@@ -45,12 +45,17 @@ public class TimerScript : MonoBehaviour
         }
         seconds = seconds - (minutes * 60);
         UpdateTimer();
-        GameManager.instance.ForceLock(true);
-        InvokeRepeating("CountdownTimer", 0, 1);
-
-        if(GameManager.instance.bonusTime > 0 || GameManager.instance.timeMult >0)
+        RoomType _curRoomType = MapManager.instance.currentRoomType;
+        if (_curRoomType == RoomType.COMBAT || _curRoomType == RoomType.MINIBOSS || _curRoomType == RoomType.BOSS)
         {
-            int bonusTime = (int)(GameManager.instance.bonusTime + (GameManager.instance.curTime * GameManager.instance.timeMult));
+            GameManager.instance.ForceLock(true);
+            InvokeRepeating("CountdownTimer", 0, 1);
+        }
+
+        // Sets bonus time values
+        if(GameManager.instance.timeIncreaseStat > 0 || GameManager.instance.timeMultStat >0)
+        {
+            int bonusTime = (int)(GameManager.instance.timeIncreaseStat + (GameManager.instance.curTime * (1 + GameManager.instance.timeMultStat)));
             if (bonusTime >= 100)
             {
                 bonusSeconds = Mathf.FloorToInt(bonusTime / 100);
@@ -74,8 +79,7 @@ public class TimerScript : MonoBehaviour
 
     private void UpdateTimer()
     {
-        // if (MapManager.instance.currentRoomType == RoomType.SHOP)
-        if (GameManager.instance.bonusTime > 0 || GameManager.instance.timeMult > 0)
+        if (GameManager.instance.timeIncreaseStat > 0 || GameManager.instance.timeMultStat > 0)
         {
             if (bonusSeconds <= 0 && bonusMinutes <= 0 && bonusCentiseconds <= 0)
             {
@@ -100,7 +104,6 @@ public class TimerScript : MonoBehaviour
             {
                 bonusCentiseconds--;
             }
-            // UpdateText();
             timerTextUI.text = string.Format("{0:00}:{1:00}:{2:00}", bonusMinutes, bonusSeconds, bonusCentiseconds);
         }
         else
@@ -128,13 +131,13 @@ public class TimerScript : MonoBehaviour
             {
                 centiseconds--;
             }
-            // UpdateText();
+            GameManager.instance.curTime--;
             timerTextUI.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, centiseconds);
         }
 
     }
 
-    public void CountdownTimer()
+    public void CountdownTimer() 
     {
         countDownScreen.SetActive(true);
         crosshair.SetActive(true);
@@ -164,7 +167,7 @@ public class TimerScript : MonoBehaviour
             TimerValueObj.SetActive(true);
             ScoreObj.SetActive(true);
             InvokeRepeating("UpdateTimer", 0.01f, 0.01f);
-            countdownTimer = 0 + 1;
+            countdownTimer = 3 + 1;
             CancelInvoke("CountdownTimer");
         }
     }

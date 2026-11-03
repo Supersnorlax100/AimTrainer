@@ -19,7 +19,11 @@ public class ShopUpgradeScript : MonoBehaviour
         foreach (Modifier mod in attachment.modifiers)
         {
             GameObject _statBox = Instantiate(statBox, statContainer.transform);
-            _statBox.GetComponent<StatBoxScript>().statName.text = "+" + mod.value.ToString() + " " + mod.type.ToString();
+            if (InventoryManager.instance.IsModTypePercentage(mod.type))
+            {
+                _statBox.GetComponent<StatBoxScript>().statName.text = "+" + mod.value.ToString() + "% " + mod.type.ToString();
+            }
+            else _statBox.GetComponent<StatBoxScript>().statName.text = "+" + mod.value.ToString() + " " + mod.type.ToString();
         }
         attachmentName.text = attachment.attachmentName;
         priceText.text = attachment.price.ToString();

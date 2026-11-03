@@ -16,11 +16,7 @@ public class PlayerControler : MonoBehaviour
 
     public float mouseSens;
 
-    public float baceDamage = 1;
     public float critMultiplier = 1.5f;
-
-    public int score = 0;
-    public float roomScore = 0;
 
     private void Awake()
     {
@@ -84,9 +80,9 @@ public class PlayerControler : MonoBehaviour
             }
 
 
-            Debug.Log("Crit Hit");
+            // Debug.Log("Crit Hit");
 
-            target.GetComponent<EnemyScript>().GetHit(DamageCalc() * GameManager.instance.critMult, true, critMultiplier);
+            target.GetComponent<EnemyScript>().GetHit(DamageCalc(true));
         }
         else if (Physics.Raycast(gunRay, out targetHit, 99999999, targetHitMask))
         {
@@ -95,17 +91,20 @@ public class PlayerControler : MonoBehaviour
             {
                 target = target.transform.parent.gameObject;
             }
-            target.GetComponent<EnemyScript>().GetHit(DamageCalc(), false, critMultiplier);
+            target.GetComponent<EnemyScript>().GetHit(DamageCalc(false));
 
-            Debug.Log("Hit");
+            // Debug.Log("Hit");
         }
     }
 
-    float DamageCalc()
+    float DamageCalc(bool isCrit)
     {
-        float damage = baceDamage + GameManager.instance.damageIncrease;
-        damage *= GameManager.instance.damageMult;
-        Debug.Log("Damage: " + damage);
+        float damage = GameManager.instance.damage;
+        if (isCrit)
+        {
+            damage *= GameManager.instance.critMult;
+        }
+        // Debug.Log("Damage: " + damage);
         return damage;
     }
 }

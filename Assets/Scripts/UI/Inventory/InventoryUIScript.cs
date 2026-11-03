@@ -26,6 +26,8 @@ public class InventoryUIScript : MonoBehaviour
     [SerializeField] TMP_Text[] hoveredAttStats;
     [SerializeField] TMP_Text[] equipedAttStats;
 
+    [SerializeField] TMP_Text[] playerStats;
+
     bool madeLists;
 
     void Start()
@@ -99,6 +101,12 @@ public class InventoryUIScript : MonoBehaviour
         {
             itemBox.inventoryScript = this;
             itemBox.UpdateUI();
+        }
+
+        // Ensure Assignment in order of player stats array
+        for (int i = 0; i < playerStats.Length; i++)
+        {
+            playerStats[i].text = GameManager.instance.playerStats[i].ToString();
         }
     }
 

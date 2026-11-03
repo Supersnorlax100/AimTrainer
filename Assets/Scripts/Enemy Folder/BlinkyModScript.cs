@@ -5,7 +5,6 @@ using UnityEngine;
 public class BlinkyModScript : MonoBehaviour
 {
     public GameObject spawnArea;
-    public List<Vector3> blinkPositions;
     private Vector3 nextLocation;
     private float XspawnAreaScale;
     private float YspawnAreaScale;

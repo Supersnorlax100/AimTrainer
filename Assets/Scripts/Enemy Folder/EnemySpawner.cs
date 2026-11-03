@@ -120,11 +120,11 @@ public class EnemySpawner : MonoBehaviour
         {
             newEnemy.AddComponent(script.GetType());
         }
+
         SetSpawnAreas(newEnemy.gameObject);
-        if (GameManager.instance.critSize != .4f)
-        {
-            newEnemy.gameObject.transform.GetChild(0).gameObject.transform.localScale = new Vector3(GameManager.instance.critSize, GameManager.instance.critSize, GameManager.instance.critSize);
-        }
+        GiveEnemyPreFab(newEnemy.gameObject);
+        float _critSize = GameManager.instance.critSize;
+        newEnemy.gameObject.transform.GetChild(0).gameObject.transform.localScale = new Vector3(_critSize, _critSize, _critSize);
         if (areEnemysMoving)
         {
             Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
@@ -143,6 +143,27 @@ public class EnemySpawner : MonoBehaviour
         {
             enemy.GetComponent<FlowerModScript>().spawnArea = spawnArea;
         }
+    }
+
+    void GiveEnemyPreFab(GameObject enemy)
+    {
+        if (enemy.GetComponent<SlimeScript>())
+        {
+            enemy.GetComponent<SlimeScript>().prefab = enemyPrefab;
+        }
+        if (enemy.GetComponent<SnorlaxMod>())
+        {
+            enemy.GetComponent<SnorlaxMod>().prefab = enemyPrefab;
+        }
+        if (enemy.GetComponent<BobsterMod>())
+        {
+            enemy.GetComponent<BobsterMod>().prefab = enemyPrefab;
+        }
+        if (enemy.GetComponent<FlowerModScript>())
+        {
+            enemy.GetComponent<FlowerModScript>().prefab = enemyPrefab;
+        }
+
     }
     public void RespawnAll()
     {

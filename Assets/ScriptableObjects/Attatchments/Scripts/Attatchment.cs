@@ -24,17 +24,16 @@ public enum AttachmentType
 //#TODO: Make bullet size work
 public enum ModifierType
 {
-    // what they are called in GameManager
-    DamageIncrease, //damageIncrease 
-    DamageMult, //damageMult 
-    CritMult,  //critMult 
-    CritSize, //critSize
+    DamageIncrease,
+    DamageMult,
+    CritMult,
+    CritSize,
     BulletSize,
-    TimeIncrease, //Just add to bonusTime
-    TimeMult, // timeMult
-    ComboTime, //maxComboTimer 
-    ComboIncrease, // comboIncrease 
-    ComboMult // comboMultAddition 
+    TimeIncrease,
+    TimeMult,
+    ComboTime,
+    ComboIncrease,
+    ComboMult
 }
 
 [Serializable]
@@ -62,16 +61,4 @@ public abstract class Attachment : ScriptableObject
     }
 
     public abstract void CreateModifiers();
-
-    // public int GetModifier(ModifierType type)
-    // {
-
-    //     foreach (Modifier modifier in modifiers)
-    //     {
-    //         if (modifier.type == type)
-    //             return modifier.value;
-    //     }
-
-    //     return 0;
-    // }
 }

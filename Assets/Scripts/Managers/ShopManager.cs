@@ -46,12 +46,12 @@ public class ShopManager : MonoBehaviour
 
     void UpdateUI()
     {
-        Debug.Log("update ui, game score: " + GameManager.instance.score.ToString());
         scoreText.text = "Score: " + GameManager.instance.score.ToString();
     }
 
     void GenerateUI()
     {
+        scoreText.text = "Score: " + GameManager.instance.score.ToString();
         int numOfUpgrades = Random.Range(1, 4);
         for (int i = 0; i < numOfUpgrades; i++)
         {
