@@ -5,7 +5,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class SnorlaxMod : MonoBehaviour
 {
-    [SerializeField] GameObject prefab;
+    public GameObject prefab;
     List<GameObject> nodes = new List<GameObject>();
     float maxHealth;
     bool HasHealed = false;

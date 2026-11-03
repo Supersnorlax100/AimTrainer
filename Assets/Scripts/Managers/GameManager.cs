@@ -107,7 +107,6 @@ public class GameManager : MonoBehaviour
             case RoomType.COMBAT:
                 break;
             case RoomType.MINIBOSS:
-                Debug.Log("Entering Miniboss Room");
                 int iterations = 0;
                 while (loop)
                 {

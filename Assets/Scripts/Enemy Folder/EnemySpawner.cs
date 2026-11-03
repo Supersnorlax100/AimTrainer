@@ -121,6 +121,7 @@ public class EnemySpawner : MonoBehaviour
             newEnemy.AddComponent(script.GetType());
         }
         SetSpawnAreas(newEnemy.gameObject);
+        GiveEnemyPreFab(newEnemy.gameObject);
         if (GameManager.instance.critSize != .4f)
         {
             newEnemy.gameObject.transform.GetChild(0).gameObject.transform.localScale = new Vector3(GameManager.instance.critSize, GameManager.instance.critSize, GameManager.instance.critSize);
@@ -143,6 +144,27 @@ public class EnemySpawner : MonoBehaviour
         {
             enemy.GetComponent<FlowerModScript>().spawnArea = spawnArea;
         }
+    }
+
+    void GiveEnemyPreFab(GameObject enemy)
+    {
+        if (enemy.GetComponent<SlimeScript>())
+        {
+            enemy.GetComponent<SlimeScript>().prefab = enemyPrefab;
+        }
+        if (enemy.GetComponent<SnorlaxMod>())
+        {
+            enemy.GetComponent<SnorlaxMod>().prefab = enemyPrefab;
+        }
+        if (enemy.GetComponent<BobsterMod>())
+        {
+            enemy.GetComponent<BobsterMod>().prefab = enemyPrefab;
+        }
+        if (enemy.GetComponent<FlowerModScript>())
+        {
+            enemy.GetComponent<FlowerModScript>().prefab = enemyPrefab;
+        }
+
     }
     public void RespawnAll()
     {

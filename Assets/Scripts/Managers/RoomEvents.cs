@@ -115,6 +115,6 @@ public class RoomEvents : MonoBehaviour
                     break;
             }
         }
-        EventHandeler.enterRoom?.Invoke();
+        EventHandeler.exitRoom?.Invoke();
     }
 }

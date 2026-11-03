@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class FlowerModScript : MonoBehaviour
 {
-    [SerializeField] GameObject petal;
-    [SerializeField] int petalCount;
+    public GameObject prefab;
+    int petalCount;
     GameObject petalParent;
     [SerializeField] Vector3 petalOfset;
     [SerializeField] GameObject[] petalPrefabs;
@@ -33,6 +33,7 @@ public class FlowerModScript : MonoBehaviour
         Rigidbody pPRB = petalParent.transform.gameObject.AddComponent<Rigidbody>();
         pPRB.useGravity = false;
         pPRB.excludeLayers = ~0;
+        
         SpawnPetals();
         GetComponent<EnemyScript>().canGetHit = false;
         petalRotateVariationMax = Random.Range(1, petalRotateVariationMax + 1);

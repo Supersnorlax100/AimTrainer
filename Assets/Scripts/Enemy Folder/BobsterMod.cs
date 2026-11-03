@@ -3,7 +3,7 @@ using System.Collections;
 using Unity.VisualScripting;
 public class BobsterMod : MonoBehaviour
 {
-    [SerializeField]GameObject prefab;
+    public GameObject prefab;
     float spawnInterval = 2f; // Adjust the spawn interval as needed
     void Start()
     {
