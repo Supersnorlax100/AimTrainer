@@ -58,7 +58,6 @@ public class EnemyScript : MonoBehaviour
 
             if (health <= 0)
             {
-                Destroy(gameObject.transform.parent.gameObject);
                 GameManager.instance.targetCount--;
                 if (!respawns)
                 {
@@ -70,6 +69,7 @@ public class EnemyScript : MonoBehaviour
                     Debug.Log("enemy died");
                     EventHandeler.onEnemyDeath?.Invoke();
                 }
+                Destroy(gameObject.transform.parent.gameObject);
             }
             foreach (MonoBehaviour script in modScripts)
             {

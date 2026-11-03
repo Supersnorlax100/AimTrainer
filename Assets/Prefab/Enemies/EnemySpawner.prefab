@@ -46,20 +46,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d7f5808dcb1ad749a5f3c98e1aebba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  spawnArea: {fileID: 1217072546807628294}
-  enemies:
-  - {fileID: 7855493583777466659, guid: f7f46dbc0f8382648bb36dfe0357e877, type: 3}
-  - {fileID: 3332953422200138115, guid: 35742c63f8416934db8922802aa97378, type: 3}
-  enemynames:
-  - Flower
-  - Blinky
-  enemyParent: {fileID: 4697131956768901634}
-  initialEnemyCount: 1
+  enemyPrefab: {fileID: 8687399965595076811, guid: 95a7abdf00a8b51429fff6ccbb9e230a, type: 3}
   attemptsToSpawn: 2000
   targetCollisions: []
   spawnableCollisions: []
-  enemyName: Flower
-  enemySpace: 5
+  enemySpace: 0.5
+  spawnArea: {fileID: 6796844360551736509}
+  enemyParent: {fileID: 4697131956768901634}
+  initialEnemyCount: 4
+  maxEnemyCount: 10
   areEnemysMoving: 1
   enemySpeed: 3
   enemySpeedVariability: 0
@@ -226,7 +221,7 @@ GameObject:
   - component: {fileID: 2682180666007444049}
   - component: {fileID: 4448347224870917809}
   m_Layer: 0
-  m_Name: TargetSpawnArea
+  m_Name: SpawnArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

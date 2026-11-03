@@ -99,6 +99,7 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
 
         EventHandeler.exitRoom += FinalizeScore;
+        EventHandeler.exitRoom += GetRidOfTempMods;
 
         EventHandeler.enterRoom += EnterRoom;
         
@@ -267,6 +268,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void GetRidOfTempMods()
+    {
+        foreach (Component script in modScriptsToLock)
+        {
+            if (modScriptsUnlocked.Contains(script))
+            {
+                modScriptsUnlocked.Remove(script);
+            }
+        }
+        modScriptsToLock.Clear();
+    }
     #region Combo Stuff
     public void RefreshCombo()
     {

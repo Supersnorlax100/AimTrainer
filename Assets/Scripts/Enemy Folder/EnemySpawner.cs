@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEngine.GraphicsBuffer;
 
 public class EnemySpawner : MonoBehaviour
@@ -27,8 +28,6 @@ public class EnemySpawner : MonoBehaviour
     public float enemySpeed = 1;
     public float enemySpeedVariability = 0;
 
-    [SerializeField] MonoBehaviour[] modScriptsThatNeedSpawnArea;
-
     private void Awake()
     {
         EventHandeler.onEnemyDeath += Spawn;
@@ -44,6 +43,11 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < initialEnemyCount; i++)  Spawn();
     }
 
+    private void OnDestroy()
+    {
+        EventHandeler.onEnemyDeath -= Spawn;
+    }
+
     private void generateRandomHealth()
     {
         float maxHealth = Mathf.Pow(1.3f, MapManager.instance.curentFloor) *5;
@@ -51,6 +55,7 @@ public class EnemySpawner : MonoBehaviour
     }
     public Vector3 GenerateSpawnLocation()
     {
+        Debug.Log(gameObject.name + SceneManager.GetActiveScene().name);
         // The + YtargetSpawnAreaScale/10 is because the target spawns a little too low than what it should so I added an offset
         // The sqrt is to out to if a square was rotated 45
         float targetX = spawnArea.transform.position.x + Random.Range(-(XspawnAreaScale / 2) + XspawnAreaScale / 25, XspawnAreaScale / 2 - XspawnAreaScale / 25);
