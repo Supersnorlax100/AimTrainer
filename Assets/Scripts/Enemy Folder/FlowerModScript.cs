@@ -7,7 +7,7 @@ public class FlowerModScript : MonoBehaviour
     public GameObject prefab;
     int petalCount;
     GameObject petalParent;
-    [SerializeField] Vector3 petalOfset;
+    [SerializeField] Vector3 petalOfset = new Vector3(0,1,0);
     [SerializeField] GameObject[] petalPrefabs;
     List<GameObject> petals = new List<GameObject>();
     [SerializeField] float petalSpinSpeed;
