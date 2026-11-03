@@ -48,7 +48,6 @@ public class FlowerModScript : MonoBehaviour
     }
     public void SpawnPetals()
     {
-
         degreasBetweenPetals = 360 / petalCount;
         for (int i = petalCount; i > 0; i--)
         {
