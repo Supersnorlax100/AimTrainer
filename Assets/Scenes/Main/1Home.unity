@@ -3107,7 +3107,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
       propertyPath: score
-      value: 1000000
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
       propertyPath: curTime
@@ -3118,8 +3118,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1419741021}
     - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
+      propertyPath: baseDamage
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
       propertyPath: secondsGiven
       value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
+      propertyPath: defaultMaxComboTimer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
       propertyPath: modScripts.Array.size

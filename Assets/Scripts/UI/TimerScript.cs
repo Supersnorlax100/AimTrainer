@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System;
+using Unity.VisualScripting;
 public class TimerScript : MonoBehaviour
 {
     [SerializeField] TMP_Text timerTextUI;
@@ -28,6 +29,8 @@ public class TimerScript : MonoBehaviour
     {
         // EventHandeler.exitRoom += StoreTime;
         EventHandeler.enterRoom += Timer;
+        EventHandeler.exitRoom += StopTimer;
+        Debug.Log("subscribe");
     }
 
     void Start()
@@ -73,6 +76,11 @@ public class TimerScript : MonoBehaviour
             }
             bonusSeconds = bonusSeconds - (bonusMinutes * 60);
         }
+    }
+
+    public void StopTimer()
+    {
+        CancelInvoke("UpdateTimer");
     }
 
     public void StoreTime()

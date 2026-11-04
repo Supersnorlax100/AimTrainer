@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,6 +21,8 @@ public class MapManager : MonoBehaviour
 
     public GameObject map;
 
+    public int floorsCleared;    
+
     // Room Types
     // 0 - Home
     // 1 - Combat
@@ -38,7 +39,7 @@ public class MapManager : MonoBehaviour
     public RoomType currentRoomType;
     List<Vector2> pastRooms = new List<Vector2>(1);
     public int curentFloor;
-    public int currnetLvl; // todo if i want to have some insurnce code
+    public int currnetLvl; //#TODO if i want to have some insurnce code
 
     public Sprite[] sprites;
     [SerializeField] GameObject mapNode;
@@ -105,6 +106,8 @@ public class MapManager : MonoBehaviour
     {
         canLeaveRoom = true;
         MapVisibility(true);
+        floorsCleared++;
+        // Debug.Log("floors cleared: " + floorsCleared);
     }
 
     public async Task GoToRoom(Vector2 room)

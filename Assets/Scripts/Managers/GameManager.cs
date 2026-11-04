@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -47,10 +48,10 @@ public class GameManager : MonoBehaviour
 
 
     [SerializeField] float defaultMaxComboTimer = 1;
-    [HideInInspector] public float maxComboTimer;
-    [HideInInspector] public float activeComboTimer;
+    public float maxComboTimer;
+    public float activeComboTimer;
 
-    [HideInInspector] public int comboValue;
+    public int comboValue;
     [SerializeField] float defaultComboIncrease = 1;
     [HideInInspector] public float comboIncrease;
     [HideInInspector] public float comboMult;
@@ -66,12 +67,11 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public float damage;
     
     [HideInInspector] public float roomScore;
-    [HideInInspector] public int score;
+     public int score;
     
     [SerializeField] List<Component> modScripts;
     public List<Component> modScriptsUnlocked;
     public List<Component> modScriptsToLock;
-
 
 
     public RunType runType;
@@ -100,13 +100,13 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
 
         EventHandeler.exitRoom += FinalizeScore;
+        EventHandeler.exitRoom += StopCombo;
         EventHandeler.exitRoom += GetRidOfTempMods;
 
         EventHandeler.enterRoom += EnterRoom;
         
         curTime = secondsGiven * 100;
 
-        //#TODO: cleaner integration and proper display of player stats
         playerStats[0] = damageIncreaseStat;
         playerStats[1] = damageMultStat;
         playerStats[2] = comboIncreaseStat;
@@ -129,13 +129,15 @@ public class GameManager : MonoBehaviour
 
         UpdateStats();
     }
+
     public void EnterRoom()
     {
+        Debug.Log("enter room");
         if (targetCount > 0)
         {
             targetCount = 0;
         }
-        Debug.Log(MapManager.instance.currentRoomType);
+        // Debug.Log(MapManager.instance.currentRoomType);
         bool loop = true;
         switch (MapManager.instance.currentRoomType)
         {
@@ -147,7 +149,7 @@ public class GameManager : MonoBehaviour
                 {
                     if (iterations > 1000)
                     {
-                        Debug.Log("Error: GameManager EnterRoom: Could not find a mod to unlock");
+                        Debug.LogError("Error: GameManager EnterRoom: Could not find a mod to unlock");
                         loop = false;
                         break;
                     }
@@ -156,7 +158,7 @@ public class GameManager : MonoBehaviour
                         loop = false;
                         break;
                     }
-                    int randomNum = UnityEngine.Random.Range(0, modScripts.Count);
+                    int randomNum = Random.Range(0, modScripts.Count);
                     bool modNotUnlocked = true;
                     foreach (Component script in modScriptsUnlocked)
                     {
@@ -210,7 +212,7 @@ public class GameManager : MonoBehaviour
             case RoomType.SHOP:
                 break;
             default:
-                Debug.Log("Room type out of range GameManger EnterRoom");
+                Debug.LogError("Room type out of range GameManger EnterRoom");
                 break;
         }
     }
@@ -261,7 +263,7 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             default:
-                Debug.Log("run type out of range");
+                Debug.LogError("run type out of range");
                 break;
         }
     }
@@ -280,7 +282,10 @@ public class GameManager : MonoBehaviour
     #region Combo Stuff
     public void RefreshCombo()
     {
+        // Debug.Log("combo value" + comboValue);
+        // Debug.Log("max timer: " + maxComboTimer);
         comboValue += (int)comboIncrease;
+        // Debug.Log("active Combo Timer: " + Mathf.Clamp(maxComboTimer / Mathf.Clamp(comboValue * 0.05f, 1, 10), 0.4f, maxComboTimer));
         activeComboTimer = Mathf.Clamp(maxComboTimer / Mathf.Clamp(comboValue * 0.05f, 1, 10), 0.4f, maxComboTimer);
     }
 
@@ -291,6 +296,12 @@ public class GameManager : MonoBehaviour
         if (activeComboTimer <= 0)   comboValue = 0;
         if (UiManager.instance)  UiManager.instance?.UpdateComboUI(activeComboTimer, comboValue);
     }
+
+    public void StopCombo()
+    {
+        comboValue = 0;
+        CancelInvoke("ComboTimer");
+    }
     #endregion
 
     #region Score
@@ -299,12 +310,10 @@ public class GameManager : MonoBehaviour
         comboMult = (1 + comboValue/comboMultDivisor + comboMultAddition) * (1 + comboMultStat);
         if (stageType == TargetType.TRACKING)
         {
-            Debug.Log("tracking");
             roomScore += PlayerControler.instance.target.GetComponent<EnemyScript>().scoreValue / 10 * comboMult;
         }
         else
         {
-            Debug.Log("not tracking");
             roomScore += PlayerControler.instance.target.GetComponent<EnemyScript>().scoreValue * comboMult;
         }
         UiManager.instance.UpdateScore();
@@ -314,6 +323,7 @@ public class GameManager : MonoBehaviour
     {
         score += (int)roomScore;
         roomScore = 0;
+        UiManager.instance.UpdateScore();
     }
     #endregion
     public void PlayerDie()
@@ -326,7 +336,6 @@ public class GameManager : MonoBehaviour
 
     public void Pause(bool isPausing)
     {
-        Debug.Log("is trying to pause: " + isPausing);
         // Reqs to unpause
         if (! isPausing && ! IsActiveUI() && ! MapManager.instance.canLeaveRoom)
         {
@@ -334,12 +343,11 @@ public class GameManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Time.timeScale = 1;
             InvokeRepeating("ComboTimer", 0.01f, 0.01f);
-            Debug.Log("not paused");
             return;
         }
         isPaused = true;
-        if (IsActiveUI()) {Cursor.lockState = CursorLockMode.None; Debug.Log("paused + not locked");}
-        else {Cursor.lockState = CursorLockMode.Locked; Debug.Log("paused + locked");}
+        if (IsActiveUI()) {Cursor.lockState = CursorLockMode.None;}
+        else {Cursor.lockState = CursorLockMode.Locked;}
         Time.timeScale = 0;
     }
 

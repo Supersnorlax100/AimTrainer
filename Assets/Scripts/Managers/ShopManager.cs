@@ -72,9 +72,24 @@ public class ShopManager : MonoBehaviour
     Attachment CreateAttachment()
     {
         Attachment _attachment = Instantiate(GameManager.instance.attachmentPool[Random.Range(0, GameManager.instance.attachmentPool.Length)]);
-        _attachment.rarity = (Rarity)Random.Range(0,5); // #TODO: rarity calculation
+        int _rarity = Random.Range(0,101);
+        /*
+        5% Legendary
+        10% Epic
+        15% Rare
+        30% Uncommon
+        40% Common
+        */
+        Debug.Log("rarity num: " + _rarity);
+        Debug.Log("rarity after sub: " + (_rarity - MapManager.instance.floorsCleared));
+        if      (_rarity <= 45 - MapManager.instance.floorsCleared)  {_attachment.rarity = Rarity.COMMON;}
+        else if (_rarity <= 75 - MapManager.instance.floorsCleared)  {_attachment.rarity = Rarity.UNCOMMON;}
+        else if (_rarity <= 90 - MapManager.instance.floorsCleared)  {_attachment.rarity = Rarity.RARE;}
+        else if (_rarity <= 100 - MapManager.instance.floorsCleared)  {_attachment.rarity = Rarity.EPIC;}
+        else if (_rarity <= 105 - MapManager.instance.floorsCleared) {_attachment.rarity = Rarity.LEGENDARY;}
+        else {Debug.LogError("rarity calculation failure");}
+        
         RollStats(_attachment);
-
         return _attachment;
     }
 
@@ -99,7 +114,7 @@ public class ShopManager : MonoBehaviour
     }
 
     // Roll item stuff
-        public void RollStats(Attachment attachment)
+    public void RollStats(Attachment attachment)
     {
         // Debug.Log("Roll stats");
         // Debug.Log("mod count: " + modifiers.Count);
@@ -108,10 +123,10 @@ public class ShopManager : MonoBehaviour
             Vector2 rollLimits = GetRollLimits(modifier.type, attachment);
             if (InventoryManager.instance.IsModTypePercentage(modifier.type))
             {
-                modifier.value =  Mathf.Ceil(UnityEngine.Random.Range(rollLimits.x, rollLimits.y)); 
+                modifier.value =  Mathf.Ceil(Random.Range(rollLimits.x, rollLimits.y)); 
                 return;   
             }
-            modifier.value =  Mathf.Round(UnityEngine.Random.Range(rollLimits.x, rollLimits.y)*100)/100;
+            modifier.value =  Mathf.Round(Random.Range(rollLimits.x, rollLimits.y)*100)/100;
         }
     }
 

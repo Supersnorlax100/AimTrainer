@@ -61,12 +61,12 @@ public class EnemyScript : MonoBehaviour
                 GameManager.instance.targetCount--;
                 if (!respawns)
                 {
-                    Debug.Log("sub enemy died");
+                    // Debug.Log("sub enemy died");
                     EventHandeler.onSubEnemyDeath?.Invoke();
                 }
                 else
                 {
-                    Debug.Log("enemy died");
+                    // Debug.Log("enemy died");
                     EventHandeler.onEnemyDeath?.Invoke();
                 }
                 Destroy(gameObject.transform.parent.gameObject);

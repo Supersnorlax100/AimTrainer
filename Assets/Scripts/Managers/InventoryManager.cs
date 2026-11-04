@@ -57,7 +57,6 @@ public class InventoryManager : MonoBehaviour
 
     public void EquipAttachment(Attachment attachment)
     {
-        //#TODO: if there is a earlier free spot, it does not take it, but instead swaps locations with the item in the inventory, maybe want to reconsider but not important
         Attachment curEquiped = equipedAttachments[(int)attachment.type];
         if (GetAttachmentSlot(attachment) == -1) // if being equiped from not an item slot (on purchase)
         {

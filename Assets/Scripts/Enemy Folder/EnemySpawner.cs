@@ -1,7 +1,4 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using static UnityEngine.GraphicsBuffer;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -55,9 +52,6 @@ public class EnemySpawner : MonoBehaviour
     }
     public Vector3 GenerateSpawnLocation()
     {
-        Debug.Log(gameObject.name + SceneManager.GetActiveScene().name);
-        // The + YtargetSpawnAreaScale/10 is because the target spawns a little too low than what it should so I added an offset
-        // The sqrt is to out to if a square was rotated 45
         float targetX = spawnArea.transform.position.x + Random.Range(-(XspawnAreaScale / 2) + XspawnAreaScale / 25, XspawnAreaScale / 2 - XspawnAreaScale / 25);
         float targetY = spawnArea.transform.position.y + Random.Range(-(YspawnAreaScale / 2), YspawnAreaScale / 2);
         float targetZ = spawnArea.transform.position.z + enemyPrefab.transform.GetChild(0).gameObject.GetComponent<SphereCollider>().radius - .2f;
@@ -89,7 +83,7 @@ public class EnemySpawner : MonoBehaviour
     {
         if (numberOfSpawnedEnemys >= maxEnemyCount && GameManager.instance.targetCount <= 0)
         {
-            Debug.Log(GameManager.instance.targetCount);
+            // Debug.Log(GameManager.instance.targetCount);
             EventHandeler.exitRoom?.Invoke();
         }
         else if (numberOfSpawnedEnemys >= maxEnemyCount)
@@ -124,6 +118,7 @@ public class EnemySpawner : MonoBehaviour
         foreach(MonoBehaviour script in modScripts)
         {
             newEnemy.AddComponent(script.GetType());
+            newEnemy.GetComponent<EnemyScript>().scoreValue += 10;
         }
 
         SetSpawnAreas(newEnemy.gameObject);
