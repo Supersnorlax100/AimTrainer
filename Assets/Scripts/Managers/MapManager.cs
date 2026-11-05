@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -32,7 +33,6 @@ public class MapManager : MonoBehaviour
     private Dictionary<Vector2, GameObject> nodeMap = new Dictionary<Vector2, GameObject>();
     [SerializeField] private int floorsNumber;
     [SerializeField] private int RoomsPerFloor;
-
     public Vector2 currentRoom = new Vector2(1,-1);
     public RoomType currentRoomType;
     List<Vector2> pastRooms = new List<Vector2>(1);
@@ -72,6 +72,7 @@ public class MapManager : MonoBehaviour
         // SceneManager.sceneLoaded += OnSceneLoaded;
 
         EventHandeler.exitRoom += ExitRoom;
+        EventHandeler.levelClear += LevelClear;
     }
 
     private void Start()
@@ -98,6 +99,15 @@ public class MapManager : MonoBehaviour
         {
             GameManager.instance.Pause(true);
         }
+    }
+
+    public void LevelClear()
+    {
+        currnetLvl++;
+        pastRooms.Clear();
+        currentRoom = new Vector2(1,-1);
+        pastRooms.Add(currentRoom);
+        NewMap();
     }
 
     void ExitRoom()

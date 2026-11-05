@@ -104,6 +104,8 @@ public class GameManager : MonoBehaviour
         EventHandeler.exitRoom += GetRidOfTempMods;
 
         EventHandeler.enterRoom += EnterRoom;
+
+        EventHandeler.levelClear += LevelClear;
         
         curTime = secondsGiven * 100;
 
@@ -119,6 +121,15 @@ public class GameManager : MonoBehaviour
         playerStats[9] = bulletSizeStat;
     }
 
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.RightShift))
+        {
+            EventHandeler.levelClear?.Invoke();
+        }
+    }
+
     void Start()
     {
         Pause(true);
@@ -128,6 +139,11 @@ public class GameManager : MonoBehaviour
         }
 
         UpdateStats();
+    }
+
+    public void LevelClear()
+    {
+        curTime = secondsGiven * 100;
     }
 
     public void EnterRoom()

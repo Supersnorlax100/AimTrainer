@@ -28,4 +28,7 @@ public class EventHandeler : MonoBehaviour
 
     public delegate void ExitRoom();
     public static ExitRoom exitRoom;
+
+    public delegate void LevelClear();
+    public static LevelClear levelClear;
 }

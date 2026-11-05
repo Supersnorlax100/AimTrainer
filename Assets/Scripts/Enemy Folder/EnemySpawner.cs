@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -46,15 +47,17 @@ public class EnemySpawner : MonoBehaviour
     private float GenerateRandomHealth(EnemyScript enemy)
     {
         enemy.health += 1 * enemy.modScripts.Count;
-        float maxHealth = (enemy.health +  MapManager.instance.currnetLvl * 3) * (1 + MapManager.instance.currentRoom.y / 10);
+        float maxHealth = (float)Math.Pow(enemy.health + (float)MapManager.instance.floorsCleared/3, 1 + (float)MapManager.instance.currnetLvl/3);
+        // float maxHealth = (enemy.health +  MapManager.instance.currnetLvl * 3) * (1 + MapManager.instance.currentRoom.y / 10);
         // float maxHealth = Mathf.Pow(1.3f, MapManager.instance.currentRoom.y) * 5;
-        Debug.Log("max health");
-        return Random.Range(maxHealth * 0.8f, maxHealth); 
+        Debug.Log((enemy.health + (float)MapManager.instance.floorsCleared/3) + "^" + (1+ MapManager.instance.currnetLvl));
+        Debug.Log("max health: " + maxHealth);
+        return UnityEngine.Random.Range(maxHealth * 0.8f, maxHealth); 
     }
     public Vector3 GenerateSpawnLocation()
     {
-        float targetX = spawnArea.transform.position.x + Random.Range(-(XspawnAreaScale / 2) + XspawnAreaScale / 25, XspawnAreaScale / 2 - XspawnAreaScale / 25);
-        float targetY = spawnArea.transform.position.y + Random.Range(-(YspawnAreaScale / 2), YspawnAreaScale / 2);
+        float targetX = spawnArea.transform.position.x + UnityEngine.Random.Range(-(XspawnAreaScale / 2) + XspawnAreaScale / 25, XspawnAreaScale / 2 - XspawnAreaScale / 25);
+        float targetY = spawnArea.transform.position.y + UnityEngine.Random.Range(-(YspawnAreaScale / 2), YspawnAreaScale / 2);
         float targetZ = spawnArea.transform.position.z + enemyPrefab.transform.GetChild(0).gameObject.GetComponent<SphereCollider>().radius - .2f;
         Vector3 targetPos = new Vector3(targetX, targetY, targetZ);
 
@@ -128,8 +131,8 @@ public class EnemySpawner : MonoBehaviour
         newEnemy.gameObject.transform.GetChild(0).gameObject.transform.localScale = new Vector3(_critSize, _critSize, _critSize);
         if (areEnemysMoving)
         {
-            Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
-            float _targetSpeed = enemySpeed + Random.Range(-enemySpeedVariability, enemySpeedVariability);
+            Vector3 _targetDirection = new Vector3(UnityEngine.Random.Range(0, 10), UnityEngine.Random.Range(1, 10), 0);
+            float _targetSpeed = enemySpeed + UnityEngine.Random.Range(-enemySpeedVariability, enemySpeedVariability);
             newEnemy.GetComponent<Rigidbody>().AddForce(_targetDirection.normalized * _targetSpeed, ForceMode.Impulse);
         }
     }

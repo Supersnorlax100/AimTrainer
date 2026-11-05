@@ -30,7 +30,6 @@ public class TimerScript : MonoBehaviour
         // EventHandeler.exitRoom += StoreTime;
         EventHandeler.enterRoom += Timer;
         EventHandeler.exitRoom += StopTimer;
-        Debug.Log("subscribe");
     }
 
     void Start()
