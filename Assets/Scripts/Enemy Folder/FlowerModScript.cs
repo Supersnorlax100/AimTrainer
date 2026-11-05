@@ -33,7 +33,7 @@ public class FlowerModScript : MonoBehaviour
         Rigidbody pPRB = petalParent.transform.gameObject.AddComponent<Rigidbody>();
         pPRB.useGravity = false;
         pPRB.excludeLayers = ~0;
-        petalCount =(int) Mathf.Pow(1.5f, MapManager.instance.curentFloor) * 3;
+        petalCount =(int) Mathf.Pow(1.5f, MapManager.instance.currentRoom.y) * 3;
         SpawnPetals();
         GetComponent<EnemyScript>().canGetHit = false;
         petalRotateVariationMax = Random.Range(1, petalRotateVariationMax + 1);

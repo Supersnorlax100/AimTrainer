@@ -4,7 +4,6 @@ public class EnemySpawner : MonoBehaviour
 {
 
     [SerializeField] GameObject enemyPrefab;
-    float randomHealth;
 
     Component[] modScripts;
 
@@ -36,7 +35,6 @@ public class EnemySpawner : MonoBehaviour
         XspawnAreaScale = spawnArea.transform.localScale.x;
         YspawnAreaScale = spawnArea.transform.localScale.y;
         modScripts = GameManager.instance.modScriptsUnlocked.ToArray();
-        generateRandomHealth();
         for (int i = 0; i < initialEnemyCount; i++)  Spawn();
     }
 
@@ -45,10 +43,13 @@ public class EnemySpawner : MonoBehaviour
         EventHandeler.onEnemyDeath -= Spawn;
     }
 
-    private void generateRandomHealth()
+    private float GenerateRandomHealth(EnemyScript enemy)
     {
-        float maxHealth = Mathf.Pow(1.3f, MapManager.instance.curentFloor) *5;
-        randomHealth = Random.Range(1,maxHealth);
+        enemy.health += 1 * enemy.modScripts.Count;
+        float maxHealth = (enemy.health +  MapManager.instance.currnetLvl * 3) * (1 + MapManager.instance.currentRoom.y / 10);
+        // float maxHealth = Mathf.Pow(1.3f, MapManager.instance.currentRoom.y) * 5;
+        Debug.Log("max health");
+        return Random.Range(maxHealth * 0.8f, maxHealth); 
     }
     public Vector3 GenerateSpawnLocation()
     {
@@ -112,9 +113,9 @@ public class EnemySpawner : MonoBehaviour
     {
         numberOfSpawnedEnemys++;
         GameManager.instance.targetCount++;
-        GameObject newEnemy =Instantiate(enemyPrefab, pos, Quaternion.identity, enemyParent.transform);
+        GameObject newEnemy = Instantiate(enemyPrefab, pos, Quaternion.identity, enemyParent.transform);
         newEnemy = newEnemy.transform.GetChild(0).gameObject;
-        newEnemy.GetComponent<EnemyScript>().health = randomHealth;
+        newEnemy.GetComponent<EnemyScript>().health = GenerateRandomHealth(newEnemy.GetComponent<EnemyScript>());
         foreach(MonoBehaviour script in modScripts)
         {
             newEnemy.AddComponent(script.GetType());
@@ -128,7 +129,7 @@ public class EnemySpawner : MonoBehaviour
         if (areEnemysMoving)
         {
             Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
-            float _targetSpeed = enemySpeed + Random.Range(-(enemySpeedVariability), enemySpeedVariability);
+            float _targetSpeed = enemySpeed + Random.Range(-enemySpeedVariability, enemySpeedVariability);
             newEnemy.GetComponent<Rigidbody>().AddForce(_targetDirection.normalized * _targetSpeed, ForceMode.Impulse);
         }
     }

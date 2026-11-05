@@ -21,8 +21,6 @@ public class MapManager : MonoBehaviour
 
     public GameObject map;
 
-    public int floorsCleared;    
-
     // Room Types
     // 0 - Home
     // 1 - Combat
@@ -38,8 +36,8 @@ public class MapManager : MonoBehaviour
     public Vector2 currentRoom = new Vector2(1,-1);
     public RoomType currentRoomType;
     List<Vector2> pastRooms = new List<Vector2>(1);
-    public int curentFloor;
-    public int currnetLvl; //#TODO if i want to have some insurnce code
+    public int floorsCleared;  
+    public int currnetLvl;
 
     public Sprite[] sprites;
     [SerializeField] GameObject mapNode;

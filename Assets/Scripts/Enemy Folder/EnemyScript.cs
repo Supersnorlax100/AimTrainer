@@ -18,7 +18,7 @@ public class EnemyScript : MonoBehaviour
     private Slider healthBar;
     public bool canGetHit = true;
     public bool respawns = true;
-    List<MonoBehaviour> modScripts = new List<MonoBehaviour>(); //#TODO: shouldn't the modScripts have a class since they are inherited? so instead of monobehavior you should use that class right?
+    public List<MonoBehaviour> modScripts = new List<MonoBehaviour>(); //#TODO: shouldn't the modScripts have a class since they are inherited? so instead of monobehavior you should use that class right?
 
     public void Start()
     {
