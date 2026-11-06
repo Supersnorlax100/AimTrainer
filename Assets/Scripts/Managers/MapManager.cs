@@ -32,7 +32,7 @@ public class MapManager : MonoBehaviour
     private Dictionary<Vector2, RoomType> roomMap = new Dictionary<Vector2, RoomType>();
     private Dictionary<Vector2, GameObject> nodeMap = new Dictionary<Vector2, GameObject>();
     [SerializeField] private int floorsNumber;
-    [SerializeField] private int roomsPerFloor;
+    [SerializeField] private int RoomsPerFloor;
     public Vector2 currentRoom = new Vector2(1,-1);
     public RoomType currentRoomType;
     List<Vector2> pastRooms = new List<Vector2>(1);
@@ -46,12 +46,12 @@ public class MapManager : MonoBehaviour
     [SerializeField] int nodeSpacing;
 
     // Random Room Type
-    Dictionary<RoomType, int> roomTypeNum = new Dictionary<RoomType, int>()
+    Dictionary<RoomType, int> roomTypeOdds = new Dictionary<RoomType, int>()
     {
-        { RoomType.COMBAT, 9999},
-        { RoomType.EVENT, 99999},
-        { RoomType.SHOP, 2},
-        { RoomType.MINIBOSS, 3}
+        { RoomType.COMBAT, 65},
+        { RoomType.EVENT, 35},
+        { RoomType.SHOP, 0},
+        { RoomType.MINIBOSS, 0}
     };
 
     [SerializeField] int specalRoomOdds = 5; // aka miniBoss and shop
@@ -136,146 +136,92 @@ public class MapManager : MonoBehaviour
         // Floor Dict
         for(int floor = 0; floor < floorsNumber; floor++)
         {
-            for (int room = 0; room < roomsPerFloor; room++)
+            for (int room = 0; room < RoomsPerFloor; room++)
             {
-                Vector2 roomPos = new Vector2(room, floor);
-                roomMap.Add(roomPos, GenerateRoomType(roomPos));
-                GenerateMapNode(roomPos);
+                Vector2 roomPosition = new Vector2(room, floor);
+                roomMap.Add(roomPosition, GenerateRoomType(roomPosition));
+                GenerateMapNode(roomPosition);
             }
         }
         // Home Node
-        Vector2 _roomPos = new Vector2(1, -1);
+        Vector2 _roomPosition = new Vector2(1, -1);
         RoomType roomType = RoomType.HOME;
-        roomMap.Add(_roomPos, roomType);
-        GenerateMapNode(_roomPos);
+        roomMap.Add(_roomPosition, roomType);
+        GenerateMapNode(_roomPosition);
         // Boss Node
-        _roomPos = new Vector2(1, floorsNumber);
+        _roomPosition = new Vector2(1, floorsNumber);
         roomType = RoomType.BOSS;
-        roomMap.Add(_roomPos, roomType);
-        GenerateMapNode(_roomPos);  
+        roomMap.Add(_roomPosition, roomType);
+        GenerateMapNode(_roomPosition);  
         
         NodeAvailability();
     }
 
-    void GenerateMapNode(Vector2 roomPos)
+    void GenerateMapNode(Vector2 roomPosition)
     {
-        Vector3 mapNodePos = new Vector3(roomPos.x * nodeSpacing - nodeSpacing, roomPos.y * nodeSpacing - nodeSpacing*2 - 100, 0);
+        Vector3 mapNodePos = new Vector3(roomPosition.x * nodeSpacing - nodeSpacing, roomPosition.y * nodeSpacing - nodeSpacing*2 - 100, 0);
         GameObject _mapNode = Instantiate(mapNode, mapNodeContainer.transform);
         _mapNode.transform.localPosition = mapNodePos;
-        _mapNode.GetComponent<MapNodeScript>().roomNum = roomPos;
-        nodeMap.Add(roomPos, _mapNode);
-    }
-
-    List<Vector2> RoomTypeMap(RoomType roomType)
-    {
-        List<Vector2> madePositions = new List<Vector2>();
-
-        if (roomType == RoomType.SHOP)
-        {
-            for (int i = 0; i < roomsPerFloor; i++)
-            {
-                madePositions.Add(new Vector2(i, floorsNumber));
-            }
-            // for (int i = 0; i < roomTypeNum[roomType]; i++)
-            // {
-                
-            // }
-        }
-
-        if (roomType != RoomType.COMBAT || roomType != RoomType.EVENT)
-        {
-            for (int i = 0; i < roomTypeNum[roomType]; i++)
-            {
-                if (roomType == RoomType.SHOP)
-                {
-                    madePositions.Add(new Vector2(Random.Range(0, roomsPerFloor + 1), Random.Range(1, floorsNumber - 3)));
-                }
-            }
-        }
-
-        // for(int floor = 0; floor < floorsNumber; floor++)
-        // {
-        //     for (int room = 0; room < RoomsPerFloor; room++)
-        //     {
-        //         if (floor == 0) {break;}
-        //         switch (roomType)
-        //         {
-        //             case RoomType.SHOP:
-        //             {
-        //                 foreach ()
-        //                 break;
-        //             }
-        //             default: break;
-        //         }
-        //         // list.Add(new Vector2(room, floor));
-        //     }
-        // }
-
-        return madePositions;
+        _mapNode.GetComponent<MapNodeScript>().roomNum = roomPosition;
+        nodeMap.Add(roomPosition, _mapNode);
     }
 
     RoomType GenerateRoomType(Vector2 roomPos)
     {
-        // if floor before boss
-        if (roomPos.y == floorsNumber-1)
+
+        if (roomPos.y != 0)
         {
-            return RoomType.SHOP;   
+            int randNum1 = Random.Range(0, 101);
+            if (randNum1 <= specalRoomOdds)
+            {
+                specalRoomOdds -= 3;
+                int randNum2 = Random.Range(0, 101);
+                if (randNum2 <= shopOdds)
+                {
+                    shopOdds -= 5;
+                    return RoomType.SHOP;
+
+                }
+                else
+                {
+                    shopOdds += 5;
+                    return RoomType.MINIBOSS;
+
+                }
+
+            }
+            else
+            {
+                specalRoomOdds += 1;
+                int randNum3 = Random.Range(0, 101);
+                if (randNum3 <= eventOdds)
+                {
+                    eventOdds -= 5;
+                    return RoomType.EVENT;
+                }
+                else
+                {
+                    eventOdds += 1;
+                    return RoomType.COMBAT;
+                }
+            }
         }
 
-        return RoomType.HOME;
-        // if (roomPos.y != 0)
-        // {
-        //     int randNum1 = Random.Range(0, 101);
-        //     if (randNum1 <= specalRoomOdds)
-        //     {
-        //         specalRoomOdds -= 3;
-        //         int randNum2 = Random.Range(0, 101);
-        //         if (randNum2 <= shopOdds)
-        //         {
-        //             shopOdds -= 5;
-        //             return RoomType.SHOP;
-
-        //         }
-        //         else
-        //         {
-        //             shopOdds += 5;
-        //             return RoomType.MINIBOSS;
-
-        //         }
-
-        //     }
-        //     else
-        //     {
-        //         specalRoomOdds += 1;
-        //         int randNum3 = Random.Range(0, 101);
-        //         if (randNum3 <= eventOdds)
-        //         {
-        //             eventOdds -= 5;
-        //             return RoomType.EVENT;
-        //         }
-        //         else
-        //         {
-        //             eventOdds += 1;
-        //             return RoomType.COMBAT;
-        //         }
-        //     }
-        // }
-
-        // else
-        // {
-        //     specalRoomOdds += 1;
-        //     int randNum3 = Random.Range(0, 101);
-        //     if (randNum3 <= eventOdds)
-        //     {
-        //         eventOdds -= 5;
-        //         return RoomType.EVENT;
-        //     }
-        //     else
-        //     {
-        //         eventOdds += 1;
-        //         return RoomType.COMBAT;
-        //     }
-        // }
+        else
+        {
+            specalRoomOdds += 1;
+            int randNum3 = Random.Range(0, 101);
+            if (randNum3 <= eventOdds)
+            {
+                eventOdds -= 5;
+                return RoomType.EVENT;
+            }
+            else
+            {
+                eventOdds += 1;
+                return RoomType.COMBAT;
+            }
+        }
     } 
 
     public Sprite GetRoomSprite(Vector2 roomPosition)
