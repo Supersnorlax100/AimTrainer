@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -35,13 +36,13 @@ public class MapManager : MonoBehaviour
     [SerializeField] private int RoomsPerFloor;
     public Vector2 currentRoom = new Vector2(1,-1);
     public RoomType currentRoomType;
-    List<Vector2> pastRooms = new List<Vector2>(1);
+    public List<Vector2> pastRooms = new List<Vector2>(1);
     public int floorsCleared;  
     public int currnetLvl;
 
     public Sprite[] sprites;
     [SerializeField] GameObject mapNode;
-    GameObject[] availableNodes = new GameObject[3];
+    public GameObject[] availableNodes = new GameObject[3];
     [SerializeField] GameObject mapNodeContainer;
     [SerializeField] int nodeSpacing;
 
@@ -250,25 +251,33 @@ public class MapManager : MonoBehaviour
             }
         }
 
+        // for (int i = 0; i < availableNodes.Length; i++)
+        // {
+        //     availableNodes[i] = null;
+        // }
+
         // Checks for available nodes
         // Left
         if (nodeMap.ContainsKey(new Vector2(currentRoom.x - 1, currentRoom.y + 1)))
         {
             availableNodes[0] = nodeMap[new Vector2(currentRoom.x - 1, currentRoom.y + 1)];
         }
+        // else {availableNodes[0] = null;}
         // Middle
         if (nodeMap.ContainsKey(new Vector2(currentRoom.x, currentRoom.y + 1)))
         {
             availableNodes[1] = nodeMap[new Vector2(currentRoom.x, currentRoom.y + 1)];
         }
+        // else {availableNodes[1] = null;}
         // Right
         if (nodeMap.ContainsKey(new Vector2(currentRoom.x + 1, currentRoom.y + 1)))
         {
             availableNodes[2] = nodeMap[new Vector2(currentRoom.x + 1, currentRoom.y + 1)];
         }
+        // else {availableNodes[2] = null;}
         foreach (GameObject node in availableNodes)
         {
-            node.GetComponent<Image>().color = Color.white;
+            node.GetComponent<Image>().color = Color.red;
         }
     }
 

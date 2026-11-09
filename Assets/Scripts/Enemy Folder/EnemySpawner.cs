@@ -88,18 +88,18 @@ public class EnemySpawner : MonoBehaviour
     public void Spawn()
     {
         Transform[] children = gameObject.GetComponentsInChildren<Transform>();
-        Debug.Log("children length: " + children.Length);
-        for (int i = 0; i < children.Length; i++)
-        {
-            Debug.Log("child: " + children[i].name);
-        }
+        // Debug.Log("children length: " + children.Length);
+        // for (int i = 0; i < children.Length; i++)
+        // {
+        //     Debug.Log("child: " + children[i].name);
+        // }
         if (numberOfSpawnedEnemys >= maxEnemyCount && gameObject.GetComponentsInChildren<Transform>().Length <= 5)
         {
             EventHandeler.exitRoom?.Invoke();
         }
         else if (numberOfSpawnedEnemys >= maxEnemyCount)
         {
-            Debug.Log("aohdfl");
+            // Debug.Log("aohdfl");
             return; // have spawnd all enemys it has but player has not killed all of them yet.
         }
         for (int i = 0; i < attemptsToSpawn; i++)
