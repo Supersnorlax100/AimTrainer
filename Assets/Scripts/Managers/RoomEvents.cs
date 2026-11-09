@@ -37,7 +37,7 @@ public class RoomEvents : MonoBehaviour
             {
                 eventImage.sprite = currentEvent.backgroundImage.sprite;
             }
-            for (int i = 0; i < currentEvent.optionCount; i++)
+            for (int i = 0; i < currentEvent.options.Length; i++)
             {
                 Debug.Log("b");
                 if (i == 0)

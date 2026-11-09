@@ -37,7 +37,6 @@ public class EventForRoom : ScriptableObject
 {
     public Image backgroundImage;
     public string eventText;
-    public int optionCount;
     public string[] options;
     public List<EventModifier> eventmodifiersO1;
     public List<EventModifier> eventmodifiersO2;
