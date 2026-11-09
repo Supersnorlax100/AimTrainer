@@ -24,6 +24,14 @@ public class EventModifier
     public float value;
     public bool positive; // when true, the modifier is positive, when false, the modifier is negative
 }
+
+
+[Serializable]
+// public class EventMods
+// {
+//     public List<EventModifier> eventModifier;
+// }
+
 [CreateAssetMenu(fileName = "EventForRoom", menuName = "Scriptable Objects/EventForRoom")]
 public class EventForRoom : ScriptableObject
 {
@@ -34,4 +42,5 @@ public class EventForRoom : ScriptableObject
     public List<EventModifier> eventmodifiersO1;
     public List<EventModifier> eventmodifiersO2;
     public List<EventModifier> eventmodifiersO3;
+    // public List<EventMods> eventMods;
 }
