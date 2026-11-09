@@ -87,13 +87,19 @@ public class EnemySpawner : MonoBehaviour
 
     public void Spawn()
     {
-        if (numberOfSpawnedEnemys >= maxEnemyCount && GameManager.instance.targetCount <= 0)
+        Transform[] children = gameObject.GetComponentsInChildren<Transform>();
+        Debug.Log("children length: " + children.Length);
+        for (int i = 0; i < children.Length; i++)
         {
-            Debug.Log(GameManager.instance.targetCount);
+            Debug.Log("child: " + children[i].name);
+        }
+        if (numberOfSpawnedEnemys >= maxEnemyCount && gameObject.GetComponentsInChildren<Transform>().Length <= 5)
+        {
             EventHandeler.exitRoom?.Invoke();
         }
         else if (numberOfSpawnedEnemys >= maxEnemyCount)
         {
+            Debug.Log("aohdfl");
             return; // have spawnd all enemys it has but player has not killed all of them yet.
         }
         for (int i = 0; i < attemptsToSpawn; i++)
@@ -117,7 +123,6 @@ public class EnemySpawner : MonoBehaviour
     void MakeEnemy(Vector3 pos)
     {
         numberOfSpawnedEnemys++;
-        GameManager.instance.targetCount++;
         GameObject newEnemy =Instantiate(enemyPrefab, pos, Quaternion.identity, enemyParent.transform);
         newEnemy = newEnemy.transform.GetChild(0).gameObject;
         newEnemy.GetComponent<EnemyScript>().health = randomHealth;
@@ -125,7 +130,6 @@ public class EnemySpawner : MonoBehaviour
         {
             newEnemy.AddComponent(script.GetType());
         }
-
         SetSpawnAreas(newEnemy.gameObject);
         GiveEnemyPreFab(newEnemy.gameObject);
         float _critSize = GameManager.instance.critSize;

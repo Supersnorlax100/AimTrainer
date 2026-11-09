@@ -7,11 +7,10 @@ public class FlowerModScript : MonoBehaviour
     public GameObject prefab;
     int petalCount;
     GameObject petalParent;
-    [SerializeField] Vector3 petalOfset = new Vector3(0,1,0);
-    [SerializeField] GameObject[] petalPrefabs;
+    Vector3 petalOfset = new Vector3(0,1,0);
     List<GameObject> petals = new List<GameObject>();
-    [SerializeField] float petalSpinSpeed;
-    [SerializeField] bool petalsSpin;
+    float petalSpinSpeed;
+    bool petalsSpin;
     int degreasBetweenPetals;
 
     [SerializeField] int petalRotateVariationMax;
@@ -53,13 +52,14 @@ public class FlowerModScript : MonoBehaviour
         for (int i = petalCount; i > 0; i--)
         {
             GameObject newPetal = Instantiate(prefab, petalParent.transform);
+            newPetal.GetComponentInChildren<Rigidbody>().excludeLayers = ~0;
+            newPetal.transform.GetChild(0).AddComponent<SubEnemyScript>();
             int randomChanceforBlink = Random.Range(0, 1);
             if (randomChanceforBlink == 1)
             {
                 newPetal.AddComponent<BlinkyModScript>();
                 newPetal.GetComponentInChildren<BlinkyModScript>().spawnArea = spawnArea;
             }
-            GameManager.instance.targetCount++;
             petalParent.transform.rotation = Quaternion.Euler(0, 0, degreasBetweenPetals * i);
             newPetal.gameObject.transform.position = gameObject.transform.position + petalOfset;
             petals.Add(newPetal);
@@ -67,6 +67,10 @@ public class FlowerModScript : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        EventHandeler.onSubEnemyDeath -= CheckPetals;
+    }
 
 
     public async void CheckPetals()
