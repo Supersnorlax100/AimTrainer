@@ -10,14 +10,20 @@ public class SlimeScript : MonoBehaviour
     public float numberOFSplit;
     public Transform parent;
     public GameObject prefab;
+    bool firstSlime = true;
     private void Start()
     {
         if (parent == null || parent.name != "SlimeParent")
         {
             parent = new GameObject("SlimeParent").transform;
+            parent.parent = transform.parent.parent;
             transform.parent.parent = parent;
         }
-        numberOFSplit = Mathf.Ceil(Mathf.Pow(2f, MapManager.instance.currentRoom.y) * 1);
+        if (firstSlime)
+        {
+            numberOFSplit = Mathf.Ceil(Mathf.Pow(2f, MapManager.instance.curentFloor) * 1);
+        }
+
     }
     private void OnDestroy()
     {
@@ -27,6 +33,7 @@ public class SlimeScript : MonoBehaviour
         {
             Debug.Log("Slime has no more splits and no sibling, invoking onEnemyDeath");
             EventHandeler.onEnemyDeath?.Invoke();
+            Destroy(parent.gameObject);
             return;
         }
         if (numberOFSplit <= 0)
@@ -47,7 +54,9 @@ public class SlimeScript : MonoBehaviour
             slimeBall_2.GetComponentInChildren<EnemyScript>().health = 1;
         }
         slimeBall_1.GetComponentInChildren<SlimeScript>().numberOFSplit = numberOFSplit - 1;
+        slimeBall_1.GetComponentInChildren<SlimeScript>().firstSlime = false;
         slimeBall_2.GetComponentInChildren<SlimeScript>().numberOFSplit = numberOFSplit - 1;
+        slimeBall_2.GetComponentInChildren<SlimeScript>().firstSlime = false;
     }
     GameObject Spawn()
     {

@@ -1,10 +1,13 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using static UnityEngine.GraphicsBuffer;
 
 public class EnemySpawner : MonoBehaviour
 {
 
     [SerializeField] GameObject enemyPrefab;
+    float randomHealth;
 
     Component[] modScripts;
 
@@ -36,6 +39,7 @@ public class EnemySpawner : MonoBehaviour
         XspawnAreaScale = spawnArea.transform.localScale.x;
         YspawnAreaScale = spawnArea.transform.localScale.y;
         modScripts = GameManager.instance.modScriptsUnlocked.ToArray();
+        generateRandomHealth();
         for (int i = 0; i < initialEnemyCount; i++)  Spawn();
     }
 
@@ -44,20 +48,18 @@ public class EnemySpawner : MonoBehaviour
         EventHandeler.onEnemyDeath -= Spawn;
     }
 
-    private float GenerateRandomHealth(EnemyScript enemy)
+    private void generateRandomHealth()
     {
-        enemy.health += 1 * enemy.modScripts.Count;
-        float maxHealth = (float)Math.Pow(enemy.health + (float)MapManager.instance.floorsCleared/3, 1 + (float)MapManager.instance.currnetLvl/3);
-        // float maxHealth = (enemy.health +  MapManager.instance.currnetLvl * 3) * (1 + MapManager.instance.currentRoom.y / 10);
-        // float maxHealth = Mathf.Pow(1.3f, MapManager.instance.currentRoom.y) * 5;
-        Debug.Log((enemy.health + (float)MapManager.instance.floorsCleared/3) + "^" + (1+ MapManager.instance.currnetLvl));
-        Debug.Log("max health: " + maxHealth);
-        return UnityEngine.Random.Range(maxHealth * 0.8f, maxHealth); 
+        float maxHealth = Mathf.Pow(1.3f, MapManager.instance.curentFloor) *5;
+        randomHealth = Random.Range(1,maxHealth);
     }
     public Vector3 GenerateSpawnLocation()
     {
-        float targetX = spawnArea.transform.position.x + UnityEngine.Random.Range(-(XspawnAreaScale / 2) + XspawnAreaScale / 25, XspawnAreaScale / 2 - XspawnAreaScale / 25);
-        float targetY = spawnArea.transform.position.y + UnityEngine.Random.Range(-(YspawnAreaScale / 2), YspawnAreaScale / 2);
+        Debug.Log(gameObject.name + SceneManager.GetActiveScene().name);
+        // The + YtargetSpawnAreaScale/10 is because the target spawns a little too low than what it should so I added an offset
+        // The sqrt is to out to if a square was rotated 45
+        float targetX = spawnArea.transform.position.x + Random.Range(-(XspawnAreaScale / 2) + XspawnAreaScale / 25, XspawnAreaScale / 2 - XspawnAreaScale / 25);
+        float targetY = spawnArea.transform.position.y + Random.Range(-(YspawnAreaScale / 2), YspawnAreaScale / 2);
         float targetZ = spawnArea.transform.position.z + enemyPrefab.transform.GetChild(0).gameObject.GetComponent<SphereCollider>().radius - .2f;
         Vector3 targetPos = new Vector3(targetX, targetY, targetZ);
 
@@ -85,13 +87,19 @@ public class EnemySpawner : MonoBehaviour
 
     public void Spawn()
     {
-        if (numberOfSpawnedEnemys >= maxEnemyCount && GameManager.instance.targetCount <= 0)
+        Transform[] children = gameObject.GetComponentsInChildren<Transform>();
+        Debug.Log("children length: " + children.Length);
+        for (int i = 0; i < children.Length; i++)
         {
-            // Debug.Log(GameManager.instance.targetCount);
+            Debug.Log("child: " + children[i].name);
+        }
+        if (numberOfSpawnedEnemys >= maxEnemyCount && gameObject.GetComponentsInChildren<Transform>().Length <= 5)
+        {
             EventHandeler.exitRoom?.Invoke();
         }
         else if (numberOfSpawnedEnemys >= maxEnemyCount)
         {
+            Debug.Log("aohdfl");
             return; // have spawnd all enemys it has but player has not killed all of them yet.
         }
         for (int i = 0; i < attemptsToSpawn; i++)
@@ -115,24 +123,21 @@ public class EnemySpawner : MonoBehaviour
     void MakeEnemy(Vector3 pos)
     {
         numberOfSpawnedEnemys++;
-        GameManager.instance.targetCount++;
-        GameObject newEnemy = Instantiate(enemyPrefab, pos, Quaternion.identity, enemyParent.transform);
+        GameObject newEnemy =Instantiate(enemyPrefab, pos, Quaternion.identity, enemyParent.transform);
         newEnemy = newEnemy.transform.GetChild(0).gameObject;
-        newEnemy.GetComponent<EnemyScript>().health = GenerateRandomHealth(newEnemy.GetComponent<EnemyScript>());
+        newEnemy.GetComponent<EnemyScript>().health = randomHealth;
         foreach(MonoBehaviour script in modScripts)
         {
             newEnemy.AddComponent(script.GetType());
-            newEnemy.GetComponent<EnemyScript>().scoreValue += 10;
         }
-
         SetSpawnAreas(newEnemy.gameObject);
         GiveEnemyPreFab(newEnemy.gameObject);
         float _critSize = GameManager.instance.critSize;
         newEnemy.gameObject.transform.GetChild(0).gameObject.transform.localScale = new Vector3(_critSize, _critSize, _critSize);
         if (areEnemysMoving)
         {
-            Vector3 _targetDirection = new Vector3(UnityEngine.Random.Range(0, 10), UnityEngine.Random.Range(1, 10), 0);
-            float _targetSpeed = enemySpeed + UnityEngine.Random.Range(-enemySpeedVariability, enemySpeedVariability);
+            Vector3 _targetDirection = new Vector3(Random.Range(0, 10), Random.Range(1, 10), 0);
+            float _targetSpeed = enemySpeed + Random.Range(-(enemySpeedVariability), enemySpeedVariability);
             newEnemy.GetComponent<Rigidbody>().AddForce(_targetDirection.normalized * _targetSpeed, ForceMode.Impulse);
         }
     }

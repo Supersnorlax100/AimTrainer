@@ -31,7 +31,6 @@ public class TargetScript : MonoBehaviour
             if (health <= 0)
             {
                 Destroy(gameObject.transform.parent.gameObject);
-                GameManager.instance.targetCount--;
                 EventHandeler.onTargetDeath?.Invoke();
             }
         }

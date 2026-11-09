@@ -48,6 +48,19 @@ public class EnemyScript : MonoBehaviour
             AssignColor();
         }
     }
+    private void OnDestroy()
+    {
+        if (!respawns)
+        {
+            Debug.Log("sub enemy died");
+            EventHandeler.onSubEnemyDeath?.Invoke();
+        }
+        else
+        {
+            Debug.Log("enemy died");
+            EventHandeler.onEnemyDeath?.Invoke();
+        }
+    }
     public void GetHit(float damage)
     {
         if (canGetHit)
@@ -58,23 +71,12 @@ public class EnemyScript : MonoBehaviour
 
             if (health <= 0)
             {
-                GameManager.instance.targetCount--;
-                if (!respawns)
-                {
-                    // Debug.Log("sub enemy died");
-                    EventHandeler.onSubEnemyDeath?.Invoke();
-                }
-                else
-                {
-                    // Debug.Log("enemy died");
-                    EventHandeler.onEnemyDeath?.Invoke();
-                }
                 Destroy(gameObject.transform.parent.gameObject);
             }
             foreach (MonoBehaviour script in modScripts)
             {
                 //Debug.Log(script);
-                script?.Invoke("GetHit",0);
+                script.Invoke("GetHit",0);
             }
         }
         else

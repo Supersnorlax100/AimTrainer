@@ -40,8 +40,6 @@ public class GameManager : MonoBehaviour
 
     public Attachment[] attachmentPool;
 
-    public int targetCount;
-
     [SerializeField] int secondsGiven;
     [HideInInspector] public int curTime; // in centiseconds
     [HideInInspector] public int timeToStore; // in centiseconds, save time on every room clear
@@ -148,12 +146,7 @@ public class GameManager : MonoBehaviour
 
     public void EnterRoom()
     {
-        Debug.Log("enter room");
-        if (targetCount > 0)
-        {
-            targetCount = 0;
-        }
-        // Debug.Log(MapManager.instance.currentRoomType);
+        Debug.Log(MapManager.instance.currentRoomType);
         bool loop = true;
         switch (MapManager.instance.currentRoomType)
         {
