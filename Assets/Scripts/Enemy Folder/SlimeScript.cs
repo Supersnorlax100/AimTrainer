@@ -21,7 +21,7 @@ public class SlimeScript : MonoBehaviour
         }
         if (firstSlime)
         {
-            numberOFSplit = Mathf.Ceil(Mathf.Pow(2f, MapManager.instance.curentFloor) * 1);
+            numberOFSplit = Mathf.Ceil(Mathf.Pow(2f, MapManager.instance.currentRoom.y) * 1);
         }
 
     }

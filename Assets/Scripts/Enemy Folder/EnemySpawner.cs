@@ -50,7 +50,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void generateRandomHealth()
     {
-        float maxHealth = Mathf.Pow(1.3f, MapManager.instance.curentFloor) *5;
+        float maxHealth = Mathf.Pow(1.3f, MapManager.instance.currentRoom.y) *5;
         randomHealth = Random.Range(1,maxHealth);
     }
     public Vector3 GenerateSpawnLocation()
