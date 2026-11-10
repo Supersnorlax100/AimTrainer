@@ -71,6 +71,7 @@ public class GameManager : MonoBehaviour
     public List<Component> modScriptsUnlocked;
     public List<Component> modScriptsToLock;
 
+    public float accuracy;
 
     public RunType runType;
 
@@ -146,7 +147,6 @@ public class GameManager : MonoBehaviour
 
     public void EnterRoom()
     {
-        Debug.Log(MapManager.instance.currentRoomType);
         bool loop = true;
         switch (MapManager.instance.currentRoomType)
         {
@@ -325,14 +325,14 @@ public class GameManager : MonoBehaviour
         {
             roomScore += PlayerControler.instance.target.GetComponent<EnemyScript>().scoreValue * comboMult;
         }
-        UiManager.instance.UpdateScore();
+        UiManager.instance.UpdateScoreAndAccuracyText();
     }
 
     public void FinalizeScore()
     {
-        score += (int)roomScore;
+        score += (int)(roomScore * accuracy);
         roomScore = 0;
-        UiManager.instance.UpdateScore();
+        UiManager.instance.UpdateScoreAndAccuracyText();
     }
     #endregion
     public void PlayerDie()
@@ -360,25 +360,12 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
     }
 
-    // public void EnsureMouseLock()
-    // {
-    //     if (! isPaused)
-    //     {
-    //         Cursor.lockState = CursorLockMode.Locked;
-    //     }
-    //     if (IsActiveUI()) {Cursor.lockState = CursorLockMode.None; Debug.Log("paused + not locked");}
-    //     else {Cursor.lockState = CursorLockMode.Locked; Debug.Log("paused + locked");}
-    // }
-
     // Checks if in a UI scene or if UI is active
     public bool IsActiveUI()
     {
-    //     if (! MapManager.instance.map.activeSelf && MapManager.instance.currentRoomType != RoomType.SHOP
-    //     && MapManager.instance.currentRoomType != RoomType.EVENT && 
-    //     (! UiManager.instance || (UiManager.instance && ! UiManager.instance.activeMenu)))
         if (MapManager.instance.map.activeSelf || MapManager.instance.IsUIRoom() || 
-        ( UiManager.instance && UiManager.instance.activeMenu))
-        {if (UiManager.instance && UiManager.instance.activeMenu) Debug.Log("ui active menu: " + UiManager.instance?.activeMenu?.name); return true; }
+        ( UiManager.instance && UiManager.instance.activeMenu)) 
+        {return true; }
         else return false;
     }
 

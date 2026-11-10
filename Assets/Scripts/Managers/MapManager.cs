@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -256,24 +254,28 @@ public class MapManager : MonoBehaviour
         //     availableNodes[i] = null;
         // }
 
+        availableNodes[1] = nodeMap[new Vector2(currentRoom.x, currentRoom.y + 1)];
+        // #TODO: game will break if available node = null, so setting tem to the middle node which should always be available
         // Checks for available nodes
         // Left
         if (nodeMap.ContainsKey(new Vector2(currentRoom.x - 1, currentRoom.y + 1)))
         {
             availableNodes[0] = nodeMap[new Vector2(currentRoom.x - 1, currentRoom.y + 1)];
         }
+        else {availableNodes[0] = availableNodes[1];}
         // else {availableNodes[0] = null;}
-        // Middle
-        if (nodeMap.ContainsKey(new Vector2(currentRoom.x, currentRoom.y + 1)))
-        {
-            availableNodes[1] = nodeMap[new Vector2(currentRoom.x, currentRoom.y + 1)];
-        }
+        // Middle (Prolly don't need this)
+        // if (nodeMap.ContainsKey(new Vector2(currentRoom.x, currentRoom.y + 1)))
+        // {
+        //     availableNodes[1] = nodeMap[new Vector2(currentRoom.x, currentRoom.y + 1)];
+        // }
         // else {availableNodes[1] = null;}
         // Right
         if (nodeMap.ContainsKey(new Vector2(currentRoom.x + 1, currentRoom.y + 1)))
         {
             availableNodes[2] = nodeMap[new Vector2(currentRoom.x + 1, currentRoom.y + 1)];
         }
+        else {availableNodes[2] = availableNodes[1];}
         // else {availableNodes[2] = null;}
         foreach (GameObject node in availableNodes)
         {

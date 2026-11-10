@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,8 +26,11 @@ public class InventoryUIScript : MonoBehaviour
     [SerializeField] TMP_Text attachmentName; // att stats att name
     [SerializeField] TMP_Text[] hoveredAttStats;
     [SerializeField] TMP_Text[] equipedAttStats;
+    [SerializeField] GameObject trashTextObj;
 
     [SerializeField] TMP_Text[] playerStats;
+
+    Attachment hovereredAtt;
 
     bool madeLists;
 
@@ -41,6 +45,16 @@ public class InventoryUIScript : MonoBehaviour
             j++;
         }
         madeLists = true;
+    }
+
+    void Update()
+    {
+        if (hovereredAtt && Input.GetKeyDown("t"))
+        {
+            InventoryManager.instance.DeleteAttachment(hovereredAtt);
+            UpdateUI();
+            HoverStats(null);
+        }
     }
 
     void OnEnable()
@@ -108,9 +122,11 @@ public class InventoryUIScript : MonoBehaviour
 
     public void HoverStats(Attachment attachment)
     {
+        hovereredAtt = attachment;
         // Will 'hide' all text if null
         if (attachment == null)
         {
+            trashTextObj.SetActive(false);
             attachmentName.text = "";
             foreach (TMP_Text text in hoveredAttStats)
             {
@@ -124,6 +140,7 @@ public class InventoryUIScript : MonoBehaviour
         }
 
         attachmentName.text = attachment.attachmentName;
+        trashTextObj.SetActive(true);
         for (int i = 0; i < attachment.modifiers.Count; i++)
         {
             // Debug.Log("i: " + i );

@@ -25,7 +25,7 @@ public class UiManager : MonoBehaviour
 
     [SerializeField] GameObject Timer;
 
-    [SerializeField] TMP_Text scoreText;
+    [SerializeField] TMP_Text scoreAndAccuracyText;
     [SerializeField] TMP_Text finalScore;
    
     // Combo stuff
@@ -49,9 +49,9 @@ public class UiManager : MonoBehaviour
         }
 
         EventHandeler.onPlayerDeath += ActivateDeathScreen;
-        EventHandeler.onTargetDeath += UpdateScore;
-        EventHandeler.onEnemyDeath += UpdateScore;
-        EventHandeler.onSubEnemyDeath += UpdateScore;
+        EventHandeler.onTargetDeath += UpdateScoreAndAccuracyText;
+        EventHandeler.onEnemyDeath += UpdateScoreAndAccuracyText;
+        EventHandeler.onSubEnemyDeath += UpdateScoreAndAccuracyText;
 
         EventHandeler.exitRoom += CloseAllMenus;
         EventHandeler.enterRoom += EnterRoom;
@@ -151,18 +151,20 @@ public class UiManager : MonoBehaviour
         pauseMenu.SetActive(enabled);
     }
 
-    public void UpdateScore()
+    // these use a connected string
+    public void UpdateScoreAndAccuracyText()
     {
-        scoreText.text = "Score: " + Mathf.Round(GameManager.instance.roomScore).ToString();
+        scoreAndAccuracyText.text = "Score: " + Mathf.Round(GameManager.instance.roomScore).ToString() + " X "
+        + Mathf.Round(GameManager.instance.accuracy * 100).ToString() + "%";
     }
 
     public void ActivateDeathScreen()
     {
         deathScreen.SetActive(true); 
         activeMenu = deathScreen;
-        finalScore.text = "Final " + scoreText.text;
+        finalScore.text = "Final " + scoreAndAccuracyText.text;
         Timer.SetActive(false);
-        scoreText.gameObject.SetActive(false);
+        scoreAndAccuracyText.gameObject.SetActive(false);
        
     }
 

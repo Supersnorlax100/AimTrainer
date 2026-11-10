@@ -55,7 +55,6 @@ public class EnemySpawner : MonoBehaviour
     }
     public Vector3 GenerateSpawnLocation()
     {
-        Debug.Log(gameObject.name + SceneManager.GetActiveScene().name);
         // The + YtargetSpawnAreaScale/10 is because the target spawns a little too low than what it should so I added an offset
         // The sqrt is to out to if a square was rotated 45
         float targetX = spawnArea.transform.position.x + Random.Range(-(XspawnAreaScale / 2) + XspawnAreaScale / 25, XspawnAreaScale / 2 - XspawnAreaScale / 25);
