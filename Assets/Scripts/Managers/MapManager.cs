@@ -70,7 +70,7 @@ public class MapManager : MonoBehaviour
         }
         // SceneManager.sceneLoaded += OnSceneLoaded;
 
-        EventHandeler.exitRoom += ExitRoom;
+        // EventHandeler.exitRoom += ExitRoom;
         EventHandeler.levelClear += LevelClear;
     }
 
@@ -109,7 +109,7 @@ public class MapManager : MonoBehaviour
         NewMap();
     }
 
-    void ExitRoom()
+    public void ExitRoom()
     {
         canLeaveRoom = true;
         MapVisibility(true);
@@ -167,7 +167,6 @@ public class MapManager : MonoBehaviour
 
     RoomType GenerateRoomType(Vector2 roomPos)
     {
-
         if (roomPos.y != 0)
         {
             int randNum1 = Random.Range(0, 101);
@@ -179,15 +178,12 @@ public class MapManager : MonoBehaviour
                 {
                     shopOdds -= 5;
                     return RoomType.SHOP;
-
                 }
                 else
                 {
                     shopOdds += 5;
                     return RoomType.MINIBOSS;
-
                 }
-
             }
             else
             {

@@ -65,8 +65,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public float damage;
     
     [HideInInspector] public float roomScore;
-     public int score;
-    
+    public int score;
+
     [SerializeField] List<Component> modScripts;
     public List<Component> modScriptsUnlocked;
     public List<Component> modScriptsToLock;
@@ -316,6 +316,11 @@ public class GameManager : MonoBehaviour
     #region Score
     public void AddScore()
     {
+        if (! PlayerControler.instance.target)
+        {
+            Debug.Log("no target");
+            return;
+        }
         comboMult = (1 + comboValue/comboMultDivisor + comboMultAddition) * (1 + comboMultStat);
         if (stageType == TargetType.TRACKING)
         {
@@ -338,7 +343,7 @@ public class GameManager : MonoBehaviour
     public void PlayerDie()
     {
         Destroy(PlayerControler.instance.gameObject);
-        Cursor.lockState = CursorLockMode.None;
+        CursorLock(false);
         Time.timeScale = 0;
         forceLock = true;
     }
@@ -349,14 +354,14 @@ public class GameManager : MonoBehaviour
         if (! isPausing && ! IsActiveUI() && ! MapManager.instance.canLeaveRoom)
         {
             isPaused = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            CursorLock(true);
             Time.timeScale = 1;
             InvokeRepeating("ComboTimer", 0.01f, 0.01f);
             return;
         }
         isPaused = true;
-        if (IsActiveUI()) {Cursor.lockState = CursorLockMode.None;}
-        else {Cursor.lockState = CursorLockMode.Locked;}
+        if (IsActiveUI()) {CursorLock(false);}
+        else {CursorLock(true);}
         Time.timeScale = 0;
     }
 
@@ -367,6 +372,19 @@ public class GameManager : MonoBehaviour
         ( UiManager.instance && UiManager.instance.activeMenu)) 
         {return true; }
         else return false;
+    }
+
+    // Mainly created for when force lock is used and whatnot
+    public void CursorLock(bool isLocking)
+    {
+        if (isLocking)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     public void ForceLock(bool isLocking)

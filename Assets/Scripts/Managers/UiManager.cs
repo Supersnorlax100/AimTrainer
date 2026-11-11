@@ -19,6 +19,8 @@ public class UiManager : MonoBehaviour
     [SerializeField] GameObject deathScreen;
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject inventoryMenu;
+
+    [SerializeField] GameObject roomCompletionMenu;
     
     #region CombatUI
     [SerializeField] GameObject combatUI;
@@ -54,6 +56,7 @@ public class UiManager : MonoBehaviour
         EventHandeler.onSubEnemyDeath += UpdateScoreAndAccuracyText;
 
         EventHandeler.exitRoom += CloseAllMenus;
+        EventHandeler.exitRoom += RoomCompletionMenu;
         EventHandeler.enterRoom += EnterRoom;
     }
 
@@ -165,7 +168,15 @@ public class UiManager : MonoBehaviour
         finalScore.text = "Final " + scoreAndAccuracyText.text;
         Timer.SetActive(false);
         scoreAndAccuracyText.gameObject.SetActive(false);
-       
+    }
+
+    public void RoomCompletionMenu()
+    {
+        bool isOpening = !roomCompletionMenu.activeSelf;
+        roomCompletionMenu.SetActive(isOpening);
+        GameManager.instance.ForceLock(isOpening);
+        GameManager.instance.Pause(true);
+        GameManager.instance.CursorLock(! isOpening);
     }
 
     public void EnterRoom()
@@ -190,6 +201,12 @@ public class UiManager : MonoBehaviour
     public void PauseMenuClose()
     {
         MenuOpen(pauseMenu, false, false);
+    }
+
+    public void LeaveRoom()
+    {
+        RoomCompletionMenu();
+        MapManager.instance.ExitRoom();
     }
 
     public void Back()
