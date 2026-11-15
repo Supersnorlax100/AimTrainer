@@ -9,3 +9,4 @@ R: New Map
 Keybinds:
 Tab/Escape: Pause
 Escape: Back
+I: inventory

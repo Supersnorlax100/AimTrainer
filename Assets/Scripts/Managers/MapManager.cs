@@ -275,7 +275,7 @@ public class MapManager : MonoBehaviour
         // else {availableNodes[2] = null;}
         foreach (GameObject node in availableNodes)
         {
-            node.GetComponent<Image>().color = Color.red;
+            node.GetComponent<Image>().color = Color.white;
         }
     }
 

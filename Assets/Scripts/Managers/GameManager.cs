@@ -1,6 +1,5 @@
 
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -57,7 +56,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public float comboMultAddition = 0;
 
     float defaultCritSize = 0.4f; // based of initial crit size may need to change later.
-   [HideInInspector]  public float critSize;
+    [HideInInspector]  public float critSize;
     [SerializeField] float defaultCritMult = 1.5f; 
     [HideInInspector] public float critMult;
 
@@ -71,7 +70,7 @@ public class GameManager : MonoBehaviour
     public List<Component> modScriptsUnlocked;
     public List<Component> modScriptsToLock;
 
-    public float accuracy;
+    public float accuracy; //Calculated by player
 
     public RunType runType;
 
@@ -147,6 +146,9 @@ public class GameManager : MonoBehaviour
 
     public void EnterRoom()
     {
+        roomScore = 0;
+
+        #region ModStuff
         bool loop = true;
         switch (MapManager.instance.currentRoomType)
         {
@@ -224,9 +226,12 @@ public class GameManager : MonoBehaviour
                 Debug.LogError("Room type out of range GameManger EnterRoom");
                 break;
         }
+        #endregion
     }
+
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // #TODO: consider moving this to enterroom
         EventHandeler.updateUI?.Invoke();
         DetermineTargetType();
         if (stageType == TargetType.TRACKING)
@@ -335,8 +340,7 @@ public class GameManager : MonoBehaviour
 
     public void FinalizeScore()
     {
-        score += (int)(roomScore * accuracy);
-        roomScore = 0;
+        score += Mathf.CeilToInt(roomScore * accuracy);
         UiManager.instance.UpdateScoreAndAccuracyText();
     }
     #endregion

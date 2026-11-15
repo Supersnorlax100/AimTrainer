@@ -1,9 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using System;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 
 // Intentionally useless on start menu
 public class UiManager : MonoBehaviour
@@ -13,15 +11,18 @@ public class UiManager : MonoBehaviour
     public TimerScript timerScript;
 
     public GameObject activeMenu = null;
-    [SerializeField] List<GameObject> menuOpenOrder;
+    List<GameObject> menuOpenOrder = new List<GameObject>(1);
 
+    [Header("Menus")]
     [SerializeField] GameObject settingsMenu;
     [SerializeField] GameObject deathScreen;
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject inventoryMenu;
-
     [SerializeField] GameObject roomCompletionMenu;
-    
+
+    [Space]    
+    [Space]    
+    [Space]    
     #region CombatUI
     [SerializeField] GameObject combatUI;
 
@@ -30,13 +31,23 @@ public class UiManager : MonoBehaviour
     [SerializeField] TMP_Text scoreAndAccuracyText;
     [SerializeField] TMP_Text finalScore;
    
-    // Combo stuff
+    [Header("Combo Stuff")]
     [SerializeField] TMP_Text comboTextNum;
     [SerializeField] TMP_Text comboTextMult;
     [SerializeField] Slider comboSlider;
     [SerializeField] GameObject comboContainer;
     #endregion
 
+    [Header("RoomCompletionMenu")]
+    [SerializeField] TMP_Text roomScoreText;
+    [SerializeField] TMP_Text accText; 
+    [SerializeField] TMP_Text accScoreText;
+    [SerializeField] TMP_Text currentScoreText;
+    [SerializeField] TMP_Text totalScoreText;
+    [Space]
+    [SerializeField] TMP_Text startRoomTimeText;
+    [SerializeField] TMP_Text roomTimeText;
+    [SerializeField] TMP_Text totalTimeText;
 
     private void Awake()
     {
@@ -110,7 +121,7 @@ public class UiManager : MonoBehaviour
         comboContainer.SetActive(true);
         comboSlider.value = activeComboTimer;
         comboTextNum.text = comboValue.ToString();
-        comboTextMult.text = (Math.Round(GameManager.instance.comboMult * 100)/100).ToString() + "x";
+        comboTextMult.text = (Mathf.Round(GameManager.instance.comboMult * 100)/100).ToString() + "x";
     }
 
     public void MenuOpen(GameObject menu, bool isOpening, bool addNewMenuOpenOrder)
@@ -157,8 +168,8 @@ public class UiManager : MonoBehaviour
     // these use a connected string
     public void UpdateScoreAndAccuracyText()
     {
-        scoreAndAccuracyText.text = "Score: " + Mathf.Round(GameManager.instance.roomScore).ToString() + " X "
-        + Mathf.Round(GameManager.instance.accuracy * 100).ToString() + "%";
+        scoreAndAccuracyText.text = "Score: " + Mathf.CeilToInt(GameManager.instance.roomScore).ToString() + " X "
+        + Mathf.CeilToInt(GameManager.instance.accuracy * 100).ToString() + "%";
     }
 
     public void ActivateDeathScreen()
@@ -177,6 +188,17 @@ public class UiManager : MonoBehaviour
         GameManager.instance.ForceLock(isOpening);
         GameManager.instance.Pause(true);
         GameManager.instance.CursorLock(! isOpening);
+
+        int accScore = Mathf.CeilToInt(GameManager.instance.roomScore * GameManager.instance.accuracy);
+        roomScoreText.text = GameManager.instance.roomScore.ToString();
+        accText.text = (GameManager.instance.accuracy * 100).ToString() + "%";
+        accScoreText.text = accScore.ToString();
+        currentScoreText.text = Mathf.CeilToInt(GameManager.instance.score - accScore).ToString();
+        totalScoreText.text = GameManager.instance.score.ToString();
+
+        startRoomTimeText.text = ConvertTime(GameManager.instance.curTime + timerScript.roomTime);
+        roomTimeText.text = ConvertTime(timerScript.roomTime);
+        totalTimeText.text = ConvertTime(GameManager.instance.curTime);
     }
 
     public void EnterRoom()
@@ -235,4 +257,26 @@ public class UiManager : MonoBehaviour
     }
 
     #endregion
+
+    public string ConvertTime(int time)
+    {
+        int minutes = 0;
+        int seconds = 0;
+        int centiseconds = 0;
+        {
+            int _time = time;
+
+            if (_time >= 100)
+            {
+                seconds = Mathf.FloorToInt(_time/100);
+                centiseconds = _time - (seconds * 100);
+            }
+            if (seconds >= 60)
+            {
+                minutes = Mathf.FloorToInt(seconds/60);
+            }
+            seconds -= minutes * 60;
+        }
+        return string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, centiseconds);
+    }
 }

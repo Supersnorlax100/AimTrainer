@@ -1,9 +1,6 @@
 using System;
-using System.Threading.Tasks;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InventoryUIScript : MonoBehaviour
 {
@@ -95,7 +92,7 @@ public class InventoryUIScript : MonoBehaviour
             }
             seconds -= minutes * 60;
         }
-        time.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, centiseconds);;
+        time.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, centiseconds);
         
         // EquipedUI
         for (int i = 0; i < Enum.GetNames(typeof(AttachmentType)).Length; i++)
