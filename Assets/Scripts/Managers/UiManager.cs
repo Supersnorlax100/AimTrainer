@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 // Intentionally useless on start menu
 public class UiManager : MonoBehaviour
@@ -18,11 +19,12 @@ public class UiManager : MonoBehaviour
     [SerializeField] GameObject deathScreen;
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject inventoryMenu;
-    public GameObject roomCompletionMenu;
+    public GameObject roomCompletionMenu; // Needs to be public since activeSelf is used on it for a ui check (like the map in a way)
 
     [Space]    
     [Space]    
     [Space]    
+
     #region CombatUI
     [SerializeField] GameObject combatUI;
 
@@ -44,10 +46,18 @@ public class UiManager : MonoBehaviour
     [SerializeField] TMP_Text accScoreText;
     [SerializeField] TMP_Text currentScoreText;
     [SerializeField] TMP_Text totalScoreText;
+    
     [Space]
+    
     [SerializeField] TMP_Text startRoomTimeText;
     [SerializeField] TMP_Text roomTimeText;
     [SerializeField] TMP_Text totalTimeText;
+
+    [Space]
+
+    [SerializeField] GameObject infoPrompt;
+    [SerializeField] TMP_Text infoPromptText;
+    [Tooltip("How long the info prompt stays on screen")] [SerializeField] float infoPromptTime;
 
     private void Awake()
     {
@@ -201,12 +211,19 @@ public class UiManager : MonoBehaviour
         GameManager.instance.Pause(true);
         GameManager.instance.CursorLock(! isOpening);
 
+        // The math for the display numbers can be a little odd due to the timing of the exit room event is called
+        // Debug.Log("Mathf.CeilToInt(GameManager.instance.roomScore * GameManager.instance.accuracy): " + Mathf.CeilToInt(GameManager.instance.roomScore * GameManager.instance.accuracy));
         int accScore = Mathf.CeilToInt(GameManager.instance.roomScore * GameManager.instance.accuracy);
+        // Debug.Log("GameManager.instance.roomScore.ToString(): " + GameManager.instance.roomScore.ToString());
         roomScoreText.text = GameManager.instance.roomScore.ToString();
+        // Debug.Log("(GameManager.instance.accuracy * 100).ToString(): " + (GameManager.instance.accuracy * 100).ToString());
         accText.text = (GameManager.instance.accuracy * 100).ToString() + "%";
+        // Debug.Log("accScore.ToString(): " + accScore.ToString());
         accScoreText.text = accScore.ToString();
-        currentScoreText.text = Mathf.CeilToInt(GameManager.instance.score - accScore).ToString();
-        totalScoreText.text = GameManager.instance.score.ToString();
+        // Debug.Log("Mathf.CeilToInt(GameManager.instance.score - accScore).ToString(): " + Mathf.CeilToInt(GameManager.instance.score - accScore).ToString());
+        currentScoreText.text = Mathf.CeilToInt(GameManager.instance.score).ToString();
+        // Debug.Log("GameManager.instance.score.ToString(): " + GameManager.instance.score.ToString());
+        totalScoreText.text = (GameManager.instance.score + accScore).ToString(); 
 
         startRoomTimeText.text = ConvertTime(GameManager.instance.curTime + timerScript.roomTime);
         roomTimeText.text = ConvertTime(timerScript.roomTime);
@@ -225,6 +242,27 @@ public class UiManager : MonoBehaviour
             CombatUI(false);
         }
     }
+
+    public void CloseAllMenus()
+    {
+        menuOpenOrder.Clear();
+        if (activeMenu) MenuOpen(activeMenu, false, false);
+    }
+
+    public void InfoPrompt(bool isVisible, string infoText)
+    {
+        infoPrompt.SetActive(isVisible);
+        infoPromptText.text = infoText;
+        Debug.Log("info prompt, is visible: " + isVisible);
+        if (isVisible) _ = InfoPromptTimer();
+    }
+    public async Task InfoPromptTimer()
+    {
+        // had to use await, instead of invoke repeating since game is paused sometimes
+        await Task.Delay((int)infoPromptTime * 1000);
+        InfoPrompt(false, "");
+    }
+
 
     #region Button Functions
     public void MainMenuOpen()
@@ -258,11 +296,6 @@ public class UiManager : MonoBehaviour
         menuOpenOrder.Remove(menuOpenOrder[^1]);
     }
 
-    public void CloseAllMenus()
-    {
-        menuOpenOrder.Clear();
-        if (activeMenu) MenuOpen(activeMenu, false, false);
-    }
 
     public void SettingsMenu()
     {

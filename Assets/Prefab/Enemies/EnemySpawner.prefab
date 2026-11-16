@@ -53,7 +53,7 @@ MonoBehaviour:
   enemySpace: 0.5
   spawnArea: {fileID: 6796844360551736509}
   enemyParent: {fileID: 4697131956768901634}
-  initialEnemyCount: 4
+  initialEnemyCount: 5
   maxEnemyCount: 10
   areEnemysMoving: 1
   enemySpeed: 3

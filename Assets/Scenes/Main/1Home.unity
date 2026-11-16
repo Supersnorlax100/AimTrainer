@@ -1764,6 +1764,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e40bcc681001619479e423700c77fb2d, type: 3}
   uiOpenSound: {fileID: 8300000, guid: 51599cc0444531d41a5dd2aed942ebf6, type: 3}
   uiCloseSound: {fileID: 8300000, guid: ac045eed3af76e542b32559d42b6f1d1, type: 3}
+  purchaseSound: {fileID: 8300000, guid: 34820b7ea6de6f84c9e6642f11b46dbd, type: 3}
 --- !u!4 &681392139
 Transform:
   m_ObjectHideFlags: 0
@@ -3051,6 +3052,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 687380742627801921, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4232405024799351890, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -3069,7 +3074,7 @@ PrefabInstance:
       objectReference: {fileID: 1419741021}
     - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
       propertyPath: baseDamage
-      value: 100
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7173013880309075657, guid: 85adf90e1a428694aab0a29a4571ab75, type: 3}
       propertyPath: secondsGiven

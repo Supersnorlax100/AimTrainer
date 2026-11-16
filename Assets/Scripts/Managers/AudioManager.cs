@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum SoundType
@@ -22,7 +23,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioClip[] hitSounds;
     [SerializeField] AudioClip uiOpenSound;
     [SerializeField] AudioClip uiCloseSound;
-    
+    [SerializeField] AudioClip purchaseSound;
 
     void Awake()
     {
@@ -89,6 +90,11 @@ public class AudioManager : MonoBehaviour
     public void UiCloseSound()
     {
         Sound(uiCloseSound, true, false, SoundType.SFX);
+    }
+
+    public void PurchaseSound()
+    {
+        Sound(purchaseSound, true, false, SoundType.SFX);
     }
 
     #endregion

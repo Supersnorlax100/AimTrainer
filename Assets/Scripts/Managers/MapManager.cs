@@ -82,17 +82,20 @@ public class MapManager : MonoBehaviour
 
     void Update()
     {
+        #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             EventHandeler.exitRoom?.Invoke();
         }
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            MapVisibility(!map.activeSelf);
-        }
         if (Input.GetKeyDown("r"))
         {
             NewMap();
+        }
+        #endif
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            MapVisibility(!map.activeSelf);
         }
         if (map.activeSelf)
         {
@@ -102,7 +105,6 @@ public class MapManager : MonoBehaviour
 
     public void LevelClear()
     {
-        Debug.Log("level clear");
         currnetLvl++;
         pastRooms.Clear();
         currentRoom = new Vector2(1,-1);
@@ -124,13 +126,11 @@ public class MapManager : MonoBehaviour
 
     public async Task GoToRoom(Vector2 room)
     {
-        Debug.Log("go to room");
         await SceneManager.LoadSceneAsync((int)roomMap[room]);
         currentRoom = room;
         currentRoomType = GetRoomType(room);
         pastRooms.Add(room);
         NodeAvailability();
-        Debug.Log("after node availability");
         MapVisibility(!map.activeSelf);
         canLeaveRoom = false;
         EventHandeler.enterRoom.Invoke();
@@ -199,7 +199,8 @@ public class MapManager : MonoBehaviour
                 if (randNum3 <= eventOdds)
                 {
                     eventOdds -= 5;
-                    return RoomType.EVENT;
+                    // return RoomType.EVENT;
+                    return RoomType.COMBAT;
                 }
                 else
                 {
@@ -242,7 +243,7 @@ public class MapManager : MonoBehaviour
             {
                 if (roomPos == pastPos)
                 {
-                    nodeMap[roomPos].GetComponent<Image>().color = Color.white;
+                    nodeMap[roomPos].GetComponent<Image>().color = Color.gray;
                     break;
                 }
                 else

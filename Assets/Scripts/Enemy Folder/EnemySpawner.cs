@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static UnityEngine.GraphicsBuffer;
@@ -31,6 +32,7 @@ public class EnemySpawner : MonoBehaviour
     private void Awake()
     {
         EventHandeler.onEnemyDeath += SpawnWait;
+        EventHandeler.onSubEnemyDeath += ExitroomCheckDelay;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -39,20 +41,24 @@ public class EnemySpawner : MonoBehaviour
         XspawnAreaScale = spawnArea.transform.localScale.x;
         YspawnAreaScale = spawnArea.transform.localScale.y;
         modScripts = GameManager.instance.modScriptsUnlocked.ToArray();
-        generateRandomHealth();
+        GenerateRandomHealthAndCount();
         for (int i = 0; i < initialEnemyCount; i++)  Spawn();
     }
 
     private void OnDestroy()
     {
         EventHandeler.onEnemyDeath -= SpawnWait;
+        EventHandeler.onSubEnemyDeath -= ExitroomCheckDelay;
     }
 
-    private void generateRandomHealth()
+    private void GenerateRandomHealthAndCount()
     {
-        float maxHealth = Mathf.Pow(1.3f, MapManager.instance.currentRoom.y) *5;
+        float _randNum = Random.Range(1, 2);
+        maxEnemyCount = Mathf.CeilToInt(maxEnemyCount/(modScripts.Length+1)/_randNum); 
+        float maxHealth = Mathf.Pow(1.3f, Mathf.Clamp(MapManager.instance.currentRoom.y/3, 1, 10))*_randNum;
         randomHealth = Random.Range(1,maxHealth);
     }
+    
     public Vector3 GenerateSpawnLocation()
     {
         // The + YtargetSpawnAreaScale/10 is because the target spawns a little too low than what it should so I added an offset
@@ -84,6 +90,21 @@ public class EnemySpawner : MonoBehaviour
         return Vector3.zero;
     }
 
+
+    // These 2 functions are for sub enemy death
+    public void ExitroomCheck()
+    {
+        if (numberOfSpawnedEnemys >= maxEnemyCount && gameObject.GetComponentsInChildren<Transform>().Length <= 5)
+        {
+            // Debug.Log("exit room invoke");
+            EventHandeler.exitRoom?.Invoke();
+        }
+    }
+    void ExitroomCheckDelay()
+    {
+        Invoke("ExitroomCheck", 0.01f);
+    }
+
     public void SpawnWait()
     {
         Invoke("Spawn", 0.01f);
@@ -97,9 +118,10 @@ public class EnemySpawner : MonoBehaviour
         // {
         //     Debug.Log("child: " + children[i].name);
         // }
+        // ExitroomCheck();
         if (numberOfSpawnedEnemys >= maxEnemyCount && gameObject.GetComponentsInChildren<Transform>().Length <= 5)
         {
-            Debug.Log("exit room invoke");
+            // Debug.Log("exit room invoke");
             EventHandeler.exitRoom?.Invoke();
         }
         else if (numberOfSpawnedEnemys >= maxEnemyCount)

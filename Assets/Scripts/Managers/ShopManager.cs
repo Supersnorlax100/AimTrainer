@@ -32,6 +32,7 @@ public class ShopManager : MonoBehaviour
 
     void Update()
     {
+        #if UNITY_EDITOR
         if (Input.GetKeyDown("s"))
         {
             // Reroll shop
@@ -42,6 +43,7 @@ public class ShopManager : MonoBehaviour
             }
             GenerateUI();
         }
+        #endif
     }
 
     void UpdateUI()
@@ -57,7 +59,7 @@ public class ShopManager : MonoBehaviour
         {
             if (GameManager.instance.attachmentPool.Length <= 0)
             {
-                Debug.Log("no attachments");
+                Debug.LogError("no attachments");
                 return;   
             }
             
@@ -97,14 +99,15 @@ public class ShopManager : MonoBehaviour
     {
         if (InventoryManager.instance.CheckInventorySlots(attachment.type) == -1 && InventoryManager.instance.GetEquipedAttachment(attachment.type) != null)
         {
-            Debug.Log("inventory full");
+            UiManager.instance.InfoPrompt(true, "Your inventory is full");
             return;
         }
         if (GameManager.instance.score < Mathf.CeilToInt(attachment.price))
         {
-            Debug.Log("brokie");
+            UiManager.instance.InfoPrompt(true, "You do not have enough score");
             return;
         }
+        AudioManager.instance.PurchaseSound();
         GameManager.instance.score -= Mathf.CeilToInt(attachment.price);
         InventoryManager.instance.EquipAttachment(attachment);
         EventHandeler.purchase?.Invoke();
@@ -365,5 +368,11 @@ public class ShopManager : MonoBehaviour
             default:
                 return Vector2.zero;
         }
+    }
+
+    // for button
+    public void LeaveShop()
+    {
+        EventHandeler.exitRoom.Invoke();
     }
 }

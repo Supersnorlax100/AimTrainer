@@ -122,10 +122,12 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.RightShift))
         {
             EventHandeler.levelClear?.Invoke();
         }
+        #endif
     }
 
     void Start()

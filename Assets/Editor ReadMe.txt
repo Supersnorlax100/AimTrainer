@@ -4,8 +4,6 @@ Right Shift: ClearLevel
 S (while in shop): re-roll shop
 R: New Map
 
-
-
 Keybinds:
 Tab/Escape: Pause
 Escape: Back
