@@ -80,8 +80,8 @@ public class ShopManager : MonoBehaviour
         30% Uncommon
         40% Common
         */
-        Debug.Log("rarity num: " + _rarity);
-        Debug.Log("rarity after sub: " + (_rarity - MapManager.instance.floorsCleared));
+        // Debug.Log("rarity num: " + _rarity);
+        // Debug.Log("rarity after sub: " + (_rarity - MapManager.instance.floorsCleared));
         if      (_rarity <= 45 - MapManager.instance.floorsCleared)  {_attachment.rarity = Rarity.COMMON;}
         else if (_rarity <= 75 - MapManager.instance.floorsCleared)  {_attachment.rarity = Rarity.UNCOMMON;}
         else if (_rarity <= 90 - MapManager.instance.floorsCleared)  {_attachment.rarity = Rarity.RARE;}

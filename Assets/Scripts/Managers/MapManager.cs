@@ -102,6 +102,7 @@ public class MapManager : MonoBehaviour
 
     public void LevelClear()
     {
+        Debug.Log("level clear");
         currnetLvl++;
         pastRooms.Clear();
         currentRoom = new Vector2(1,-1);
@@ -109,24 +110,30 @@ public class MapManager : MonoBehaviour
         NewMap();
     }
 
-    public void ExitRoom()
+    public void ExitRoom() // Called from Game manager from leave room button on room completion menu
     {
         canLeaveRoom = true;
         MapVisibility(true);
         floorsCleared++;
-        // Debug.Log("floors cleared: " + floorsCleared);
+
+        if (currentRoomType == RoomType.BOSS)
+        {
+            EventHandeler.levelClear.Invoke();
+        }
     }
 
     public async Task GoToRoom(Vector2 room)
     {
+        Debug.Log("go to room");
         await SceneManager.LoadSceneAsync((int)roomMap[room]);
         currentRoom = room;
         currentRoomType = GetRoomType(room);
         pastRooms.Add(room);
         NodeAvailability();
+        Debug.Log("after node availability");
         MapVisibility(!map.activeSelf);
         canLeaveRoom = false;
-        EventHandeler.enterRoom?.Invoke();
+        EventHandeler.enterRoom.Invoke();
         GameManager.instance.Pause(false);
     }
 
@@ -244,37 +251,30 @@ public class MapManager : MonoBehaviour
                 }
             }
         }
-
-        // for (int i = 0; i < availableNodes.Length; i++)
-        // {
-        //     availableNodes[i] = null;
-        // }
-
-        availableNodes[1] = nodeMap[new Vector2(currentRoom.x, currentRoom.y + 1)];
-        // #TODO: game will break if available node = null, so setting tem to the middle node which should always be available
+        
         // Checks for available nodes
         // Left
         if (nodeMap.ContainsKey(new Vector2(currentRoom.x - 1, currentRoom.y + 1)))
         {
             availableNodes[0] = nodeMap[new Vector2(currentRoom.x - 1, currentRoom.y + 1)];
         }
-        else {availableNodes[0] = availableNodes[1];}
-        // else {availableNodes[0] = null;}
-        // Middle (Prolly don't need this)
-        // if (nodeMap.ContainsKey(new Vector2(currentRoom.x, currentRoom.y + 1)))
-        // {
-        //     availableNodes[1] = nodeMap[new Vector2(currentRoom.x, currentRoom.y + 1)];
-        // }
-        // else {availableNodes[1] = null;}
+        else {availableNodes[0] = null;}
+        // Middle
+        if (nodeMap.ContainsKey(new Vector2(currentRoom.x, currentRoom.y + 1)))
+        {
+            availableNodes[1] = nodeMap[new Vector2(currentRoom.x, currentRoom.y + 1)];
+        }
+        else {availableNodes[1] = null;}
         // Right
         if (nodeMap.ContainsKey(new Vector2(currentRoom.x + 1, currentRoom.y + 1)))
         {
             availableNodes[2] = nodeMap[new Vector2(currentRoom.x + 1, currentRoom.y + 1)];
         }
-        else {availableNodes[2] = availableNodes[1];}
-        // else {availableNodes[2] = null;}
+        else {availableNodes[2] = null;}
         foreach (GameObject node in availableNodes)
         {
+            if (node == null) continue; // Skip null
+            
             node.GetComponent<Image>().color = Color.white;
         }
     }
@@ -307,9 +307,13 @@ public class MapManager : MonoBehaviour
         {
             foreach (GameObject node in availableNodes)
             {
+                if (node == null) continue; // Skip null
+
                 node.GetComponent<Button>().enabled = canLeaveRoom;
             }
         }
+        if (isVisible) AudioManager.instance.UiOpenSound();
+        else AudioManager.instance.UiCloseSound();
         map.SetActive(isVisible);
         GameManager.instance.Pause(isVisible);
     }

@@ -21,17 +21,18 @@ public class SlimeScript : MonoBehaviour
         }
         if (firstSlime)
         {
-            numberOFSplit = Mathf.Ceil(Mathf.Pow(2f, MapManager.instance.currentRoom.y) * 1);
+            // numberOFSplit = Mathf.Ceil(Mathf.Pow(2f, MapManager.instance.currentRoom.y) * 1);
+            numberOFSplit = Mathf.CeilToInt(1 * (MapManager.instance.currentRoom.y/3));
         }
 
     }
     private void OnDestroy()
     {
-        Debug.Log("Ns: "+numberOFSplit);
-        Debug.Log("PL: "+parent.GetComponentsInChildren<Transform>().Length);
+        // Debug.Log("Ns: "+numberOFSplit);
+        // Debug.Log("PL: "+parent.GetComponentsInChildren<Transform>().Length);
         if (numberOFSplit <= 0 && parent.GetComponentsInChildren<Transform>().Length == 1)
         {
-            Debug.Log("Slime has no more splits and no sibling, invoking onEnemyDeath");
+            // Debug.Log("Slime has no more splits and no sibling, invoking onEnemyDeath");
             EventHandeler.onEnemyDeath?.Invoke();
             Destroy(parent.gameObject);
             return;

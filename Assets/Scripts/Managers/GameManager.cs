@@ -323,7 +323,7 @@ public class GameManager : MonoBehaviour
     {
         if (! PlayerControler.instance.target)
         {
-            Debug.Log("no target");
+            // Debug.Log("no target");
             return;
         }
         comboMult = (1 + comboValue/comboMultDivisor + comboMultAddition) * (1 + comboMultStat);
@@ -373,7 +373,7 @@ public class GameManager : MonoBehaviour
     public bool IsActiveUI()
     {
         if (MapManager.instance.map.activeSelf || MapManager.instance.IsUIRoom() || 
-        ( UiManager.instance && UiManager.instance.activeMenu)) 
+        ( UiManager.instance && (UiManager.instance.roomCompletionMenu.activeSelf || UiManager.instance.activeMenu)))
         {return true; }
         else return false;
     }

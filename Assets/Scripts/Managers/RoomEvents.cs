@@ -29,7 +29,7 @@ public class RoomEvents : MonoBehaviour
 
     void GeneratEvent()
     {
-        Debug.Log("a");
+        // Debug.Log("a");
         if (currentEvent != null)
         {
             eventText.text = currentEvent.eventText;
@@ -39,10 +39,10 @@ public class RoomEvents : MonoBehaviour
             }
             for (int i = 0; i < currentEvent.options.Length; i++)
             {
-                Debug.Log("b");
+                // Debug.Log("b");
                 if (i == 0)
                 {
-                    Debug.Log("kahfd");
+                    // Debug.Log("kahfd");
                     option1.gameObject.SetActive(true);
                     option1.GetComponentInChildren<TMP_Text>().text = currentEvent.options[i];
                 }

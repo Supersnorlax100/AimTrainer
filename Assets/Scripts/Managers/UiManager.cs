@@ -18,7 +18,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] GameObject deathScreen;
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject inventoryMenu;
-    [SerializeField] GameObject roomCompletionMenu;
+    public GameObject roomCompletionMenu;
 
     [Space]    
     [Space]    
@@ -126,6 +126,9 @@ public class UiManager : MonoBehaviour
 
     public void MenuOpen(GameObject menu, bool isOpening, bool addNewMenuOpenOrder)
     {
+        if (isOpening) AudioManager.instance.UiOpenSound();
+        else AudioManager.instance.UiCloseSound();
+
         GameManager.instance.Pause(true);
         if (activeMenu && addNewMenuOpenOrder)
         {
@@ -149,25 +152,28 @@ public class UiManager : MonoBehaviour
             menu.SetActive(isOpening);
             return;
         }
-
         menu.SetActive(isOpening);
         GameManager.instance.Pause(true);
     }
 
-// Hides extra ui for when in combat scene and when not (or for when map is open)
+    // Hides extra ui for when in combat scene and when not (or for when map is open)
     public void CombatUI(bool isVisible)
     {
         combatUI.SetActive(isVisible);
     }
 
-    void PauseMenu(bool enabled)
-    {
-        pauseMenu.SetActive(enabled);
-    }
+    // void PauseMenu(bool enabled)
+    // {
+    //     pauseMenu.SetActive(enabled);
+    // }
 
     // these use a connected string
     public void UpdateScoreAndAccuracyText()
     {
+        if (MapManager.instance.IsUIRoom())
+        {
+            return;
+        }
         scoreAndAccuracyText.text = "Score: " + Mathf.CeilToInt(GameManager.instance.roomScore).ToString() + " X "
         + Mathf.CeilToInt(GameManager.instance.accuracy * 100).ToString() + "%";
     }
@@ -181,8 +187,14 @@ public class UiManager : MonoBehaviour
         scoreAndAccuracyText.gameObject.SetActive(false);
     }
 
+    // This happens for exit room when not ui, and then has a button that the player can press to open the map, etc... for the rest of the functionality
     public void RoomCompletionMenu()
     {
+        if (MapManager.instance.IsUIRoom())
+        {
+            MapManager.instance.ExitRoom(); //Button function, but called when in ui room since no score or time calc needed
+            return;
+        }
         bool isOpening = !roomCompletionMenu.activeSelf;
         roomCompletionMenu.SetActive(isOpening);
         GameManager.instance.ForceLock(isOpening);
@@ -236,6 +248,7 @@ public class UiManager : MonoBehaviour
         if (menuOpenOrder.Count == 0)
         {
             activeMenu.SetActive(false);
+            AudioManager.instance.UiCloseSound();
             activeMenu = null;
             GameManager.instance.Pause(false);
             return;

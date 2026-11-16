@@ -30,7 +30,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        EventHandeler.onEnemyDeath += Spawn;
+        EventHandeler.onEnemyDeath += SpawnWait;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -45,7 +45,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnDestroy()
     {
-        EventHandeler.onEnemyDeath -= Spawn;
+        EventHandeler.onEnemyDeath -= SpawnWait;
     }
 
     private void generateRandomHealth()
@@ -84,6 +84,11 @@ public class EnemySpawner : MonoBehaviour
         return Vector3.zero;
     }
 
+    public void SpawnWait()
+    {
+        Invoke("Spawn", 0.01f);
+    }
+
     public void Spawn()
     {
         Transform[] children = gameObject.GetComponentsInChildren<Transform>();
@@ -94,6 +99,7 @@ public class EnemySpawner : MonoBehaviour
         // }
         if (numberOfSpawnedEnemys >= maxEnemyCount && gameObject.GetComponentsInChildren<Transform>().Length <= 5)
         {
+            Debug.Log("exit room invoke");
             EventHandeler.exitRoom?.Invoke();
         }
         else if (numberOfSpawnedEnemys >= maxEnemyCount)

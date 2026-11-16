@@ -137,7 +137,7 @@ public class PlayerControler : MonoBehaviour
     public void AccuracyCalc()
     {
         // Debug.Log(" accCalc: " + ((float)shotsHit/(shotsMissed+shotsHit)) + " calcwithround: " + Mathf.Round((float)shotsHit/(shotsMissed + shotsHit)*100)/100);
-        GameManager.instance.accuracy = Mathf.Round((float)shotsHit/(shotsMissed + shotsHit)*100)/100;
+        GameManager.instance.accuracy = Mathf.Clamp(Mathf.Round((float)shotsHit/(shotsMissed + shotsHit)*100)/100, 0, 1);
         UiManager.instance.UpdateScoreAndAccuracyText();
     }
 }
