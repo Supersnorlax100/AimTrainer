@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public float comboMultAddition = 0;
 
     float defaultCritSize = 0.4f; // based of initial crit size may need to change later.
-    [HideInInspector]  public float critSize;
+    [HideInInspector] public float critSize;
     [SerializeField] float defaultCritMult = 1.5f; 
     [HideInInspector] public float critMult;
 
@@ -85,6 +85,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
         EventHandeler.onPlayerDeath += PlayerDie;
 
         EventHandeler.onTargetDeath += RefreshCombo;
@@ -104,6 +105,8 @@ public class GameManager : MonoBehaviour
         EventHandeler.enterRoom += EnterRoom;
 
         EventHandeler.levelClear += LevelClear;
+
+        EventHandeler.restart += Restart;
         
         curTime = secondsGiven * 100;
 
@@ -138,6 +141,22 @@ public class GameManager : MonoBehaviour
             obj.SetActive(false);
         }
 
+        UpdateStats();
+    }
+
+    public void Restart()
+    {
+        for (int i = 0; i < playerStats.Length; i++)
+        {
+            playerStats[i] = 0;
+        }
+        isPaused = true;
+        forceLock = false;
+        cameraLock = false;
+        score = 0;
+        roomScore = 0;
+        comboValue = 0;
+        curTime = secondsGiven * 100;
         UpdateStats();
     }
 

@@ -31,4 +31,7 @@ public class EventHandeler : MonoBehaviour
 
     public delegate void LevelClear();
     public static LevelClear levelClear;
+
+    public delegate void Restart();
+    public static Restart restart;
 }
