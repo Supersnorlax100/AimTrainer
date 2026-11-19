@@ -31,7 +31,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        EventHandeler.onEnemyDeath += SpawnWait;
+        EventHandeler.onEnemyDeath += SpawnWait; // Make sure spawn runs before exit room check
         EventHandeler.onSubEnemyDeath += ExitroomCheckDelay;
     }
 
@@ -45,7 +45,7 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < initialEnemyCount; i++)  Spawn();
     }
 
-    private void OnDestroy()
+    void OnDisable()
     {
         EventHandeler.onEnemyDeath -= SpawnWait;
         EventHandeler.onSubEnemyDeath -= ExitroomCheckDelay;
@@ -102,7 +102,7 @@ public class EnemySpawner : MonoBehaviour
     }
     void ExitroomCheckDelay()
     {
-        Invoke("ExitroomCheck", 0.01f);
+        Invoke("ExitroomCheck", 0.1f);
     }
 
     public void SpawnWait()
@@ -113,11 +113,11 @@ public class EnemySpawner : MonoBehaviour
     public void Spawn()
     {
         Transform[] children = gameObject.GetComponentsInChildren<Transform>();
-        // Debug.Log("children length: " + children.Length);
-        // for (int i = 0; i < children.Length; i++)
-        // {
-        //     Debug.Log("child: " + children[i].name);
-        // }
+        Debug.Log("children length: " + children.Length);
+        for (int i = 0; i < children.Length; i++)
+        {
+            Debug.Log("child: " + children[i].name);
+        }
         // ExitroomCheck();
         if (numberOfSpawnedEnemys >= maxEnemyCount && gameObject.GetComponentsInChildren<Transform>().Length <= 5)
         {
@@ -152,7 +152,7 @@ public class EnemySpawner : MonoBehaviour
         numberOfSpawnedEnemys++;
         GameObject newEnemy =Instantiate(enemyPrefab, pos, Quaternion.identity, enemyParent.transform);
         newEnemy = newEnemy.transform.GetChild(0).gameObject;
-        newEnemy.GetComponent<EnemyScript>().health = randomHealth;
+        newEnemy.GetComponent<EnemyScript>().maxHealth = randomHealth;
         foreach(MonoBehaviour script in modScripts)
         {
             newEnemy.AddComponent(script.GetType());

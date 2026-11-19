@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 // Intentionally useless on start menu
 public class UiManager : MonoBehaviour
@@ -31,7 +32,6 @@ public class UiManager : MonoBehaviour
     [SerializeField] GameObject Timer;
 
     [SerializeField] TMP_Text scoreAndAccuracyText;
-    [SerializeField] TMP_Text finalScore;
    
     [Header("Combo Stuff")]
     [SerializeField] TMP_Text comboTextNum;
@@ -53,11 +53,20 @@ public class UiManager : MonoBehaviour
     [SerializeField] TMP_Text roomTimeText;
     [SerializeField] TMP_Text totalTimeText;
 
-    [Space]
+    [Header("InfoPrompt")]
 
     [SerializeField] GameObject infoPrompt;
     [SerializeField] TMP_Text infoPromptText;
     [Tooltip("How long the info prompt stays on screen")] [SerializeField] float infoPromptTime;
+
+    [Space]
+    [Space]
+    [Space]
+
+    [SerializeField] TMP_Text finalScoreText;
+    [SerializeField] TMP_Text floorsClearedText;
+    [SerializeField] TMP_Text finalLevelText;
+
 
     private void Awake()
     {
@@ -79,6 +88,24 @@ public class UiManager : MonoBehaviour
         EventHandeler.exitRoom += CloseAllMenus;
         EventHandeler.exitRoom += RoomCompletionMenu;
         EventHandeler.enterRoom += EnterRoom;
+
+        EventHandeler.restart += CloseAllMenus;
+        EventHandeler.restart += CloseSpecialMenus;
+    }
+
+    void OnDisable()
+    {
+        EventHandeler.onPlayerDeath -= ActivateDeathScreen;
+        EventHandeler.onTargetDeath -= UpdateScoreAndAccuracyText;
+        EventHandeler.onEnemyDeath -= UpdateScoreAndAccuracyText;
+        EventHandeler.onSubEnemyDeath -= UpdateScoreAndAccuracyText;
+
+        EventHandeler.exitRoom -= CloseAllMenus;
+        EventHandeler.exitRoom -= RoomCompletionMenu;
+        EventHandeler.enterRoom -= EnterRoom;
+
+        EventHandeler.restart -= CloseAllMenus;
+        EventHandeler.restart -= CloseSpecialMenus;
     }
 
     void Start()
@@ -88,10 +115,11 @@ public class UiManager : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.forceLock || MapManager.instance.currentRoomType == RoomType.HOME)
-        {
-            return;
-        }
+        if (GameManager.instance.forceLock) return;
+        
+        // Only want Escape/Back functionality in main menu, otherwise, no other menus/inputs work
+        if (Input.GetKeyDown("escape") && MapManager.instance.map.activeSelf && MapManager.instance.currentRoomType == RoomType.HOME) Back();
+        else if (MapManager.instance.currentRoomType == RoomType.HOME) return;
 
         if (MapManager.instance.currentRoomType == RoomType.BOSS 
         || MapManager.instance.currentRoomType == RoomType.MINIBOSS 
@@ -99,7 +127,7 @@ public class UiManager : MonoBehaviour
         {
             if (Input.GetKeyDown("escape") || Input.GetKeyDown("tab"))
             {
-                if (!activeMenu)
+                if (!activeMenu && ! MapManager.instance.map.activeSelf)
                 {
                     MenuOpen(pauseMenu, true, true);
                     return;
@@ -120,17 +148,17 @@ public class UiManager : MonoBehaviour
         }
     }
 
-    public void UpdateComboUI(float activeComboTimer, float comboValue)
+    public void UpdateComboUI()
     {
-        if (activeComboTimer <= 0)
+        if (GameManager.instance.activeComboTimer <= 0)
         {
             comboContainer.SetActive(false);
             return;
         }
         comboSlider.maxValue = GameManager.instance.maxComboTimer;
         comboContainer.SetActive(true);
-        comboSlider.value = activeComboTimer;
-        comboTextNum.text = comboValue.ToString();
+        comboSlider.value = GameManager.instance.activeComboTimer;
+        comboTextNum.text = GameManager.instance.comboValue.ToString();
         comboTextMult.text = (Mathf.Round(GameManager.instance.comboMult * 100)/100).ToString() + "x";
     }
 
@@ -191,10 +219,14 @@ public class UiManager : MonoBehaviour
     public void ActivateDeathScreen()
     {
         deathScreen.SetActive(true); 
-        activeMenu = deathScreen;
-        finalScore.text = "Final " + scoreAndAccuracyText.text;
-        Timer.SetActive(false);
         scoreAndAccuracyText.gameObject.SetActive(false);
+        CombatUI(false);
+        CloseAllMenus();
+        GameManager.instance.Pause(true);
+        GameManager.instance.ForceLock(true);
+        finalScoreText.text = GameManager.instance.score.ToString();
+        floorsClearedText.text = MapManager.instance.floorsCleared.ToString();
+        finalLevelText.text = MapManager.instance.currnetLvl.ToString();
     }
 
     // This happens for exit room when not ui, and then has a button that the player can press to open the map, etc... for the rest of the functionality
@@ -249,6 +281,13 @@ public class UiManager : MonoBehaviour
         if (activeMenu) MenuOpen(activeMenu, false, false);
     }
 
+    public void CloseSpecialMenus()
+    {
+        deathScreen.SetActive(false);
+        infoPrompt.SetActive(false);
+        roomCompletionMenu.SetActive(false);
+    }
+
     public void InfoPrompt(bool isVisible, string infoText)
     {
         infoPrompt.SetActive(isVisible);
@@ -265,11 +304,6 @@ public class UiManager : MonoBehaviour
 
 
     #region Button Functions
-    public void MainMenuOpen()
-    {
-        //#TODO
-    }
-
     public void PauseMenuClose()
     {
         MenuOpen(pauseMenu, false, false);
@@ -283,6 +317,13 @@ public class UiManager : MonoBehaviour
 
     public void Back()
     {
+        Debug.Log("back");
+        if (MapManager.instance.map.activeSelf)
+        {
+            Debug.Log("hide map");
+            MapManager.instance.MapVisibility(false);
+            return;
+        }
         if (menuOpenOrder.Count == 0)
         {
             activeMenu.SetActive(false);

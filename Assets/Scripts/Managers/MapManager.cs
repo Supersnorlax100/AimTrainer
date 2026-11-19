@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public enum RoomType
 {
+    PILOT,
     HOME,
     COMBAT,
     SHOP,
@@ -16,7 +17,7 @@ public enum RoomType
 public class MapManager : MonoBehaviour
 {
     public static MapManager instance;
-    
+
     public bool canLeaveRoom; // Can go to new room
 
     public GameObject map;
@@ -68,10 +69,15 @@ public class MapManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        // SceneManager.sceneLoaded += OnSceneLoaded;
 
-        // EventHandeler.exitRoom += ExitRoom;
         EventHandeler.levelClear += LevelClear;
+        EventHandeler.restart += Restart;
+    }
+
+    void OnDisable()
+    {
+        EventHandeler.levelClear -= LevelClear;
+        EventHandeler.restart -= Restart;
     }
 
     private void Start()
@@ -90,26 +96,53 @@ public class MapManager : MonoBehaviour
         if (Input.GetKeyDown("r"))
         {
             NewMap();
+            currentRoom = new Vector2(1,-1);
+            pastRooms.Add(currentRoom);
+            NodeAvailability();
         }
         #endif
+
+        if (GameManager.instance.forceLock || currentRoomType == RoomType.HOME) return;
 
         if (Input.GetKeyDown(KeyCode.M))
         {
             MapVisibility(!map.activeSelf);
         }
-        if (map.activeSelf)
-        {
-            GameManager.instance.Pause(true);
-        }
+    }
+
+    public void Restart()
+    {
+        NewMap();
+        floorsCleared = 0;
+        currnetLvl = 0;
+        canLeaveRoom = true;
+        _ = RestartGoToRoom();
+    }
+
+    // Just a copy of the standard function but without event call, pause, etc...
+    public async Task RestartGoToRoom()
+    {
+        Vector2 room = new Vector2(1,-1);
+        GameManager.instance.isSceneChanging = true;
+        await SceneManager.LoadSceneAsync((int)roomMap[room]);
+        GameManager.instance.isSceneChanging = false;
+        currentRoom = room;
+        currentRoomType = GetRoomType(room);
+        pastRooms.Clear();
+        pastRooms.Add(currentRoom);
+        NodeAvailability();
+        map.SetActive(false);
+        // GameManager.instance.Pause(true);
     }
 
     public void LevelClear()
     {
         currnetLvl++;
         pastRooms.Clear();
+        NewMap();
         currentRoom = new Vector2(1,-1);
         pastRooms.Add(currentRoom);
-        NewMap();
+        NodeAvailability();
     }
 
     public void ExitRoom() // Called from Game manager from leave room button on room completion menu
@@ -120,21 +153,32 @@ public class MapManager : MonoBehaviour
 
         if (currentRoomType == RoomType.BOSS)
         {
-            EventHandeler.levelClear.Invoke();
+            EventHandeler.levelClear?.Invoke();
         }
     }
 
     public async Task GoToRoom(Vector2 room)
     {
+        GameManager.instance.isSceneChanging = true;
+        // Debug.Log("go to room");
         await SceneManager.LoadSceneAsync((int)roomMap[room]);
+        // Debug.Log("loaded");
+        GameManager.instance.isSceneChanging = false;
         currentRoom = room;
         currentRoomType = GetRoomType(room);
         pastRooms.Add(room);
+        // Debug.Log("did past rooms");
         NodeAvailability();
+        // Debug.Log("node availability");
         MapVisibility(!map.activeSelf);
+        // Debug.Log("map visibility");
         canLeaveRoom = false;
-        EventHandeler.enterRoom.Invoke();
+        // Debug.Log("can leave");
+        EventHandeler.enterRoom?.Invoke();
+        // Debug.Log("event");
+        // Debug.Log("go to room call: ");
         GameManager.instance.Pause(false);
+        // Debug.Log("can leave room: " + canLeaveRoom);
     }
 
     private void MakeMap()
@@ -217,7 +261,8 @@ public class MapManager : MonoBehaviour
             if (randNum3 <= eventOdds)
             {
                 eventOdds -= 5;
-                return RoomType.EVENT;
+                // return RoomType.EVENT;
+                return RoomType.COMBAT;
             }
             else
             {
@@ -229,7 +274,7 @@ public class MapManager : MonoBehaviour
 
     public Sprite GetRoomSprite(Vector2 roomPosition)
     {
-        Sprite roomSprite = sprites[(int)roomMap[roomPosition]];
+        Sprite roomSprite = sprites[(int)roomMap[roomPosition]-1]; //Because pilot room type
         return roomSprite;
     }
 
@@ -238,17 +283,13 @@ public class MapManager : MonoBehaviour
         // Clears all nodes
         foreach (Vector2 roomPos in nodeMap.Keys)
         {
+            nodeMap[roomPos].GetComponent<Image>().color = Color.black;
             nodeMap[roomPos].GetComponent<Button>().enabled = false;
             foreach (Vector2 pastPos in pastRooms)
             {
                 if (roomPos == pastPos)
                 {
                     nodeMap[roomPos].GetComponent<Image>().color = Color.gray;
-                    break;
-                }
-                else
-                {
-                    nodeMap[roomPos].GetComponent<Image>().color = Color.black;
                 }
             }
         }
@@ -275,7 +316,8 @@ public class MapManager : MonoBehaviour
         foreach (GameObject node in availableNodes)
         {
             if (node == null) continue; // Skip null
-            
+    
+            node.GetComponent<Button>().enabled = canLeaveRoom;
             node.GetComponent<Image>().color = Color.white;
         }
     }
@@ -283,6 +325,7 @@ public class MapManager : MonoBehaviour
     void NewMap()
     {
         roomMap.Clear();
+        pastRooms.Clear();
         foreach (GameObject node in nodeMap.Values)
         {
             Destroy(node);
@@ -298,21 +341,13 @@ public class MapManager : MonoBehaviour
         else return false;
     }
 
-    void MapVisibility(bool isVisible)
+    public void MapVisibility(bool isVisible)
     {
         if (UiManager.instance && ! IsUIRoom())
         {
             UiManager.instance?.CombatUI(!isVisible);
         }
-        if (isVisible)
-        {
-            foreach (GameObject node in availableNodes)
-            {
-                if (node == null) continue; // Skip null
-
-                node.GetComponent<Button>().enabled = canLeaveRoom;
-            }
-        }
+        NodeAvailability();
         if (isVisible) AudioManager.instance.UiOpenSound();
         else AudioManager.instance.UiCloseSound();
         map.SetActive(isVisible);
@@ -324,6 +359,7 @@ public class MapManager : MonoBehaviour
         return roomMap[roomPos];
     }
 
+    // Game start
     public void OpenMap()
     {
         MapVisibility(true);

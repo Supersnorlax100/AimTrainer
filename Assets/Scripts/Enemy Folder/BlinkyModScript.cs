@@ -19,10 +19,11 @@ public class BlinkyModScript : MonoBehaviour
     public void GetHit()
     {
         transform.position = nextLocation;
-        transform.parent.parent = null;
-        transform.parent.rotation = Quaternion.Euler(0, 0, 0);
+        nextLocation = Vector3.zero;
         if (GetComponent<FlowerModScript>())
         {
+            transform.parent.rotation = Quaternion.Euler(0, 0, 0);
+            transform.parent.parent = null;
             GetComponent<FlowerModScript>().Invoke("SpawnPetals",0.1f);
             GetComponent<EnemyScript>().canGetHit = false;
         }

@@ -1,4 +1,6 @@
 Keybinds:
 Tab/Escape: Pause
 Escape: Back
-I: inventory
+M: Map
+I: Inventory
+

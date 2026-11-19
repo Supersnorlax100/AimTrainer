@@ -28,6 +28,10 @@ public class SlimeScript : MonoBehaviour
     }
     private void OnDestroy()
     {
+        if (GameManager.instance.isSceneChanging)
+        {
+            return;
+        }
         // Debug.Log("Ns: "+numberOFSplit);
         // Debug.Log("PL: "+parent.GetComponentsInChildren<Transform>().Length);
         if (numberOFSplit <= 0 && parent.GetComponentsInChildren<Transform>().Length == 1)
@@ -59,8 +63,13 @@ public class SlimeScript : MonoBehaviour
         slimeBall_2.GetComponentInChildren<SlimeScript>().numberOFSplit = numberOFSplit - 1;
         slimeBall_2.GetComponentInChildren<SlimeScript>().firstSlime = false;
     }
+
     GameObject Spawn()
     {
+        if (parent == null)
+        {
+            return null;
+        }
         GameObject newEnemy = Instantiate(prefab, transform.position, transform.rotation, parent);
         newEnemy.transform.GetChild(0).AddComponent<SlimeScript>();
         newEnemy.transform.GetChild(0).AddComponent<SubEnemyScript>();

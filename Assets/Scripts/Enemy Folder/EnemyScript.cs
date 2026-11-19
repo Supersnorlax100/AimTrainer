@@ -13,6 +13,7 @@ public class EnemyScript : MonoBehaviour
     public TargetType targetType;
 
     public float health;
+    public float maxHealth;
     public float scoreValue;
     public GameObject healthBarCanvas;
     private Slider healthBar;
@@ -22,6 +23,7 @@ public class EnemyScript : MonoBehaviour
 
     public void Start()
     {
+        health = maxHealth;
         SetHealthBar();
 
         MonoBehaviour[] tempModArray = GetComponentsInChildren<MonoBehaviour>();
@@ -50,6 +52,10 @@ public class EnemyScript : MonoBehaviour
     }
     private void OnDestroy()
     {
+        if (GameManager.instance.isSceneChanging)
+        {
+            return;
+        }
         if (!respawns)
         {
             Debug.Log("sub enemy died");
@@ -87,6 +93,11 @@ public class EnemyScript : MonoBehaviour
 
     public void UpdateHealthBar()
     {
+        if (health > maxHealth)
+        {
+            maxHealth = health;
+            SetHealthBar();   
+        }
         if (!healthBar.gameObject.activeSelf)
         {
             healthBar.gameObject.SetActive(true);
@@ -97,7 +108,7 @@ public class EnemyScript : MonoBehaviour
     public void SetHealthBar()
     {
         healthBar = healthBarCanvas.GetComponentInChildren<Slider>();
-        healthBar.maxValue = health;
+        healthBar.maxValue = maxHealth;
         healthBar.value = health;
         healthBar.gameObject.SetActive(false);
     }

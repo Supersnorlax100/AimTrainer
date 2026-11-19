@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    [HideInInspector] public bool isSceneChanging; // On destroy functionality occurs on enemies even on scene change which throws errors
+
     [HideInInspector] public float[] playerStats = new float[11];
     [HideInInspector] public float damageIncreaseStat;
     [HideInInspector] public float damageMultStat;
@@ -96,12 +98,11 @@ public class GameManager : MonoBehaviour
 
         EventHandeler.onSubEnemyDeath += RefreshCombo;
 
-        SceneManager.sceneLoaded += OnSceneLoaded;
-
         EventHandeler.exitRoom += FinalizeScore;
-        EventHandeler.exitRoom += StopCombo;
+        // EventHandeler.exitRoom += StopCombo;
         EventHandeler.exitRoom += GetRidOfTempMods;
 
+        EventHandeler.enterRoom += StopCombo;
         EventHandeler.enterRoom += EnterRoom;
 
         EventHandeler.levelClear += LevelClear;
@@ -122,6 +123,30 @@ public class GameManager : MonoBehaviour
         playerStats[9] = bulletSizeStat;
     }
 
+    void OnDisable()
+    {
+        EventHandeler.onPlayerDeath -= PlayerDie;
+
+        EventHandeler.onTargetDeath -= RefreshCombo;
+        EventHandeler.onTargetDeath -= AddScore;
+
+        EventHandeler.onEnemyDeath -= AddScore;
+        EventHandeler.onEnemyDeath -= RefreshCombo;
+
+        EventHandeler.onSubEnemyDeath -= RefreshCombo;
+
+        EventHandeler.exitRoom -= FinalizeScore;
+        // EventHandeler.exitRoom -= StopCombo;
+        EventHandeler.exitRoom -= GetRidOfTempMods;
+
+        EventHandeler.enterRoom -= StopCombo;
+        EventHandeler.enterRoom -= EnterRoom;
+
+        EventHandeler.levelClear -= LevelClear;
+
+        EventHandeler.restart -= Restart;
+    }
+
 
     void Update()
     {
@@ -129,6 +154,11 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightShift))
         {
             EventHandeler.levelClear?.Invoke();
+        }
+        if (Input.GetKeyDown(KeyCode.Minus))
+        {
+            Debug.Log("restart");
+            EventHandeler.restart?.Invoke();
         }
         #endif
     }
@@ -150,6 +180,8 @@ public class GameManager : MonoBehaviour
         {
             playerStats[i] = 0;
         }
+        StopCombo();
+        GetRidOfTempMods();
         isPaused = true;
         forceLock = false;
         cameraLock = false;
@@ -167,81 +199,36 @@ public class GameManager : MonoBehaviour
 
     public void EnterRoom()
     {
+        Debug.Log("enter room");
         roomScore = 0;
 
+        // EventHandeler.updateUI?.Invoke();
+        
+        DetermineTargetType();
+        if (stageType == TargetType.TRACKING)
+        {
+            maxComboTimer = maxComboTimer / 10;
+            comboMultDivisor = comboMultDivisor * 10;
+        }
+
         #region ModStuff
-        bool loop = true;
+        
         switch (MapManager.instance.currentRoomType)
         {
             case RoomType.COMBAT:
                 break;
             case RoomType.MINIBOSS:
-                int iterations = 0;
-                while (loop)
-                {
-                    if (iterations > 1000)
-                    {
-                        Debug.LogError("Error: GameManager EnterRoom: Could not find a mod to unlock");
-                        loop = false;
-                        break;
-                    }
-                    if (modScriptsUnlocked.Count == modScripts.Count)
-                    {
-                        loop = false;
-                        break;
-                    }
-                    int randomNum = Random.Range(0, modScripts.Count);
-                    bool modNotUnlocked = true;
-                    foreach (Component script in modScriptsUnlocked)
-                    {
-                        if (script == modScripts[randomNum])
-                        {
-                            modNotUnlocked = false;
-                            break;
-                        }
-                    }
-                    if (modNotUnlocked)
-                    {
-                        modScriptsUnlocked.Add(modScripts[randomNum]);
-                        modScriptsToLock.Add(modScripts[randomNum]);
-                        loop = false;
-                    }
-                    iterations++;
-                }
+                AddTempMod();
                 break;
             case RoomType.BOSS:
-                while (loop)
-                {
-                    if (modScriptsUnlocked.Count == modScripts.Count)
-                    {
-                        loop = false;
-                        break;
-                    }
-                    int randomNum = UnityEngine.Random.Range(0, modScripts.Count);
-                    bool modNotUnlocked = true;
-                    foreach (Component script in modScriptsUnlocked)
-                    {
-                        if (script == modScripts[randomNum])
-                        {
-                            modNotUnlocked = false;
-                            break;
-                        }
-                    }
-                    if (modNotUnlocked)
-                    {
-                        modScriptsUnlocked.Add(modScripts[randomNum]);
-                        modScripts.Remove(modScripts[randomNum]);
-                        loop = false;
-                    }
-                    else
-                    {
-                        Debug.LogError("Error: Mod:" + modScripts[randomNum].name + " already unlocked but is not removed from ModScripts");
-                    }
-                }
+                AddPermanentMod();
+                AddTempMod(); 
                 break;
             case RoomType.EVENT:
                 break;
             case RoomType.SHOP:
+                break;
+            case RoomType.HOME:
                 break;
             default:
                 Debug.LogError("Room type out of range GameManger EnterRoom");
@@ -250,15 +237,73 @@ public class GameManager : MonoBehaviour
         #endregion
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    void AddPermanentMod()
     {
-        // #TODO: consider moving this to enterroom
-        EventHandeler.updateUI?.Invoke();
-        DetermineTargetType();
-        if (stageType == TargetType.TRACKING)
+        bool loop = true;
+        while (loop)
         {
-            maxComboTimer = maxComboTimer / 10;
-            comboMultDivisor = comboMultDivisor * 10;
+            if (modScriptsUnlocked.Count == modScripts.Count)
+            {
+                loop = false;
+                break;
+            }
+            int randomNum = UnityEngine.Random.Range(0, modScripts.Count);
+            bool modNotUnlocked = true;
+            foreach (Component script in modScriptsUnlocked)
+            {
+                if (script == modScripts[randomNum])
+                {
+                    modNotUnlocked = false;
+                    break;
+                }
+            }
+            if (modNotUnlocked)
+            {
+                modScriptsUnlocked.Add(modScripts[randomNum]);
+                modScripts.Remove(modScripts[randomNum]);
+                loop = false;
+            }
+            else
+            {
+                Debug.LogError("Error: Mod:" + modScripts[randomNum].name + " already unlocked but is not removed from ModScripts");
+            }
+        }
+    }
+    void AddTempMod()
+    {
+        //#TODO: Add some more breaks just in case
+        bool loop = true;
+        int iterations = 0;
+        while (loop)
+        {
+            if (iterations > 1000)
+            {
+                Debug.LogError("Error: GameManager EnterRoom: Could not find a mod to unlock");
+                loop = false;
+                break;
+            }
+            if (modScriptsUnlocked.Count == modScripts.Count)
+            {
+                loop = false;
+                break;
+            }
+            int randomNum = Random.Range(0, modScripts.Count);
+            bool modNotUnlocked = true;
+            foreach (Component script in modScriptsUnlocked)
+            {
+                if (script == modScripts[randomNum])
+                {
+                    modNotUnlocked = false;
+                    break;
+                }
+            }
+            if (modNotUnlocked)
+            {
+                modScriptsUnlocked.Add(modScripts[randomNum]);
+                modScriptsToLock.Add(modScripts[randomNum]);
+                loop = false;
+            }
+            iterations++;
         }
     }
 
@@ -314,6 +359,7 @@ public class GameManager : MonoBehaviour
         }
         modScriptsToLock.Clear();
     }
+   
     #region Combo Stuff
     public void RefreshCombo()
     {
@@ -329,12 +375,14 @@ public class GameManager : MonoBehaviour
         if (isPaused) CancelInvoke("ComboTimer");
         activeComboTimer -= .01f;
         if (activeComboTimer <= 0)   comboValue = 0;
-        if (UiManager.instance)  UiManager.instance?.UpdateComboUI(activeComboTimer, comboValue);
+        if (UiManager.instance)  UiManager.instance.UpdateComboUI();
     }
 
     public void StopCombo()
     {
         comboValue = 0;
+        activeComboTimer = 0;
+        UiManager.instance.UpdateComboUI();
         CancelInvoke("ComboTimer");
     }
     #endregion
@@ -375,16 +423,25 @@ public class GameManager : MonoBehaviour
 
     public void Pause(bool isPausing)
     {
+        // Debug.Log("attempt pause");
         // Reqs to unpause
         if (! isPausing && ! IsActiveUI() && ! MapManager.instance.canLeaveRoom)
         {
+            // Debug.Log("unpause");
             isPaused = false;
             CursorLock(true);
             Time.timeScale = 1;
             InvokeRepeating("ComboTimer", 0.01f, 0.01f);
             return;
         }
+        // else if (! isPausing)
+        // {
+        //     // Debug.Log("issue, active ui need false: " + IsActiveUI() + "can leave need false: " + MapManager.instance.canLeaveRoom);
+        //     return;
+        // }
+        // Debug.Log("pause, was trying: " + isPausing);
         isPaused = true;
+        // Debug.Log("pause true");
         if (IsActiveUI()) {CursorLock(false);}
         else {CursorLock(true);}
         Time.timeScale = 0;
@@ -395,7 +452,7 @@ public class GameManager : MonoBehaviour
     {
         if (MapManager.instance.map.activeSelf || MapManager.instance.IsUIRoom() || 
         ( UiManager.instance && (UiManager.instance.roomCompletionMenu.activeSelf || UiManager.instance.activeMenu)))
-        {return true; }
+        {return true;}
         else return false;
     }
 
@@ -427,6 +484,12 @@ public class GameManager : MonoBehaviour
     {
         MapManager.instance.canLeaveRoom = true;
         MapManager.instance.OpenMap();
+    }
+
+    // For Button
+    public void ButtonRestart()
+    {
+        EventHandeler.restart?.Invoke();
     }
 
     public void UpdateStats()

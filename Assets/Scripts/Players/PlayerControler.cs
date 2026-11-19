@@ -41,6 +41,12 @@ public class PlayerControler : MonoBehaviour
         curShotTimer = shotTimer;
     }
 
+    void OnDisable()
+    {
+        EventHandeler.exitRoom -= ExitRoom;
+        EventHandeler.enterRoom -= EnterRoom;
+    }
+
     void Start()
     {
         mouseSens = SettingsManager.instance.mouseSens;

@@ -43,6 +43,7 @@ public class SnorlaxMod : MonoBehaviour
             {
                 Destroy(node);
                 GetComponent<EnemyScript>().health += 1; // heal amount
+                GetComponent<EnemyScript>().UpdateHealthBar();
             }
         }
         GetComponent<EnemyScript>().canGetHit = true;

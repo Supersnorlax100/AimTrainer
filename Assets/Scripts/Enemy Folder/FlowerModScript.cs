@@ -21,7 +21,11 @@ public class FlowerModScript : MonoBehaviour
     private void Awake()
     {
         EventHandeler.onSubEnemyDeath += CheckPetals;
+    }
 
+    void OnDisable()
+    {
+        EventHandeler.onSubEnemyDeath -= CheckPetals;        
     }
 
     private void Start()
@@ -67,12 +71,6 @@ public class FlowerModScript : MonoBehaviour
 
         }
     }
-
-    private void OnDestroy()
-    {
-        EventHandeler.onSubEnemyDeath -= CheckPetals;
-    }
-
 
     public async void CheckPetals()
     {

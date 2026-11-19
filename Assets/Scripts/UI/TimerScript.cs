@@ -33,6 +33,13 @@ public class TimerScript : MonoBehaviour
         EventHandeler.exitRoom += StopTimer;
     }
 
+    void OnDisable()
+    {
+        EventHandeler.enterRoom -= EnterRoom;
+        EventHandeler.enterRoom -= Timer;
+        EventHandeler.exitRoom -= StopTimer;
+    }
+
     void Start()
     {
         countdownTime = SettingsManager.instance.countdownTime; 

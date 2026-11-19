@@ -124,17 +124,22 @@ public class InventoryManager : MonoBehaviour
         return inventory[attachmentType];
     }
 
-    public Attachment GetAttachment(Attachment attachment)
+    public Attachment GetAttachment(AttachmentType attachmentType, int attSlot)
     {
-        foreach (Attachment _attachment in inventory[attachment.type])
-        {
-            if (_attachment == attachment)
-            {
-                return _attachment;
-            }
-        }
-        return null;
+        return inventory[attachmentType][attSlot];
     }
+
+    // public Attachment GetAttachment(Attachment attachment)
+    // {
+    //     foreach (Attachment _attachment in inventory[attachment.type])
+    //     {
+    //         if (_attachment == attachment)
+    //         {
+    //             return _attachment;
+    //         }
+    //     }
+    //     return null;
+    // }
 
     // Good for swapping attachment locations
     public int GetAttachmentSlot(Attachment attachment)
