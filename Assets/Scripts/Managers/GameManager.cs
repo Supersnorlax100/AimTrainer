@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public float roomScore;
      public int score;
     
-    [SerializeField] List<Component> modScripts;
+    public List<Component> modScripts;
     public List<Component> modScriptsUnlocked;
     public List<Component> modScriptsToLock;
 
@@ -211,7 +211,7 @@ public class GameManager : MonoBehaviour
                         loop = false;
                     }
                     else
-                    {
+                    { 
                         Debug.LogError("Error: Mod:" + modScripts[randomNum].name + " already unlocked but is not removed from ModScripts");
                     }
                 }
@@ -406,5 +406,300 @@ public class GameManager : MonoBehaviour
         critMult = defaultCritMult + critMultStat;
         critSize = defaultCritSize + critSizeStat;
         damage = (baseDamage + damageIncreaseStat) * (1 + damageMultStat);
+    }
+
+
+    public Attachment CreateAttachment(Rarity rarity , AttachmentType type)
+    {
+        Attachment _attachment = null;
+        if (type == AttachmentType.NONE)
+        {
+            _attachment = Instantiate(GameManager.instance.attachmentPool[Random.Range(0, GameManager.instance.attachmentPool.Length)]);
+        }
+        else
+        {
+            _attachment = Instantiate(GameManager.instance.attachmentPool[(int)type]);
+        }
+
+        if (rarity == Rarity.NONE)
+        {
+            int _rarity = Random.Range(0, 101);
+            /*
+            5% Legendary
+            10% Epic
+            15% Rare
+            30% Uncommon
+            40% Common
+            */
+            Debug.Log("rarity num: " + _rarity);
+            Debug.Log("rarity after sub: " + (_rarity - MapManager.instance.floorsCleared));
+            if (_rarity <= 45 - MapManager.instance.floorsCleared) { _attachment.rarity = Rarity.COMMON; }
+            else if (_rarity <= 75 - MapManager.instance.floorsCleared) { _attachment.rarity = Rarity.UNCOMMON; }
+            else if (_rarity <= 90 - MapManager.instance.floorsCleared) { _attachment.rarity = Rarity.RARE; }
+            else if (_rarity <= 100 - MapManager.instance.floorsCleared) { _attachment.rarity = Rarity.EPIC; }
+            else if (_rarity <= 105 - MapManager.instance.floorsCleared) { _attachment.rarity = Rarity.LEGENDARY; }
+            else { Debug.LogError("rarity calculation failure"); }
+        }
+        else
+        {
+            _attachment.rarity = rarity;
+        }
+
+        RollStats(_attachment);
+        return _attachment;
+    }
+
+
+    public void RollStats(Attachment attachment)
+    {
+        // Debug.Log("Roll stats");
+        // Debug.Log("mod count: " + modifiers.Count);
+        foreach (Modifier modifier in attachment.modifiers)
+        {
+            Vector2 rollLimits = GetRollLimits(modifier.type, attachment);
+            if (InventoryManager.instance.IsModTypePercentage(modifier.type))
+            {
+                modifier.value = Mathf.Ceil(Random.Range(rollLimits.x, rollLimits.y));
+                return;
+            }
+            modifier.value = Mathf.Round(Random.Range(rollLimits.x, rollLimits.y) * 100) / 100;
+        }
+    }
+
+
+    Vector2 GetRollLimits(ModifierType modifierType, Attachment attachment)
+    {
+        switch (modifierType)
+        {
+            case ModifierType.ComboTime:
+                // Debug.Log("roll comboTime");
+                switch (attachment.rarity)
+                {
+                    case Rarity.COMMON:
+                        // Debug.Log("common");
+                        return new Vector2(0, 1);
+                    case Rarity.UNCOMMON:
+                        // Debug.Log("uncommon");
+                        return new Vector2(0, 1.75f);
+                    case Rarity.RARE:
+                        // Debug.Log("rare");
+                        return new Vector2(1, 2.5f);
+                    case Rarity.EPIC:
+                        // Debug.Log("epic");
+                        return new Vector2(2, 4);
+                    case Rarity.LEGENDARY:
+                        // Debug.Log("Legendary");
+                        return new Vector2(3, 6);
+                    default:
+                        return Vector2.zero;
+                }
+            case ModifierType.DamageIncrease:
+                // Debug.Log("roll damageInc");
+                switch (attachment.rarity)
+                {
+                    case Rarity.COMMON:
+                        // Debug.Log("common");
+                        return new Vector2(0, 5);
+                    case Rarity.UNCOMMON:
+                        // Debug.Log("uncommon");
+                        return new Vector2(2, 7);
+                    case Rarity.RARE:
+                        // Debug.Log("rare");
+                        return new Vector2(4, 9);
+                    case Rarity.EPIC:
+                        // Debug.Log("epic");
+                        return new Vector2(7, 14);
+                    case Rarity.LEGENDARY:
+                        // Debug.Log("Legendary");
+                        return new Vector2(12, 20);
+                    default:
+                        return Vector2.zero;
+                }
+            case ModifierType.DamageMult:
+                // Debug.Log("roll DamageMult");
+                // Returns value in percentage
+                switch (attachment.rarity)
+                {
+                    case Rarity.COMMON:
+                        // Debug.Log("common");
+                        return new Vector2(0, 30);
+                    case Rarity.UNCOMMON:
+                        // Debug.Log("uncommon");
+                        return new Vector2(0, 60);
+                    case Rarity.RARE:
+                        // Debug.Log("rare");
+                        return new Vector2(0, 100);
+                    case Rarity.EPIC:
+                        // Debug.Log("epic");
+                        return new Vector2(50, 130);
+                    case Rarity.LEGENDARY:
+                        // Debug.Log("Legendary");
+                        return new Vector2(100, 250);
+                    default:
+                        return Vector2.zero;
+                }
+            case ModifierType.BulletSize:
+                // Debug.Log("roll BulletSize")
+                // Returns value in percentage
+                switch (attachment.rarity)
+                {
+                    case Rarity.COMMON:
+                        // Debug.Log("common");
+                        return new Vector2(0, 100);
+                    case Rarity.UNCOMMON:
+                        // Debug.Log("uncommon");
+                        return new Vector2(0, 200);
+                    case Rarity.RARE:
+                        // Debug.Log("rare");
+                        return new Vector2(100, 300);
+                    case Rarity.EPIC:
+                        // Debug.Log("epic");
+                        return new Vector2(200, 350);
+                    case Rarity.LEGENDARY:
+                        // Debug.Log("Legendary");
+                        return new Vector2(300, 500);
+                    default:
+                        return Vector2.zero;
+                }
+            case ModifierType.CritMult:
+                // Debug.Log("roll CritMult")
+                // Returns value in percentage
+                switch (attachment.rarity)
+                {
+                    // Returns value in percentage
+                    case Rarity.COMMON:
+                        // Debug.Log("common");
+                        return new Vector2(0, 30);
+                    case Rarity.UNCOMMON:
+                        // Debug.Log("uncommon");
+                        return new Vector2(0, 60);
+                    case Rarity.RARE:
+                        // Debug.Log("rare");
+                        return new Vector2(0, 100);
+                    case Rarity.EPIC:
+                        // Debug.Log("epic");
+                        return new Vector2(50, 130);
+                    case Rarity.LEGENDARY:
+                        // Debug.Log("Legendary");
+                        return new Vector2(100, 250);
+                    default:
+                        return Vector2.zero;
+                }
+            case ModifierType.CritSize:
+                // Debug.Log("roll CritSize")
+                // Returns value in percentage
+                switch (attachment.rarity)
+                {
+                    case Rarity.COMMON:
+                        // Debug.Log("common");
+                        return new Vector2(0, 30);
+                    case Rarity.UNCOMMON:
+                        // Debug.Log("uncommon");
+                        return new Vector2(0, 60);
+                    case Rarity.RARE:
+                        // Debug.Log("rare");
+                        return new Vector2(0, 100);
+                    case Rarity.EPIC:
+                        // Debug.Log("epic");
+                        return new Vector2(50, 130);
+                    case Rarity.LEGENDARY:
+                        // Debug.Log("Legendary");
+                        return new Vector2(100, 250);
+                    default:
+                        return Vector2.zero;
+                }
+            case ModifierType.TimeIncrease:
+                // Debug.Log("roll TimeIncrease")
+                switch (attachment.rarity)
+                {
+                    case Rarity.COMMON:
+                        // Debug.Log("common");
+                        return new Vector2(0, 2);
+                    case Rarity.UNCOMMON:
+                        // Debug.Log("uncommon");
+                        return new Vector2(1, 3.5f);
+                    case Rarity.RARE:
+                        // Debug.Log("rare");
+                        return new Vector2(2, 4);
+                    case Rarity.EPIC:
+                        // Debug.Log("epic");
+                        return new Vector2(3, 4.5f);
+                    case Rarity.LEGENDARY:
+                        // Debug.Log("Legendary");
+                        return new Vector2(5, 7);
+                    default:
+                        return Vector2.zero;
+                }
+            case ModifierType.TimeMult:
+                // Debug.Log("roll TimeMult")
+                // Returns value in percentage
+                switch (attachment.rarity)
+                {
+                    case Rarity.COMMON:
+                        // Debug.Log("common");
+                        return new Vector2(0, 3);
+                    case Rarity.UNCOMMON:
+                        // Debug.Log("uncommon");
+                        return new Vector2(0, 5);
+                    case Rarity.RARE:
+                        // Debug.Log("rare");
+                        return new Vector2(0, 8);
+                    case Rarity.EPIC:
+                        // Debug.Log("epic");
+                        return new Vector2(3, 10);
+                    case Rarity.LEGENDARY:
+                        // Debug.Log("Legendary");
+                        return new Vector2(10, 25);
+                    default:
+                        return Vector2.zero;
+                }
+            case ModifierType.ComboIncrease:
+                // Debug.Log("roll ComboIncrease")
+                switch (attachment.rarity)
+                {
+                    case Rarity.COMMON:
+                        // Debug.Log("common");
+                        return new Vector2(0, 2);
+                    case Rarity.UNCOMMON:
+                        // Debug.Log("uncommon");
+                        return new Vector2(0, 4);
+                    case Rarity.RARE:
+                        // Debug.Log("rare");
+                        return new Vector2(2, 6);
+                    case Rarity.EPIC:
+                        // Debug.Log("epic");
+                        return new Vector2(4, 9);
+                    case Rarity.LEGENDARY:
+                        // Debug.Log("Legendary");
+                        return new Vector2(5, 12);
+                    default:
+                        return Vector2.zero;
+                }
+            case ModifierType.ComboMult:
+                // Debug.Log("roll ComboMult")
+                // Returns value in percentage
+                switch (attachment.rarity)
+                {
+                    case Rarity.COMMON:
+                        // Debug.Log("common");
+                        return new Vector2(0, 5);
+                    case Rarity.UNCOMMON:
+                        // Debug.Log("uncommon");
+                        return new Vector2(0, 10);
+                    case Rarity.RARE:
+                        // Debug.Log("rare");
+                        return new Vector2(5, 15);
+                    case Rarity.EPIC:
+                        // Debug.Log("epic");
+                        return new Vector2(10, 20);
+                    case Rarity.LEGENDARY:
+                        // Debug.Log("Legendary");
+                        return new Vector2(20, 30);
+                    default:
+                        return Vector2.zero;
+                }
+            default:
+                return Vector2.zero;
+        }
     }
 }

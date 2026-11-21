@@ -8,7 +8,8 @@ public enum Rarity
     UNCOMMON,
     RARE,
     EPIC,
-    LEGENDARY
+    LEGENDARY,
+    NONE
 }
 
 public enum AttachmentType
@@ -18,12 +19,14 @@ public enum AttachmentType
     Mag,
     Barrel,
     Lazer,
-    Trigger
+    Trigger,
+    NONE
 }
 
 //#TODO: Make bullet size work
 public enum ModifierType
 {
+    // PlayerStats in GameMnager is a one to one array to this enum.
     DamageIncrease,
     DamageMult,
     CritMult,

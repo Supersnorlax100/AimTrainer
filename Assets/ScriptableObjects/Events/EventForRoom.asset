@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EventForRoom
   backgroundImage: {fileID: 0}
   eventText: 
-  optionCount: 0
-  options: []
-  eventmodifiersO1: []
-  eventmodifiersO2: []
-  eventmodifiersO3: []
+  options:
+  - 
+  - 
+  - 
+  eventMods:
+  - eventModifier: []
+  - eventModifier: []
+  - eventModifier: []

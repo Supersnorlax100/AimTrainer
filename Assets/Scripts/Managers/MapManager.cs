@@ -109,7 +109,6 @@ public class MapManager : MonoBehaviour
         pastRooms.Add(currentRoom);
         NewMap();
     }
-
     void ExitRoom()
     {
         canLeaveRoom = true;

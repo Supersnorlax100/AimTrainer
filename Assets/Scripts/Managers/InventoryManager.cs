@@ -201,4 +201,12 @@ public class InventoryManager : MonoBehaviour
         }
         GameManager.instance.UpdateStats();
     }
+    public void DeleteAttachment(Attachment attachment)
+    {
+        int slot = GetAttachmentSlot(attachment);
+        if (slot > -1)
+        {
+            inventory[attachment.type][slot] = null;
+        }
+    }
 }
