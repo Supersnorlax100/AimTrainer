@@ -518,6 +518,7 @@ MonoBehaviour:
   healthBarCanvas: {fileID: 7149636841340508797}
   canGetHit: 1
   respawns: 1
+  modScripts: []
 --- !u!54 &6320557970378273748
 Rigidbody:
   m_ObjectHideFlags: 0

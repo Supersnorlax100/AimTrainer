@@ -32,6 +32,7 @@ public class ShopManager : MonoBehaviour
 
     void Update()
     {
+        #if UNITY_EDITOR
         if (Input.GetKeyDown("s"))
         {
             // Reroll shop
@@ -42,6 +43,7 @@ public class ShopManager : MonoBehaviour
             }
             GenerateUI();
         }
+        #endif
     }
 
     void UpdateUI()
@@ -57,7 +59,7 @@ public class ShopManager : MonoBehaviour
         {
             if (GameManager.instance.attachmentPool.Length <= 0)
             {
-                Debug.Log("no attachments");
+                Debug.LogError("no attachments");
                 return;   
             }
             
@@ -69,26 +71,60 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-
+    Attachment CreateAttachment()
+    {
+        Attachment _attachment = Instantiate(GameManager.instance.attachmentPool[Random.Range(0, GameManager.instance.attachmentPool.Length)]);
+        int _rarity = Random.Range(0,101);
+        /*
+        5% Legendary
+        10% Epic
+        15% Rare
+        30% Uncommon
+        40% Common
+        */
+        // Debug.Log("rarity num: " + _rarity);
+        // Debug.Log("rarity after sub: " + (_rarity - MapManager.instance.floorsCleared));
+        if      (_rarity <= 45 - MapManager.instance.floorsCleared)  {_attachment.rarity = Rarity.COMMON;}
+        else if (_rarity <= 75 - MapManager.instance.floorsCleared)  {_attachment.rarity = Rarity.UNCOMMON;}
+        else if (_rarity <= 90 - MapManager.instance.floorsCleared)  {_attachment.rarity = Rarity.RARE;}
+        else if (_rarity <= 100 - MapManager.instance.floorsCleared)  {_attachment.rarity = Rarity.EPIC;}
+        else if (_rarity <= 105 - MapManager.instance.floorsCleared) {_attachment.rarity = Rarity.LEGENDARY;}
+        else {Debug.LogError("rarity calculation failure");}
+        
+        RollStats(_attachment);
+        return _attachment;
+    }
 
     public void Purchase(Attachment attachment)
     {
-        if (InventoryManager.instance.CheckInventorySlots(attachment.type) == -1 && InventoryManager.instance.GetEquipedAttachment(attachment.type) != null)
+        if (! CanPurchase(attachment, true))
         {
-            Debug.Log("inventory full");
             return;
         }
-        if (GameManager.instance.score < Mathf.CeilToInt(attachment.price))
-        {
-            Debug.Log("brokie");
-            return;
-        }
+        AudioManager.instance.PurchaseSound();
         GameManager.instance.score -= Mathf.CeilToInt(attachment.price);
         InventoryManager.instance.EquipAttachment(attachment);
         EventHandeler.purchase?.Invoke();
         UpdateUI();
         Debug.Log("inventory after purchase: ");
         InventoryManager.instance.DebugInventory();
+    }
+
+    public bool CanPurchase(Attachment attachment, bool showPrompt)
+    {
+        if (InventoryManager.instance.CheckInventorySlots(attachment.type) == -1 && InventoryManager.instance.GetEquipedAttachment(attachment.type) != null)
+        {
+            if (showPrompt) UiManager.instance.InfoPrompt(true, "Your inventory is full");
+            
+            return false;
+        }
+        if (GameManager.instance.score < Mathf.CeilToInt(attachment.price))
+        {
+            if (showPrompt) UiManager.instance.InfoPrompt(true, "You do not have enough score");
+            
+            return false;
+        }
+        return true;
     }
 
     // Roll item stuff

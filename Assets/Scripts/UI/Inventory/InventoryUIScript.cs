@@ -1,8 +1,6 @@
 using System;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InventoryUIScript : MonoBehaviour
 {
@@ -25,8 +23,11 @@ public class InventoryUIScript : MonoBehaviour
     [SerializeField] TMP_Text attachmentName; // att stats att name
     [SerializeField] TMP_Text[] hoveredAttStats;
     [SerializeField] TMP_Text[] equipedAttStats;
+    [SerializeField] GameObject trashTextObj;
 
     [SerializeField] TMP_Text[] playerStats;
+
+    Attachment hovereredAtt;
 
     bool madeLists;
 
@@ -41,6 +42,16 @@ public class InventoryUIScript : MonoBehaviour
             j++;
         }
         madeLists = true;
+    }
+
+    void Update()
+    {
+        if (hovereredAtt && Input.GetKeyDown("t"))
+        {
+            InventoryManager.instance.DeleteAttachment(hovereredAtt);
+            UpdateUI();
+            HoverStats(null);
+        }
     }
 
     void OnEnable()
@@ -81,7 +92,7 @@ public class InventoryUIScript : MonoBehaviour
             }
             seconds -= minutes * 60;
         }
-        time.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, centiseconds);;
+        time.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, centiseconds);
         
         // EquipedUI
         for (int i = 0; i < Enum.GetNames(typeof(AttachmentType)).Length; i++)
@@ -94,8 +105,8 @@ public class InventoryUIScript : MonoBehaviour
         // Attachment Slots
         for (int i = 0; i < attachmentSlots?.GetLength(0); i++)
         {
-            attachmentSlots[i, 0].attachment = InventoryManager.instance.GetAttachments((AttachmentType)i)[0];
-            attachmentSlots[i, 1].attachment = InventoryManager.instance.GetAttachments((AttachmentType)i)[1];
+            attachmentSlots[i, 0].attachment = InventoryManager.instance.GetAttachmentsOfType((AttachmentType)i)[0];
+            attachmentSlots[i, 1].attachment = InventoryManager.instance.GetAttachmentsOfType((AttachmentType)i)[1];
         }
         foreach (ItemBoxScript itemBox in attachmentSlots)
         {
@@ -108,9 +119,11 @@ public class InventoryUIScript : MonoBehaviour
 
     public void HoverStats(Attachment attachment)
     {
+        hovereredAtt = attachment;
         // Will 'hide' all text if null
         if (attachment == null)
         {
+            trashTextObj.SetActive(false);
             attachmentName.text = "";
             foreach (TMP_Text text in hoveredAttStats)
             {
@@ -124,6 +137,7 @@ public class InventoryUIScript : MonoBehaviour
         }
 
         attachmentName.text = attachment.attachmentName;
+        trashTextObj.SetActive(true);
         for (int i = 0; i < attachment.modifiers.Count; i++)
         {
             // Debug.Log("i: " + i );

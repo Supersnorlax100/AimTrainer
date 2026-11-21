@@ -28,7 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 915.5684, y: 557.7301, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -44,15 +44,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b49988fd5584d4a40a0c3d78860d7d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  isSceneChanging: 0
+  playerStats:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  damageIncreaseStat: 0
+  damageMultStat: 0
+  comboTimeStat: 0
+  comboIncreaseStat: 0
+  comboMultStat: 0
+  critMultStat: 0
+  critSizeStat: 0
+  timeIncreaseStat: 0
+  timeMultStat: 0
+  bulletSizeStat: 0
   stageType: 0
-  attatchmentPool: []
-  targetCount: 0
-  minutesGiven: 1
-  secondsGiven: 0
+  attachmentPool:
+  - {fileID: 11400000, guid: 20f01dfcf4cd58f4b864579efc26663b, type: 2}
+  - {fileID: 11400000, guid: a2a90850b61b8374f9b28e76bc858afa, type: 2}
+  - {fileID: 11400000, guid: 14d4d69d53fe1b84296696e53f614695, type: 2}
+  - {fileID: 11400000, guid: cdd94ee23eb0c1142a43c0f994d9b361, type: 2}
+  - {fileID: 11400000, guid: b81c53a86054327448a2a29e124ae16d, type: 2}
+  - {fileID: 11400000, guid: 898a844b92e03d94ba638faecaae779f, type: 2}
+  secondsGiven: 90
+  curTime: 5000
+  timeToStore: 0
+  defaultMaxComboTimer: 2
   maxComboTimer: 1
   activeComboTimer: 0
   comboValue: 0
+  defaultComboIncrease: 1
+  comboIncrease: 0
   comboMult: 0
   comboMultDivisor: 10
+  comboMultAddition: 0
+  critSize: 0
+  defaultCritMult: 1.5
+  critMult: 0
+  baseDamage: 1
+  damage: 0
+  roomScore: 0
   score: 0
+  modScripts:
+  - {fileID: 2232511013304303654, guid: f92b2808e007fa44795bec5779c5a733, type: 3}
+  - {fileID: 8339889768802966832, guid: 8760dfa104269d243b1c984ff6640e51, type: 3}
+  - {fileID: 6862610775069310637, guid: caa161f4ff2883e46a25040cddf9c8eb, type: 3}
+  - {fileID: 596386839818436470, guid: 06b363b3c63c1094e8a77f1f7bd828f0, type: 3}
+  - {fileID: 360807878505667110, guid: dcaa96ee87a4ea9409a55d7b0a87e578, type: 3}
+  - {fileID: 7751917083892612795, guid: fd50ef37050e48548873e9f500a1aa58, type: 3}
+  modScriptsUnlocked: []
+  modScriptsToLock: []
+  accuracy: 0
   runType: 0

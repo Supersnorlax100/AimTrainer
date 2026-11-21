@@ -17,8 +17,8 @@ public class EventHandeler : MonoBehaviour
     public delegate void Purchase();
     public static Purchase purchase;
 
-    public delegate void UpdateUI();
-    public static UpdateUI updateUI;
+    // public delegate void UpdateUI();
+    // public static UpdateUI updateUI;
 
     public delegate void EnterRoom();
     public static EnterRoom enterRoom;
@@ -31,4 +31,7 @@ public class EventHandeler : MonoBehaviour
 
     public delegate void LevelClear();
     public static LevelClear levelClear;
+
+    public delegate void Restart();
+    public static Restart restart;
 }

@@ -21,7 +21,11 @@ public class FlowerModScript : MonoBehaviour
     private void Awake()
     {
         EventHandeler.onSubEnemyDeath += CheckPetals;
+    }
 
+    void OnDisable()
+    {
+        EventHandeler.onSubEnemyDeath -= CheckPetals;        
     }
 
     private void Start()
@@ -32,7 +36,8 @@ public class FlowerModScript : MonoBehaviour
         Rigidbody pPRB = petalParent.transform.gameObject.AddComponent<Rigidbody>();
         pPRB.useGravity = false;
         pPRB.excludeLayers = ~0;
-        petalCount =(int) Mathf.Pow(1.5f, MapManager.instance.currentRoom.y) * 3;
+        // petalCount =(int) Mathf.Pow(1.5f, MapManager.instance.currentRoom.y) * 3;
+        petalCount = Mathf.CeilToInt(3 + (MapManager.instance.currentRoom.y/3));
         SpawnPetals();
         GetComponent<EnemyScript>().canGetHit = false;
         petalRotateVariationMax = Random.Range(1, petalRotateVariationMax + 1);
@@ -66,12 +71,6 @@ public class FlowerModScript : MonoBehaviour
 
         }
     }
-
-    private void OnDestroy()
-    {
-        EventHandeler.onSubEnemyDeath -= CheckPetals;
-    }
-
 
     public async void CheckPetals()
     {

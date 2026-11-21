@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8544188574008915120}
-  - component: {fileID: 2987246130316678775}
   m_Layer: 5
   m_Name: ItemBox
   m_TagString: Untagged
@@ -39,22 +38,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2987246130316678775
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4216460747675371441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21a11d80334ce114d8c63b72f67fafd2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  attachment: {fileID: 0}
-  attImageContainer: {fileID: 6876659186836413013}
-  attRarityImage: {fileID: 0}
-  inventoryScript: {fileID: 0}
 --- !u!1 &6694456714775470527
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,6 +160,7 @@ GameObject:
   - component: {fileID: 1216718100073294975}
   - component: {fileID: 7386383044077543465}
   - component: {fileID: 7559235707434163812}
+  - component: {fileID: 8901803632295865537}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -285,7 +269,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2987246130316678775}
+      - m_Target: {fileID: 8901803632295865537}
         m_TargetAssemblyTypeName: ItemBoxScript, Assembly-CSharp
         m_MethodName: EquipItem
         m_Mode: 1
@@ -297,3 +281,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8901803632295865537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6961876887106451577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21a11d80334ce114d8c63b72f67fafd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemBoxScript
+  attachment: {fileID: 0}
+  attImageContainer: {fileID: 6876659186836413013}
+  attRarityImage: {fileID: 0}
+  inventoryScript: {fileID: 0}

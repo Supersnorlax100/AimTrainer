@@ -14,11 +14,43 @@ public class RoomEvents : MonoBehaviour
 
     public void TriggerOption(int optionNumber)
     {
-        optionNumber--;
-        currentEventMods = currentEvent.eventMods[optionNumber];
-        foreach (EventModifier mod in currentEventMods.eventModifier)
+        Cursor.lockState = CursorLockMode.None;
+        int randomIndex = Random.Range(0, eventList.Count);
+        currentEvent = eventList[randomIndex];
+        GeneratEvent();
+    }
+
+
+    void GeneratEvent()
+    {
+        // Debug.Log("a");
+        if (currentEvent != null)
         {
-            _ = ApplyMod(mod);
+            eventText.text = currentEvent.eventText;
+            if (currentEvent.backgroundImage != null)
+            {
+                eventImage.sprite = currentEvent.backgroundImage.sprite;
+            }
+            for (int i = 0; i < currentEvent.options.Length; i++)
+            {
+                // Debug.Log("b");
+                if (i == 0)
+                {
+                    // Debug.Log("kahfd");
+                    option1.gameObject.SetActive(true);
+                    option1.GetComponentInChildren<TMP_Text>().text = currentEvent.options[i];
+                }
+                else if (i == 1)
+                {
+                    option2.gameObject.SetActive(true);
+                    option2.GetComponentInChildren<TMP_Text>().text = currentEvent.options[i];
+                }
+                else if (i == 2)
+                {
+                    option3.gameObject.SetActive(true);
+                    option3.GetComponentInChildren<TMP_Text>().text = currentEvent.options[i];
+                }
+            }
         }
     }
 

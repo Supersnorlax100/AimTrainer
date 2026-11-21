@@ -18,6 +18,9 @@ public class PlayerControler : MonoBehaviour
 
     public float critMultiplier = 1.5f;
 
+    int shotsHit;
+    int shotsMissed;
+
     private void Awake()
     {
         if (instance == null)
@@ -29,10 +32,19 @@ public class PlayerControler : MonoBehaviour
             Destroy(gameObject);
         }
 
+        EventHandeler.exitRoom += ExitRoom;
+        EventHandeler.enterRoom += EnterRoom;
+
         targetHitMask = LayerMask.GetMask("TargetHit");
         targetCritMask = LayerMask.GetMask("TargetCrit");
 
         curShotTimer = shotTimer;
+    }
+
+    void OnDisable()
+    {
+        EventHandeler.exitRoom -= ExitRoom;
+        EventHandeler.enterRoom -= EnterRoom;
     }
 
     void Start()
@@ -83,11 +95,10 @@ public class PlayerControler : MonoBehaviour
             {
                 target = target?.transform?.parent?.gameObject;
             }
-
-
-            // Debug.Log("Crit Hit");
-
+            shotsHit++;
             target.GetComponent<EnemyScript>()?.GetHit(DamageCalc(true));
+            AudioManager.instance.PlayHitSound();
+            // Debug.Log("Crit Hit");
         }
         else if (Physics.Raycast(gunRay, out targetHit, 99999999, targetHitMask))
         {
@@ -97,9 +108,12 @@ public class PlayerControler : MonoBehaviour
                 target = target?.transform?.parent?.gameObject;
             }
             target.GetComponent<EnemyScript>()?.GetHit(DamageCalc(false));
-
+            shotsHit++;
             // Debug.Log("Hit");
+            AudioManager.instance.PlayHitSound();
         }
+        else {shotsMissed++;}
+        AccuracyCalc();
     }
 
     float DamageCalc(bool isCrit)
@@ -111,5 +125,25 @@ public class PlayerControler : MonoBehaviour
         }
         // Debug.Log("Damage: " + damage);
         return damage;
+    }
+
+    public void EnterRoom()
+    {
+        shotsHit = 0;
+        shotsMissed = 0;
+        GameManager.instance.accuracy = 0;
+        UiManager.instance.UpdateScoreAndAccuracyText();
+    }
+
+    public void ExitRoom()
+    {
+        AccuracyCalc();
+    }
+
+    public void AccuracyCalc()
+    {
+        // Debug.Log(" accCalc: " + ((float)shotsHit/(shotsMissed+shotsHit)) + " calcwithround: " + Mathf.Round((float)shotsHit/(shotsMissed + shotsHit)*100)/100);
+        GameManager.instance.accuracy = Mathf.Clamp(Mathf.Round((float)shotsHit/(shotsMissed + shotsHit)*100)/100, 0, 1);
+        UiManager.instance.UpdateScoreAndAccuracyText();
     }
 }

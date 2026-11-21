@@ -13,6 +13,7 @@ public class ShopUpgradeScript : MonoBehaviour
     
     [SerializeField] GameObject statContainer;
     [SerializeField] GameObject statBox;
+    [SerializeField] GameObject markout;
     
     void Start()
     {
@@ -33,6 +34,13 @@ public class ShopUpgradeScript : MonoBehaviour
 
     public void Purchase()
     {
+        // shopmanager aslo checks if it can purchase, the purpose here is so the shopUpgrade can show markout without needing the shop manager to have a reference to it
+        if (ShopManager.instance.CanPurchase(attachment, false))
+        {
+            markout.SetActive(true);
+            GetComponentInChildren<Button>().enabled = false;
+        }
+        // since manager still checks anyway, we run the function
         ShopManager.instance.Purchase(attachment);
     }
 }

@@ -1,6 +1,5 @@
 
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,6 +15,8 @@ public enum RunType
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+
+    [HideInInspector] public bool isSceneChanging; // On destroy functionality occurs on enemies even on scene change which throws errors
 
     [HideInInspector] public float[] playerStats = new float[11];
     [HideInInspector] public float damageIncreaseStat;
@@ -57,7 +58,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public float comboMultAddition = 0;
 
     float defaultCritSize = 0.4f; // based of initial crit size may need to change later.
-   [HideInInspector]  public float critSize;
+    [HideInInspector] public float critSize;
     [SerializeField] float defaultCritMult = 1.5f; 
     [HideInInspector] public float critMult;
 
@@ -65,12 +66,13 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public float damage;
     
     [HideInInspector] public float roomScore;
-     public int score;
-    
-    public List<Component> modScripts;
-    public List<Component> modScriptsUnlocked;
-    public List<Component> modScriptsToLock;
+    public int score;
 
+    [SerializeField] List<MonoBehaviour> modScripts;
+    public List<MonoBehaviour> modScriptsUnlocked;
+    public List<MonoBehaviour> modScriptsToLock;
+
+    public float accuracy; //Calculated by player
 
     public RunType runType;
 
@@ -85,6 +87,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
         EventHandeler.onPlayerDeath += PlayerDie;
 
         EventHandeler.onTargetDeath += RefreshCombo;
@@ -95,15 +98,16 @@ public class GameManager : MonoBehaviour
 
         EventHandeler.onSubEnemyDeath += RefreshCombo;
 
-        SceneManager.sceneLoaded += OnSceneLoaded;
-
         EventHandeler.exitRoom += FinalizeScore;
-        EventHandeler.exitRoom += StopCombo;
+        // EventHandeler.exitRoom += StopCombo;
         EventHandeler.exitRoom += GetRidOfTempMods;
 
+        EventHandeler.enterRoom += StopCombo;
         EventHandeler.enterRoom += EnterRoom;
 
         EventHandeler.levelClear += LevelClear;
+
+        EventHandeler.restart += Restart;
         
         curTime = secondsGiven * 100;
 
@@ -119,13 +123,44 @@ public class GameManager : MonoBehaviour
         playerStats[9] = bulletSizeStat;
     }
 
+    void OnDisable()
+    {
+        EventHandeler.onPlayerDeath -= PlayerDie;
+
+        EventHandeler.onTargetDeath -= RefreshCombo;
+        EventHandeler.onTargetDeath -= AddScore;
+
+        EventHandeler.onEnemyDeath -= AddScore;
+        EventHandeler.onEnemyDeath -= RefreshCombo;
+
+        EventHandeler.onSubEnemyDeath -= RefreshCombo;
+
+        EventHandeler.exitRoom -= FinalizeScore;
+        // EventHandeler.exitRoom -= StopCombo;
+        EventHandeler.exitRoom -= GetRidOfTempMods;
+
+        EventHandeler.enterRoom -= StopCombo;
+        EventHandeler.enterRoom -= EnterRoom;
+
+        EventHandeler.levelClear -= LevelClear;
+
+        EventHandeler.restart -= Restart;
+    }
+
 
     void Update()
     {
+        #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.RightShift))
         {
             EventHandeler.levelClear?.Invoke();
         }
+        if (Input.GetKeyDown(KeyCode.Minus))
+        {
+            Debug.Log("restart");
+            EventHandeler.restart?.Invoke();
+        }
+        #endif
     }
 
     void Start()
@@ -139,6 +174,24 @@ public class GameManager : MonoBehaviour
         UpdateStats();
     }
 
+    public void Restart()
+    {
+        for (int i = 0; i < playerStats.Length; i++)
+        {
+            playerStats[i] = 0;
+        }
+        StopCombo();
+        GetRidOfTempMods();
+        isPaused = true;
+        forceLock = false;
+        cameraLock = false;
+        score = 0;
+        roomScore = 0;
+        comboValue = 0;
+        curTime = secondsGiven * 100;
+        UpdateStats();
+    }
+
     public void LevelClear()
     {
         curTime = secondsGiven * 100;
@@ -146,94 +199,81 @@ public class GameManager : MonoBehaviour
 
     public void EnterRoom()
     {
-        Debug.Log(MapManager.instance.currentRoomType);
-        bool loop = true;
-        switch (MapManager.instance.currentRoomType)
-        {
-            case RoomType.COMBAT:
-                break;
-            case RoomType.MINIBOSS:
-                int iterations = 0;
-                while (loop)
-                {
-                    if (iterations > 1000)
-                    {
-                        Debug.LogError("Error: GameManager EnterRoom: Could not find a mod to unlock");
-                        loop = false;
-                        break;
-                    }
-                    if (modScriptsUnlocked.Count == modScripts.Count)
-                    {
-                        loop = false;
-                        break;
-                    }
-                    int randomNum = Random.Range(0, modScripts.Count);
-                    bool modNotUnlocked = true;
-                    foreach (Component script in modScriptsUnlocked)
-                    {
-                        if (script == modScripts[randomNum])
-                        {
-                            modNotUnlocked = false;
-                            break;
-                        }
-                    }
-                    if (modNotUnlocked)
-                    {
-                        modScriptsUnlocked.Add(modScripts[randomNum]);
-                        modScriptsToLock.Add(modScripts[randomNum]);
-                        loop = false;
-                    }
-                    iterations++;
-                }
-                break;
-            case RoomType.BOSS:
-                while (loop)
-                {
-                    if (modScriptsUnlocked.Count == modScripts.Count)
-                    {
-                        loop = false;
-                        break;
-                    }
-                    int randomNum = UnityEngine.Random.Range(0, modScripts.Count);
-                    bool modNotUnlocked = true;
-                    foreach (Component script in modScriptsUnlocked)
-                    {
-                        if (script == modScripts[randomNum])
-                        {
-                            modNotUnlocked = false;
-                            break;
-                        }
-                    }
-                    if (modNotUnlocked)
-                    {
-                        modScriptsUnlocked.Add(modScripts[randomNum]);
-                        modScripts.Remove(modScripts[randomNum]);
-                        loop = false;
-                    }
-                    else
-                    { 
-                        Debug.LogError("Error: Mod:" + modScripts[randomNum].name + " already unlocked but is not removed from ModScripts");
-                    }
-                }
-                break;
-            case RoomType.EVENT:
-                break;
-            case RoomType.SHOP:
-                break;
-            default:
-                Debug.LogError("Room type out of range GameManger EnterRoom");
-                break;
-        }
-    }
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        EventHandeler.updateUI?.Invoke();
+        Debug.Log("enter room");
+        roomScore = 0;
+
+        // EventHandeler.updateUI?.Invoke();
+        
         DetermineTargetType();
         if (stageType == TargetType.TRACKING)
         {
             maxComboTimer = maxComboTimer / 10;
             comboMultDivisor = comboMultDivisor * 10;
         }
+
+        #region ModStuff
+        
+        switch (MapManager.instance.currentRoomType)
+        {
+            case RoomType.COMBAT:
+                break;
+            case RoomType.MINIBOSS:
+                AddTempMod();
+                break;
+            case RoomType.BOSS:
+                AddPermanentMod();
+                AddTempMod(); 
+                break;
+            case RoomType.EVENT:
+                break;
+            case RoomType.SHOP:
+                break;
+            case RoomType.HOME:
+                break;
+            default:
+                Debug.LogError("Room type out of range GameManger EnterRoom");
+                break;
+        }
+        #endregion
+    }
+
+    
+    void AddPermanentMod()
+    {
+        if (modScripts.Count == 0)
+        {
+            Debug.Log("obtained all mods");
+            return;
+        }
+        int randomNum = UnityEngine.Random.Range(0, modScripts.Count);
+        modScriptsUnlocked.Add(modScripts[randomNum]);
+        modScripts.Remove(modScripts[randomNum]);
+    }
+    void AddTempMod()
+    {
+        if (modScripts.Count == 0)
+        {
+            Debug.Log("obtained all mods");
+            return;
+        }
+        int randomNum = Random.Range(0, modScripts.Count);
+        if (! IsModUnlocked(modScripts[randomNum]))
+        {
+            modScriptsUnlocked.Add(modScripts[randomNum]);
+            modScriptsToLock.Add(modScripts[randomNum]);
+        }
+    }
+
+    bool IsModUnlocked(MonoBehaviour script)
+    {
+        foreach (MonoBehaviour _script in modScriptsUnlocked)
+        {
+            if (_script == script)
+            {
+                return true;
+            }
+        }
+        return false;    
     }
 
     void DetermineTargetType()
@@ -279,7 +319,7 @@ public class GameManager : MonoBehaviour
 
     public void GetRidOfTempMods()
     {
-        foreach (Component script in modScriptsToLock)
+        foreach (MonoBehaviour script in modScriptsToLock)
         {
             if (modScriptsUnlocked.Contains(script))
             {
@@ -288,6 +328,7 @@ public class GameManager : MonoBehaviour
         }
         modScriptsToLock.Clear();
     }
+   
     #region Combo Stuff
     public void RefreshCombo()
     {
@@ -303,12 +344,14 @@ public class GameManager : MonoBehaviour
         if (isPaused) CancelInvoke("ComboTimer");
         activeComboTimer -= .01f;
         if (activeComboTimer <= 0)   comboValue = 0;
-        if (UiManager.instance)  UiManager.instance?.UpdateComboUI(activeComboTimer, comboValue);
+        if (UiManager.instance)  UiManager.instance.UpdateComboUI();
     }
 
     public void StopCombo()
     {
         comboValue = 0;
+        activeComboTimer = 0;
+        UiManager.instance.UpdateComboUI();
         CancelInvoke("ComboTimer");
     }
     #endregion
@@ -316,6 +359,11 @@ public class GameManager : MonoBehaviour
     #region Score
     public void AddScore()
     {
+        if (! PlayerControler.instance.target)
+        {
+            // Debug.Log("no target");
+            return;
+        }
         comboMult = (1 + comboValue/comboMultDivisor + comboMultAddition) * (1 + comboMultStat);
         if (stageType == TargetType.TRACKING)
         {
@@ -325,61 +373,69 @@ public class GameManager : MonoBehaviour
         {
             roomScore += PlayerControler.instance.target.GetComponent<EnemyScript>().scoreValue * comboMult;
         }
-        UiManager.instance.UpdateScore();
+        UiManager.instance.UpdateScoreAndAccuracyText();
     }
 
     public void FinalizeScore()
     {
-        score += (int)roomScore;
-        roomScore = 0;
-        UiManager.instance.UpdateScore();
+        score += Mathf.CeilToInt(roomScore * accuracy);
+        UiManager.instance.UpdateScoreAndAccuracyText();
     }
     #endregion
     public void PlayerDie()
     {
         Destroy(PlayerControler.instance.gameObject);
-        Cursor.lockState = CursorLockMode.None;
+        CursorLock(false);
         Time.timeScale = 0;
         forceLock = true;
     }
 
     public void Pause(bool isPausing)
     {
+        // Debug.Log("attempt pause");
         // Reqs to unpause
         if (! isPausing && ! IsActiveUI() && ! MapManager.instance.canLeaveRoom)
         {
+            // Debug.Log("unpause");
             isPaused = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            CursorLock(true);
             Time.timeScale = 1;
             InvokeRepeating("ComboTimer", 0.01f, 0.01f);
             return;
         }
+        // else if (! isPausing)
+        // {
+        //     // Debug.Log("issue, active ui need false: " + IsActiveUI() + "can leave need false: " + MapManager.instance.canLeaveRoom);
+        //     return;
+        // }
+        // Debug.Log("pause, was trying: " + isPausing);
         isPaused = true;
-        if (IsActiveUI()) {Cursor.lockState = CursorLockMode.None;}
-        else {Cursor.lockState = CursorLockMode.Locked;}
+        // Debug.Log("pause true");
+        if (IsActiveUI()) {CursorLock(false);}
+        else {CursorLock(true);}
         Time.timeScale = 0;
     }
-
-    // public void EnsureMouseLock()
-    // {
-    //     if (! isPaused)
-    //     {
-    //         Cursor.lockState = CursorLockMode.Locked;
-    //     }
-    //     if (IsActiveUI()) {Cursor.lockState = CursorLockMode.None; Debug.Log("paused + not locked");}
-    //     else {Cursor.lockState = CursorLockMode.Locked; Debug.Log("paused + locked");}
-    // }
 
     // Checks if in a UI scene or if UI is active
     public bool IsActiveUI()
     {
-    //     if (! MapManager.instance.map.activeSelf && MapManager.instance.currentRoomType != RoomType.SHOP
-    //     && MapManager.instance.currentRoomType != RoomType.EVENT && 
-    //     (! UiManager.instance || (UiManager.instance && ! UiManager.instance.activeMenu)))
         if (MapManager.instance.map.activeSelf || MapManager.instance.IsUIRoom() || 
-        ( UiManager.instance && UiManager.instance.activeMenu))
-        {if (UiManager.instance && UiManager.instance.activeMenu) Debug.Log("ui active menu: " + UiManager.instance?.activeMenu?.name); return true; }
+        ( UiManager.instance && (UiManager.instance.roomCompletionMenu.activeSelf || UiManager.instance.activeMenu)))
+        {return true;}
         else return false;
+    }
+
+    // Mainly created for when force lock is used and whatnot
+    public void CursorLock(bool isLocking)
+    {
+        if (isLocking)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     public void ForceLock(bool isLocking)
@@ -397,6 +453,12 @@ public class GameManager : MonoBehaviour
     {
         MapManager.instance.canLeaveRoom = true;
         MapManager.instance.OpenMap();
+    }
+
+    // For Button
+    public void ButtonRestart()
+    {
+        EventHandeler.restart?.Invoke();
     }
 
     public void UpdateStats()

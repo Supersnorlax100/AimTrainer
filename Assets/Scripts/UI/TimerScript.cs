@@ -1,7 +1,6 @@
 using UnityEngine;
 using TMPro;
-using System;
-using Unity.VisualScripting;
+
 public class TimerScript : MonoBehaviour
 {
     [SerializeField] TMP_Text timerTextUI;
@@ -24,12 +23,21 @@ public class TimerScript : MonoBehaviour
     int bonusCentiseconds;
 
     public int countdownTime;
+    public int roomTime; // in centiseconds
 
     void Awake()
     {
         // EventHandeler.exitRoom += StoreTime;
+        EventHandeler.enterRoom += EnterRoom;
         EventHandeler.enterRoom += Timer;
         EventHandeler.exitRoom += StopTimer;
+    }
+
+    void OnDisable()
+    {
+        EventHandeler.enterRoom -= EnterRoom;
+        EventHandeler.enterRoom -= Timer;
+        EventHandeler.exitRoom -= StopTimer;
     }
 
     void Start()
@@ -41,6 +49,7 @@ public class TimerScript : MonoBehaviour
     {
         int time = GameManager.instance.curTime;
 
+        // Sets time values
         if (time >= 100)
         {
             seconds = Mathf.FloorToInt(time/100);
@@ -51,7 +60,9 @@ public class TimerScript : MonoBehaviour
              minutes = Mathf.FloorToInt(seconds/60);
         }
         seconds = seconds - (minutes * 60);
-        UpdateTimer();
+       
+        UpdateTimer(); //#TODO: try removing this or moving further down
+
         RoomType _curRoomType = MapManager.instance.currentRoomType;
         if (_curRoomType == RoomType.COMBAT || _curRoomType == RoomType.MINIBOSS || _curRoomType == RoomType.BOSS)
         {
@@ -90,6 +101,11 @@ public class TimerScript : MonoBehaviour
         // Debug.Log("after store: " + GameManager.instance.curTime);
     }
 
+    public void EnterRoom()
+    {
+        roomTime = 0;
+    }
+
     private void UpdateTimer()
     {
         if (GameManager.instance.timeIncreaseStat > 0 || GameManager.instance.timeMultStat > 0)
@@ -98,6 +114,7 @@ public class TimerScript : MonoBehaviour
             {
                 CancelInvoke("UpdateTimer");
                 EventHandeler.onPlayerDeath?.Invoke();
+                return;
             }
             if (bonusCentiseconds <= 0)
             {
@@ -125,6 +142,7 @@ public class TimerScript : MonoBehaviour
             {
                 CancelInvoke("UpdateTimer");
                 EventHandeler.onPlayerDeath?.Invoke();
+                return;
             }
             if (centiseconds <= 0)
             {
@@ -147,7 +165,7 @@ public class TimerScript : MonoBehaviour
             GameManager.instance.curTime--;
             timerTextUI.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, centiseconds);
         }
-
+        roomTime++;
     }
 
     public void CountdownTimer() 

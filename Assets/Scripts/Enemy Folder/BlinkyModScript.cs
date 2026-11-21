@@ -19,10 +19,10 @@ public class BlinkyModScript : MonoBehaviour
     public void GetHit()
     {
         transform.position = nextLocation;
-        transform.parent.parent = null;
-        transform.parent.rotation = Quaternion.Euler(0, 0, 0);
+        nextLocation = Vector3.zero;
         if (GetComponent<FlowerModScript>())
         {
+            transform.parent.rotation = Quaternion.Euler(0, 0, 0);
             GetComponent<FlowerModScript>().Invoke("SpawnPetals",0.1f);
             GetComponent<EnemyScript>().canGetHit = false;
         }
@@ -45,8 +45,7 @@ public class BlinkyModScript : MonoBehaviour
     {
         Collider[] targetCollisions;
         Collider[] spawnableCollisions;
-        // The + YtargetSpawnAreaScale/10 is because the target spawns a little too low than what it should so I added an offset
-        // The sqrt is to out to if a square was rotated 45             
+        // The + YtargetSpawnAreaScale/10 is because the target spawns a little too low than what it should so I added an offset         
         float targetX = spawnArea.transform.position.x + Random.Range(-(XspawnAreaScale / 2) + XspawnAreaScale / 25, XspawnAreaScale / 2 - XspawnAreaScale / 25);
         float targetY = spawnArea.transform.position.y + Random.Range(-(YspawnAreaScale / 2), YspawnAreaScale / 2);
         float targetZ = spawnArea.transform.position.z + GetComponent<SphereCollider>().radius - .2f;

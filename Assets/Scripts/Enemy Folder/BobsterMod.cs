@@ -9,15 +9,16 @@ public class BobsterMod : MonoBehaviour
     {
         StartCoroutine(Mobster());
     }
+    
     IEnumerator Mobster()
     {
         while (true)
         {
-
             Spawn();
             yield return new WaitForSeconds(spawnInterval);
         }
     }
+
     GameObject Spawn()
     {
         GameObject newEnemy = Instantiate(prefab, transform.position, transform.rotation, transform.parent.parent.transform);
