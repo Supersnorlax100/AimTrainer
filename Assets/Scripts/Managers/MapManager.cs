@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -57,6 +58,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] int specalRoomOdds = 5; // aka miniBoss and shop
     [SerializeField] int shopOdds = 70;
     [SerializeField] int eventOdds = 25;
+    [SerializeField] TMP_Text levelText;
 
     private void Awake()
     {
@@ -138,6 +140,7 @@ public class MapManager : MonoBehaviour
     public void LevelClear()
     {
         currnetLvl++;
+        levelText.text = "Level: " + currnetLvl;
         pastRooms.Clear();
         NewMap();
         currentRoom = new Vector2(1,-1);

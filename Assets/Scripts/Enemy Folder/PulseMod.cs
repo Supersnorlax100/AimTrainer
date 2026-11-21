@@ -6,6 +6,7 @@ public class PulseMod : MonoBehaviour
     float pulseMax = 2;
     float pulseMin = .4f;
     int scaleDirection = 1;
+    float pulseSpeed = 5;
 
     void Start()
     {
@@ -22,7 +23,7 @@ public class PulseMod : MonoBehaviour
                 transform.localScale = new Vector3(transform.localScale.x + (.1f * scaleDirection), transform.localScale.y + (.1f * scaleDirection), transform.localScale.z + (.1f * scaleDirection));
             }
             transform.localScale = new Vector3(transform.localScale.x + (.1f * scaleDirection), transform.localScale.y + (.1f * scaleDirection), transform.localScale.z + (.1f* scaleDirection) );
-            yield return new WaitForSeconds(.2f);
+            yield return new WaitForSeconds((float) 0.2 / pulseSpeed);
         }
     }
 }

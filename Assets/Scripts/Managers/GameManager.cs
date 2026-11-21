@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public bool isSceneChanging; // On destroy functionality occurs on enemies even on scene change which throws errors
 
-    [HideInInspector] public float[] playerStats = new float[11];
+    public float[] playerStats = new float[11];
     [HideInInspector] public float damageIncreaseStat;
     [HideInInspector] public float damageMultStat;
     [HideInInspector] public float comboTimeStat;
@@ -410,7 +410,7 @@ public class GameManager : MonoBehaviour
         // }
         // Debug.Log("pause, was trying: " + isPausing);
         isPaused = true;
-        // Debug.Log("pause true");
+        CancelInvoke("ComboTimer");
         if (IsActiveUI()) {CursorLock(false);}
         else {CursorLock(true);}
         Time.timeScale = 0;
@@ -463,6 +463,18 @@ public class GameManager : MonoBehaviour
 
     public void UpdateStats()
     {
+        damageIncreaseStat = playerStats[0];
+        damageMultStat = playerStats[1];
+        comboTimeStat = playerStats[2];
+        comboIncreaseStat = playerStats[3];
+        comboMultStat = playerStats[4];
+        critMultStat = playerStats[5];
+        critSizeStat = playerStats[6];
+        timeIncreaseStat = playerStats[7];
+        timeMultStat = playerStats[8];
+        bulletSizeStat = playerStats[9];
+
+        Debug.Log("combo time stat: " + comboTimeStat);
         maxComboTimer = defaultMaxComboTimer + comboTimeStat;
         comboIncrease = defaultComboIncrease + comboIncreaseStat;
         critMult = defaultCritMult + critMultStat;

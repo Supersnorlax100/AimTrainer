@@ -78,8 +78,15 @@ public class AudioManager : MonoBehaviour
     #region For Other Scripts
     public void PlayHitSound()
     {
+        Sound(hitSounds[2], true, false, SoundType.SFX);
+    }
+    public void PlaySubEnemyHitSound()
+    {
+        Sound(hitSounds[1], true, false, SoundType.SFX);
+    }
+    public void PlayCritSound()
+    {
         Sound(hitSounds[0], true, false, SoundType.SFX);
-        // audioSourceSFX.clip = hitSounds[Random.Range(0, hitSounds.Length)];
     }
 
     public void UiOpenSound()

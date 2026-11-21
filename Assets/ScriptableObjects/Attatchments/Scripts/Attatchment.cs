@@ -26,21 +26,21 @@ public enum ModifierType
 {
     DamageIncrease,
     DamageMult,
-    CritMult,
-    CritSize,
-    BulletSize,
-    TimeIncrease,
-    TimeMult,
     ComboTime,
     ComboIncrease,
-    ComboMult
+    ComboMult,
+    CritMult,
+    CritSize,
+    TimeIncrease,
+    TimeMult,
+    BulletSize
 }
 
 [Serializable]
 public class Modifier
 {
-    [HideInInspector] public ModifierType type;
-    [HideInInspector] public float value;
+    public ModifierType type;
+    public float value;
 }
 
 public abstract class Attachment : ScriptableObject
@@ -51,9 +51,8 @@ public abstract class Attachment : ScriptableObject
     public float price;
     public AttachmentType type;
 
-    [Header("NO TOUCH NO TOUCH NO TOUCH NO TOUCH NO TOUCH NO TOUCH ")] // Don't touch modifiers in editor
-
-    public List<Modifier> modifiers;
+    // Don't touch modifiers in editor
+    [HideInInspector] public List<Modifier> modifiers;
 
     void Awake()
     {

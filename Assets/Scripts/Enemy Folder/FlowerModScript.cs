@@ -11,6 +11,7 @@ public class FlowerModScript : MonoBehaviour
     List<GameObject> petals = new List<GameObject>();
     float petalSpinSpeed;
     bool petalsSpin;
+    bool allPetalsDead;
     int degreasBetweenPetals;
 
     [SerializeField] int petalRotateVariationMax;
@@ -52,7 +53,6 @@ public class FlowerModScript : MonoBehaviour
     }
     public void SpawnPetals()
     {
-
         degreasBetweenPetals = 360 / petalCount;
         for (int i = petalCount; i > 0; i--)
         {
@@ -74,6 +74,8 @@ public class FlowerModScript : MonoBehaviour
 
     public async void CheckPetals()
     {
+        if (allPetalsDead) return;
+
         await System.Threading.Tasks.Task.Delay(10);
         for (int i = 0; i < petals.Count; i++)
         {
@@ -93,6 +95,7 @@ public class FlowerModScript : MonoBehaviour
         }
         if (petals.Count == 0)
         {
+            allPetalsDead = true;
             GetComponent<EnemyScript>().canGetHit = true;
         }
     }

@@ -52,7 +52,11 @@ public class InventoryManager : MonoBehaviour
     public void AddAttachment(Attachment attachment)
     {
         int freeSlot = CheckInventorySlots(attachment.type);
-        inventory[attachment.type][freeSlot] = attachment;
+        if (freeSlot > -1 && freeSlot < 2)
+        {
+            inventory[attachment.type][freeSlot] = attachment;
+        }
+        else Debug.LogError("add attachment no slot (should've been checked before called)");
     }
 
     public void EquipAttachment(Attachment attachment)
@@ -73,10 +77,11 @@ public class InventoryManager : MonoBehaviour
             return;
         }
         Debug.Log("inside inventory");
-        Attachment toEquip = inventory[attachment.type][GetAttachmentSlot(attachment)];
+        Attachment toEquip = attachment;
         equipedAttachments[(int)attachment.type] = toEquip;
         inventory[attachment.type][GetAttachmentSlot(attachment)] = null;
         inventory[attachment.type][CheckInventorySlots(attachment.type)] = curEquiped;
+        UpdateStats(attachment, true);
         CycleInventory();
     }
 
@@ -102,11 +107,12 @@ public class InventoryManager : MonoBehaviour
             return;
         }
         int freeSlot = CheckInventorySlots(attachment.type); 
-        if (freeSlot >= 0)
+        if (freeSlot > -1 && freeSlot < 2)
         {
             Debug.Log("free slot: " + freeSlot.ToString());
             equipedAttachments[(int)attachment.type] = null;
             AddAttachment(attachment);
+            UpdateStats(attachment, false);
         }
         else
         {
@@ -199,18 +205,19 @@ public class InventoryManager : MonoBehaviour
 
     public void UpdateStats(Attachment attachment, bool isEquiping)
     {
-        if (! isEquiping)
-        {
-            for (int i = 0; i < attachment.modifiers.Count; i++)
-            {
-                GameManager.instance.playerStats[(int)attachment.modifiers[i].type] -= attachment.modifiers[i].value;
-            }
-        }
-        else if (isEquiping)
+        Debug.Log("Update stats");
+        if (isEquiping)
         {
             for (int i = 0; i < attachment.modifiers.Count; i++)
             {
                 GameManager.instance.playerStats[(int)attachment.modifiers[i].type] += attachment.modifiers[i].value;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < attachment.modifiers.Count; i++)
+            {
+                GameManager.instance.playerStats[(int)attachment.modifiers[i].type] -= attachment.modifiers[i].value;
             }
         }
         GameManager.instance.UpdateStats();

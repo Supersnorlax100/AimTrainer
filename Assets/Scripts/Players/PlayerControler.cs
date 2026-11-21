@@ -97,7 +97,12 @@ public class PlayerControler : MonoBehaviour
             }
             shotsHit++;
             target.GetComponent<EnemyScript>()?.GetHit(DamageCalc(true));
-            AudioManager.instance.PlayHitSound();
+            if (target.GetComponent<EnemyScript>().canGetHit) 
+            {
+                AudioManager.instance.PlayCritSound();
+                shotsHit++;
+            }
+            else shotsMissed++;
             // Debug.Log("Crit Hit");
         }
         else if (Physics.Raycast(gunRay, out targetHit, 99999999, targetHitMask))
@@ -108,9 +113,16 @@ public class PlayerControler : MonoBehaviour
                 target = target?.transform?.parent?.gameObject;
             }
             target.GetComponent<EnemyScript>()?.GetHit(DamageCalc(false));
-            shotsHit++;
             // Debug.Log("Hit");
-            AudioManager.instance.PlayHitSound();
+            if (target.GetComponent<EnemyScript>().canGetHit) 
+            {
+                if (target.GetComponent<SubEnemyScript>()) AudioManager.instance.PlaySubEnemyHitSound();
+                else AudioManager.instance.PlayHitSound();
+                
+                shotsHit++;
+            }
+            else shotsMissed++;
+
         }
         else {shotsMissed++;}
         AccuracyCalc();
