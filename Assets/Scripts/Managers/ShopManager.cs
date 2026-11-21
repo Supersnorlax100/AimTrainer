@@ -97,14 +97,8 @@ public class ShopManager : MonoBehaviour
 
     public void Purchase(Attachment attachment)
     {
-        if (InventoryManager.instance.CheckInventorySlots(attachment.type) == -1 && InventoryManager.instance.GetEquipedAttachment(attachment.type) != null)
+        if (! CanPurchase(attachment, true))
         {
-            UiManager.instance.InfoPrompt(true, "Your inventory is full");
-            return;
-        }
-        if (GameManager.instance.score < Mathf.CeilToInt(attachment.price))
-        {
-            UiManager.instance.InfoPrompt(true, "You do not have enough score");
             return;
         }
         AudioManager.instance.PurchaseSound();
@@ -114,6 +108,23 @@ public class ShopManager : MonoBehaviour
         UpdateUI();
         Debug.Log("inventory after purchase: ");
         InventoryManager.instance.DebugInventory();
+    }
+
+    public bool CanPurchase(Attachment attachment, bool showPrompt)
+    {
+        if (InventoryManager.instance.CheckInventorySlots(attachment.type) == -1 && InventoryManager.instance.GetEquipedAttachment(attachment.type) != null)
+        {
+            if (showPrompt) UiManager.instance.InfoPrompt(true, "Your inventory is full");
+            
+            return false;
+        }
+        if (GameManager.instance.score < Mathf.CeilToInt(attachment.price))
+        {
+            if (showPrompt) UiManager.instance.InfoPrompt(true, "You do not have enough score");
+            
+            return false;
+        }
+        return true;
     }
 
     // Roll item stuff

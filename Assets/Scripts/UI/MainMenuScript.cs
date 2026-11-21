@@ -5,13 +5,14 @@ using UnityEngine.UI;
 public class MainMenuScript : MonoBehaviour
 {
     // Kinda a copy of UiManager but for main menu stuff
-    [SerializeField] GameObject settingsMenu;
-    [SerializeField] GameObject mainMenu;
+    public GameObject settingsMenu;
+    public GameObject mainMenu;
     [SerializeField] Button startButton;
 
     void Start()
     {
         startButton.onClick.AddListener(GameManager.instance.GameStart);
+        UiManager.instance.mainMenuScript = GetComponent<MainMenuScript>();
     }
 
     public void Close()
@@ -24,5 +25,10 @@ public class MainMenuScript : MonoBehaviour
     {
         settingsMenu.SetActive(true);
         mainMenu.SetActive(false);
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }

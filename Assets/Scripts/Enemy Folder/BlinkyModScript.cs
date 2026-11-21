@@ -23,7 +23,6 @@ public class BlinkyModScript : MonoBehaviour
         if (GetComponent<FlowerModScript>())
         {
             transform.parent.rotation = Quaternion.Euler(0, 0, 0);
-            transform.parent.parent = null;
             GetComponent<FlowerModScript>().Invoke("SpawnPetals",0.1f);
             GetComponent<EnemyScript>().canGetHit = false;
         }

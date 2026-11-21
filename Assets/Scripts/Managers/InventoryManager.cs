@@ -119,7 +119,7 @@ public class InventoryManager : MonoBehaviour
         return equipedAttachments[(int)attachmentType];
     }
 
-    public Attachment[] GetAttachments(AttachmentType attachmentType)
+    public Attachment[] GetAttachmentsOfType(AttachmentType attachmentType)
     {
         return inventory[attachmentType];
     }
@@ -141,15 +141,38 @@ public class InventoryManager : MonoBehaviour
     //     return null;
     // }
 
+    // will return true if the given attachment is equiped
+    public bool IsEquipedAttachment(Attachment attachment)
+    {
+        foreach (Attachment att in equipedAttachments)
+        {
+            if (att == attachment) return true;
+        }
+        return false;
+    }
+
+    public bool IsInventoryAttachment(Attachment attachment)
+    {
+        foreach (Attachment[] att in inventory.Values)
+        {
+            if (att[0] == attachment || att[1] == attachment) return true;
+        }
+        return false;
+    }
+
+    public bool DoesPlayerHaveAttachment(Attachment attachment)
+    {
+        if (IsEquipedAttachment(attachment) || IsInventoryAttachment(attachment)) return true;
+
+        return false;
+    }
+
     // Good for swapping attachment locations
     public int GetAttachmentSlot(Attachment attachment)
     {
         for (int i = 0; i < inventory[attachment.type].Length; i++)
         {
-            if (inventory[attachment.type][i] == attachment)
-            {
-                return i;
-            }
+            if (inventory[attachment.type][i] == attachment) return i;
         }
         return -1;
     }
@@ -158,18 +181,10 @@ public class InventoryManager : MonoBehaviour
     // return 2 if equip is empty
     public int CheckInventorySlots(AttachmentType attachmentType)
     {
-        if (! inventory[attachmentType][0])
-        {
-            return 0;
-        }
-        if (! inventory[attachmentType][1])
-        {
-            return 1;
-        }
-        if (! equipedAttachments[(int)attachmentType])
-        {
-            return 2;
-        }
+        if (! inventory[attachmentType][0]) return 0;
+        else if (! inventory[attachmentType][1]) return 1;
+        else if (! equipedAttachments[(int)attachmentType]) return 2;
+        
         return -1;
     }
 
@@ -177,14 +192,8 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < inventory.Count; i++)
         {
-            if (inventory[(AttachmentType)i][0])
-            {
-                Debug.Log((AttachmentType)i + " 0: " + inventory[(AttachmentType)i][0].id);
-            }
-            if (inventory[(AttachmentType)i][1])
-            {
-                Debug.Log((AttachmentType)i + " 1: " + inventory[(AttachmentType)i][1].id);
-            }
+            if (inventory[(AttachmentType)i][0])    Debug.Log((AttachmentType)i + " 0: " + inventory[(AttachmentType)i][0].id);
+            if (inventory[(AttachmentType)i][1])    Debug.Log((AttachmentType)i + " 1: " + inventory[(AttachmentType)i][1].id);
         }
     }
 
@@ -209,10 +218,17 @@ public class InventoryManager : MonoBehaviour
 
     public void DeleteAttachment(Attachment attachment)
     {
-        int slot = GetAttachmentSlot(attachment);
-        if (slot > -1)
+        if (IsInventoryAttachment(attachment))
         {
+            int slot = GetAttachmentSlot(attachment);
             inventory[attachment.type][slot] = null;
+        }
+        else if (IsEquipedAttachment(attachment))
+        {
+            for (int i = 0; i < equipedAttachments.Length; i++)
+            {
+                if (equipedAttachments[i] == attachment) equipedAttachments[i] = null;
+            }
         }
     }
 }

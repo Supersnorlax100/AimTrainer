@@ -105,8 +105,8 @@ public class InventoryUIScript : MonoBehaviour
         // Attachment Slots
         for (int i = 0; i < attachmentSlots?.GetLength(0); i++)
         {
-            attachmentSlots[i, 0].attachment = InventoryManager.instance.GetAttachments((AttachmentType)i)[0];
-            attachmentSlots[i, 1].attachment = InventoryManager.instance.GetAttachments((AttachmentType)i)[1];
+            attachmentSlots[i, 0].attachment = InventoryManager.instance.GetAttachmentsOfType((AttachmentType)i)[0];
+            attachmentSlots[i, 1].attachment = InventoryManager.instance.GetAttachmentsOfType((AttachmentType)i)[1];
         }
         foreach (ItemBoxScript itemBox in attachmentSlots)
         {

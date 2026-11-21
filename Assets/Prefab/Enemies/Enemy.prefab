@@ -286,6 +286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyScript
   targetType: 0
   health: 1
+  maxHealth: 0
   scoreValue: 10
   healthBarCanvas: {fileID: 5154670183188312931}
   canGetHit: 1
@@ -316,7 +317,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 8
+  m_Constraints: 56
   m_CollisionDetection: 0
 --- !u!1 &5875144797187088029
 GameObject:

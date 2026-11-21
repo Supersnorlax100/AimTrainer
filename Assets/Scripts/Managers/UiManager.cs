@@ -67,6 +67,9 @@ public class UiManager : MonoBehaviour
     [SerializeField] TMP_Text floorsClearedText;
     [SerializeField] TMP_Text finalLevelText;
 
+    public MainMenuScript mainMenuScript; //Assigned by mainMenuScript
+    int infoPromptTimerID;
+
 
     private void Awake()
     {
@@ -118,8 +121,9 @@ public class UiManager : MonoBehaviour
         if (GameManager.instance.forceLock) return;
         
         // Only want Escape/Back functionality in main menu, otherwise, no other menus/inputs work
-        if (Input.GetKeyDown("escape") && MapManager.instance.map.activeSelf && MapManager.instance.currentRoomType == RoomType.HOME) Back();
-        else if (MapManager.instance.currentRoomType == RoomType.HOME) return;
+        // if (Input.GetKeyDown("escape") && (MapManager.instance.map.activeSelf || mainMenuSettingsMenu.activeSelf /* menus that can be open on main menu (also may want to abstract these if more) */)
+        //  && MapManager.instance.currentRoomType == RoomType.HOME) Back();
+        // else if (MapManager.instance.currentRoomType == RoomType.HOME) return;
 
         if (MapManager.instance.currentRoomType == RoomType.BOSS 
         || MapManager.instance.currentRoomType == RoomType.MINIBOSS 
@@ -135,7 +139,7 @@ public class UiManager : MonoBehaviour
                 else if (Input.GetKeyDown("escape") || activeMenu == pauseMenu) Back();
             }
         }
-        // else if (Input.GetKeyDown("escape")) Back();
+        else if (Input.GetKeyDown("escape")) Back();
 
         if (Input.GetKeyDown("i"))
         {
@@ -199,11 +203,6 @@ public class UiManager : MonoBehaviour
     {
         combatUI.SetActive(isVisible);
     }
-
-    // void PauseMenu(bool enabled)
-    // {
-    //     pauseMenu.SetActive(enabled);
-    // }
 
     // these use a connected string
     public void UpdateScoreAndAccuracyText()
@@ -293,13 +292,21 @@ public class UiManager : MonoBehaviour
         infoPrompt.SetActive(isVisible);
         infoPromptText.text = infoText;
         Debug.Log("info prompt, is visible: " + isVisible);
-        if (isVisible) _ = InfoPromptTimer();
+        if (isVisible) 
+        {
+            infoPromptTimerID++;
+            _ = InfoPromptTimer(infoPromptTimerID);
+        }
     }
-    public async Task InfoPromptTimer()
+    // Each infoPromptTimer call will add to the timer ID, reason: if the prompt is started shortly after another it will still be using the initial timer, instead of the newly started timer
+    public async Task InfoPromptTimer(int timerID)
     {
         // had to use await, instead of invoke repeating since game is paused sometimes
         await Task.Delay((int)infoPromptTime * 1000);
-        InfoPrompt(false, "");
+        if (infoPromptTimerID == timerID)
+        {
+            InfoPrompt(false, "");
+        }
     }
 
 
@@ -318,12 +325,24 @@ public class UiManager : MonoBehaviour
     public void Back()
     {
         Debug.Log("back");
+        // Special Menus
         if (MapManager.instance.map.activeSelf)
         {
-            Debug.Log("hide map");
             MapManager.instance.MapVisibility(false);
             return;
         }
+        if (mainMenuScript && mainMenuScript.settingsMenu.activeSelf)
+        {
+            mainMenuScript.Close(); // handles main menu menus
+            return;
+        }
+
+        if (activeMenu == null)
+        {
+            return;
+        }
+
+        // if closing last menu game will now "resume"
         if (menuOpenOrder.Count == 0)
         {
             activeMenu.SetActive(false);
@@ -332,7 +351,8 @@ public class UiManager : MonoBehaviour
             GameManager.instance.Pause(false);
             return;
         }
-        // ^1 is the same as -1 except for some reason it doesn't like -1 so I used ^1
+
+        // close last menu
         MenuOpen(menuOpenOrder[^1], true, false);
         menuOpenOrder.Remove(menuOpenOrder[^1]);
     }

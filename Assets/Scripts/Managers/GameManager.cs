@@ -68,9 +68,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public float roomScore;
     public int score;
 
-    [SerializeField] List<Component> modScripts;
-    public List<Component> modScriptsUnlocked;
-    public List<Component> modScriptsToLock;
+    [SerializeField] List<MonoBehaviour> modScripts;
+    public List<MonoBehaviour> modScriptsUnlocked;
+    public List<MonoBehaviour> modScriptsToLock;
 
     public float accuracy; //Calculated by player
 
@@ -237,74 +237,43 @@ public class GameManager : MonoBehaviour
         #endregion
     }
 
+    
     void AddPermanentMod()
     {
-        bool loop = true;
-        while (loop)
+        if (modScripts.Count == 0)
         {
-            if (modScriptsUnlocked.Count == modScripts.Count)
-            {
-                loop = false;
-                break;
-            }
-            int randomNum = UnityEngine.Random.Range(0, modScripts.Count);
-            bool modNotUnlocked = true;
-            foreach (Component script in modScriptsUnlocked)
-            {
-                if (script == modScripts[randomNum])
-                {
-                    modNotUnlocked = false;
-                    break;
-                }
-            }
-            if (modNotUnlocked)
-            {
-                modScriptsUnlocked.Add(modScripts[randomNum]);
-                modScripts.Remove(modScripts[randomNum]);
-                loop = false;
-            }
-            else
-            {
-                Debug.LogError("Error: Mod:" + modScripts[randomNum].name + " already unlocked but is not removed from ModScripts");
-            }
+            Debug.Log("obtained all mods");
+            return;
         }
+        int randomNum = UnityEngine.Random.Range(0, modScripts.Count);
+        modScriptsUnlocked.Add(modScripts[randomNum]);
+        modScripts.Remove(modScripts[randomNum]);
     }
     void AddTempMod()
     {
-        //#TODO: Add some more breaks just in case
-        bool loop = true;
-        int iterations = 0;
-        while (loop)
+        if (modScripts.Count == 0)
         {
-            if (iterations > 1000)
-            {
-                Debug.LogError("Error: GameManager EnterRoom: Could not find a mod to unlock");
-                loop = false;
-                break;
-            }
-            if (modScriptsUnlocked.Count == modScripts.Count)
-            {
-                loop = false;
-                break;
-            }
-            int randomNum = Random.Range(0, modScripts.Count);
-            bool modNotUnlocked = true;
-            foreach (Component script in modScriptsUnlocked)
-            {
-                if (script == modScripts[randomNum])
-                {
-                    modNotUnlocked = false;
-                    break;
-                }
-            }
-            if (modNotUnlocked)
-            {
-                modScriptsUnlocked.Add(modScripts[randomNum]);
-                modScriptsToLock.Add(modScripts[randomNum]);
-                loop = false;
-            }
-            iterations++;
+            Debug.Log("obtained all mods");
+            return;
         }
+        int randomNum = Random.Range(0, modScripts.Count);
+        if (! IsModUnlocked(modScripts[randomNum]))
+        {
+            modScriptsUnlocked.Add(modScripts[randomNum]);
+            modScriptsToLock.Add(modScripts[randomNum]);
+        }
+    }
+
+    bool IsModUnlocked(MonoBehaviour script)
+    {
+        foreach (MonoBehaviour _script in modScriptsUnlocked)
+        {
+            if (_script == script)
+            {
+                return true;
+            }
+        }
+        return false;    
     }
 
     void DetermineTargetType()
@@ -350,7 +319,7 @@ public class GameManager : MonoBehaviour
 
     public void GetRidOfTempMods()
     {
-        foreach (Component script in modScriptsToLock)
+        foreach (MonoBehaviour script in modScriptsToLock)
         {
             if (modScriptsUnlocked.Contains(script))
             {
