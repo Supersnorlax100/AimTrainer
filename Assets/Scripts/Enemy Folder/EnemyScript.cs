@@ -59,12 +59,12 @@ public class EnemyScript : MonoBehaviour
         if (!respawns)
         {
             Debug.Log("sub enemy died");
-            EventHandeler.onSubEnemyDeath?.Invoke();
+            EventManager.onSubEnemyDeath?.Invoke();
         }
         else
         {
             Debug.Log("enemy died");
-            EventHandeler.onEnemyDeath?.Invoke();
+            EventManager.onEnemyDeath?.Invoke();
         }
     }
     public void GetHit(float damage)

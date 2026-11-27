@@ -104,7 +104,7 @@ public class ShopManager : MonoBehaviour
         AudioManager.instance.PurchaseSound();
         GameManager.instance.score -= Mathf.CeilToInt(attachment.price);
         InventoryManager.instance.EquipAttachment(attachment);
-        EventHandeler.purchase?.Invoke();
+        EventManager.purchase?.Invoke();
         UpdateUI();
         Debug.Log("inventory after purchase: ");
         InventoryManager.instance.DebugInventory();
@@ -384,6 +384,6 @@ public class ShopManager : MonoBehaviour
     // for button
     public void LeaveShop()
     {
-        EventHandeler.exitRoom.Invoke();
+        EventManager.exitRoom.Invoke();
     }
 }

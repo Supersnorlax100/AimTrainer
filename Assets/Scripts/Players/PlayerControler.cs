@@ -32,8 +32,8 @@ public class PlayerControler : MonoBehaviour
             Destroy(gameObject);
         }
 
-        EventHandeler.exitRoom += ExitRoom;
-        EventHandeler.enterRoom += EnterRoom;
+        EventManager.exitRoom += ExitRoom;
+        EventManager.enterRoom += EnterRoom;
 
         targetHitMask = LayerMask.GetMask("TargetHit");
         targetCritMask = LayerMask.GetMask("TargetCrit");
@@ -43,8 +43,8 @@ public class PlayerControler : MonoBehaviour
 
     void OnDisable()
     {
-        EventHandeler.exitRoom -= ExitRoom;
-        EventHandeler.enterRoom -= EnterRoom;
+        EventManager.exitRoom -= ExitRoom;
+        EventManager.enterRoom -= EnterRoom;
     }
 
     void Start()

@@ -88,26 +88,26 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        EventHandeler.onPlayerDeath += PlayerDie;
+        EventManager.onPlayerDeath += PlayerDie;
 
-        EventHandeler.onTargetDeath += RefreshCombo;
-        EventHandeler.onTargetDeath += AddScore;
+        EventManager.onTargetDeath += RefreshCombo;
+        EventManager.onTargetDeath += AddScore;
 
-        EventHandeler.onEnemyDeath += AddScore;
-        EventHandeler.onEnemyDeath += RefreshCombo;
+        EventManager.onEnemyDeath += AddScore;
+        EventManager.onEnemyDeath += RefreshCombo;
 
-        EventHandeler.onSubEnemyDeath += RefreshCombo;
+        EventManager.onSubEnemyDeath += RefreshCombo;
 
-        EventHandeler.exitRoom += FinalizeScore;
-        // EventHandeler.exitRoom += StopCombo;
-        EventHandeler.exitRoom += GetRidOfTempMods;
+        EventManager.exitRoom += FinalizeScore;
+        EventManager.exitRoom += ClearTempMods;
+        EventManager.exitRoom += AdvanceLevelCheck;
 
-        EventHandeler.enterRoom += StopCombo;
-        EventHandeler.enterRoom += EnterRoom;
+        EventManager.enterRoom += StopCombo;
+        EventManager.enterRoom += EnterRoom;
 
-        EventHandeler.levelClear += LevelClear;
+        EventManager.levelClear += LevelClear;
 
-        EventHandeler.restart += Restart;
+        EventManager.restart += Restart;
         
         curTime = secondsGiven * 100;
 
@@ -125,26 +125,26 @@ public class GameManager : MonoBehaviour
 
     void OnDisable()
     {
-        EventHandeler.onPlayerDeath -= PlayerDie;
+        EventManager.onPlayerDeath -= PlayerDie;
 
-        EventHandeler.onTargetDeath -= RefreshCombo;
-        EventHandeler.onTargetDeath -= AddScore;
+        EventManager.onTargetDeath -= RefreshCombo;
+        EventManager.onTargetDeath -= AddScore;
 
-        EventHandeler.onEnemyDeath -= AddScore;
-        EventHandeler.onEnemyDeath -= RefreshCombo;
+        EventManager.onEnemyDeath -= AddScore;
+        EventManager.onEnemyDeath -= RefreshCombo;
 
-        EventHandeler.onSubEnemyDeath -= RefreshCombo;
+        EventManager.onSubEnemyDeath -= RefreshCombo;
 
-        EventHandeler.exitRoom -= FinalizeScore;
-        // EventHandeler.exitRoom -= StopCombo;
-        EventHandeler.exitRoom -= GetRidOfTempMods;
+        EventManager.exitRoom -= FinalizeScore;
+        EventManager.exitRoom -= ClearTempMods;
+        EventManager.exitRoom -= AdvanceLevelCheck;
 
-        EventHandeler.enterRoom -= StopCombo;
-        EventHandeler.enterRoom -= EnterRoom;
+        EventManager.enterRoom -= StopCombo;
+        EventManager.enterRoom -= EnterRoom;
 
-        EventHandeler.levelClear -= LevelClear;
+        EventManager.levelClear -= LevelClear;
 
-        EventHandeler.restart -= Restart;
+        EventManager.restart -= Restart;
     }
 
 
@@ -153,12 +153,12 @@ public class GameManager : MonoBehaviour
         #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.RightShift))
         {
-            EventHandeler.levelClear?.Invoke();
+            EventManager.levelClear?.Invoke();
         }
         if (Input.GetKeyDown(KeyCode.Minus))
         {
             Debug.Log("restart");
-            EventHandeler.restart?.Invoke();
+            EventManager.restart?.Invoke();
         }
         #endif
     }
@@ -181,7 +181,8 @@ public class GameManager : MonoBehaviour
             playerStats[i] = 0;
         }
         StopCombo();
-        GetRidOfTempMods();
+        ResetMods();
+        ClearTempMods();
         isPaused = true;
         forceLock = false;
         cameraLock = false;
@@ -190,6 +191,14 @@ public class GameManager : MonoBehaviour
         comboValue = 0;
         curTime = secondsGiven * 100;
         UpdateStats();
+    }
+
+    public void AdvanceLevelCheck()
+    {
+        if (MapManager.instance.currentRoomType == RoomType.BOSS)
+        {
+            EventManager.levelClear?.Invoke();
+        }
     }
 
     public void LevelClear()
@@ -202,7 +211,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("enter room");
         roomScore = 0;
 
-        // EventHandeler.updateUI?.Invoke();
+        // EventManager.updateUI?.Invoke();
         
         DetermineTargetType();
         if (stageType == TargetType.TRACKING)
@@ -317,7 +326,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void GetRidOfTempMods()
+    // ClearTempMods + restore base mods
+    void ResetMods()
+    {
+        ClearTempMods();
+        foreach (MonoBehaviour script in modScriptsUnlocked) // meaning all mods that were permanent
+        {
+           modScripts.Add(script);
+           modScriptsUnlocked.Remove(script); 
+        }
+    }
+
+    public void ClearTempMods()
     {
         foreach (MonoBehaviour script in modScriptsToLock)
         {
@@ -458,7 +478,7 @@ public class GameManager : MonoBehaviour
     // For Button
     public void ButtonRestart()
     {
-        EventHandeler.restart?.Invoke();
+        EventManager.restart?.Invoke();
     }
 
     public void UpdateStats()

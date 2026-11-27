@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EventHandeler : MonoBehaviour
+public class EventManager : MonoBehaviour
 {
     public delegate void OnTargetDeath();
     public static OnTargetDeath onTargetDeath;
@@ -22,9 +22,6 @@ public class EventHandeler : MonoBehaviour
 
     public delegate void EnterRoom();
     public static EnterRoom enterRoom;
-
-    public delegate void LvCleared(); //#TODO not realy used but may be used later
-    public static LvCleared lvCleared;
 
     public delegate void ExitRoom();
     public static ExitRoom exitRoom;

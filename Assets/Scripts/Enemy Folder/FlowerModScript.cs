@@ -21,12 +21,12 @@ public class FlowerModScript : MonoBehaviour
 
     private void Awake()
     {
-        EventHandeler.onSubEnemyDeath += CheckPetals;
+        EventManager.onSubEnemyDeath += CheckPetals;
     }
 
     void OnDisable()
     {
-        EventHandeler.onSubEnemyDeath -= CheckPetals;        
+        EventManager.onSubEnemyDeath -= CheckPetals;        
     }
 
     private void Start()

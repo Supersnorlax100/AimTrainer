@@ -4,13 +4,13 @@ public class SlimeParent : MonoBehaviour
 {
     private void Start()
     {
-        EventHandeler.onSubEnemyDeath += CheckChildren;
-        EventHandeler.onEnemyDeath += CheckChildren;
+        EventManager.onSubEnemyDeath += CheckChildren;
+        EventManager.onEnemyDeath += CheckChildren;
     }
     private void OnDisable()
     {
-        EventHandeler.onEnemyDeath -= CheckChildren;
-        EventHandeler.onSubEnemyDeath -= CheckChildren;
+        EventManager.onEnemyDeath -= CheckChildren;
+        EventManager.onSubEnemyDeath -= CheckChildren;
     }
 
     public void CheckChildren()

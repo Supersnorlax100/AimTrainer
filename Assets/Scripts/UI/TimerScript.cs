@@ -27,17 +27,17 @@ public class TimerScript : MonoBehaviour
 
     void Awake()
     {
-        // EventHandeler.exitRoom += StoreTime;
-        EventHandeler.enterRoom += EnterRoom;
-        EventHandeler.enterRoom += Timer;
-        EventHandeler.exitRoom += StopTimer;
+        // EventManager.exitRoom += StoreTime;
+        EventManager.enterRoom += EnterRoom;
+        EventManager.enterRoom += Timer;
+        EventManager.exitRoom += StopTimer;
     }
 
     void OnDisable()
     {
-        EventHandeler.enterRoom -= EnterRoom;
-        EventHandeler.enterRoom -= Timer;
-        EventHandeler.exitRoom -= StopTimer;
+        EventManager.enterRoom -= EnterRoom;
+        EventManager.enterRoom -= Timer;
+        EventManager.exitRoom -= StopTimer;
     }
 
     void Start()
@@ -113,7 +113,7 @@ public class TimerScript : MonoBehaviour
             if (bonusSeconds <= 0 && bonusMinutes <= 0 && bonusCentiseconds <= 0)
             {
                 CancelInvoke("UpdateTimer");
-                EventHandeler.onPlayerDeath?.Invoke();
+                EventManager.onPlayerDeath?.Invoke();
                 return;
             }
             if (bonusCentiseconds <= 0)
@@ -141,7 +141,7 @@ public class TimerScript : MonoBehaviour
             if (seconds <= 0 && minutes <= 0 && centiseconds <= 0)
             {
                 CancelInvoke("UpdateTimer");
-                EventHandeler.onPlayerDeath?.Invoke();
+                EventManager.onPlayerDeath?.Invoke();
                 return;
             }
             if (centiseconds <= 0)

@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
+using System;
 
 // Intentionally useless on start menu
 public class UiManager : MonoBehaviour
@@ -21,6 +22,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject inventoryMenu;
     public GameObject roomCompletionMenu; // Needs to be public since activeSelf is used on it for a ui check (like the map in a way)
+    public GameObject levelCompletionMenu; // Same as room completion but for when beating a level
 
     [Space]    
     [Space]    
@@ -67,7 +69,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] TMP_Text floorsClearedText;
     [SerializeField] TMP_Text finalLevelText;
 
-    public MainMenuScript mainMenuScript; //Assigned by mainMenuScript
+    [HideInInspector] public MainMenuScript mainMenuScript; //Assigned by mainMenuScript
     int infoPromptTimerID;
 
 
@@ -83,32 +85,34 @@ public class UiManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        EventHandeler.onPlayerDeath += ActivateDeathScreen;
-        EventHandeler.onTargetDeath += UpdateScoreAndAccuracyText;
-        EventHandeler.onEnemyDeath += UpdateScoreAndAccuracyText;
-        EventHandeler.onSubEnemyDeath += UpdateScoreAndAccuracyText;
+        EventManager.onPlayerDeath += ActivateDeathScreen;
+        EventManager.onTargetDeath += UpdateScoreAndAccuracyText;
+        EventManager.onEnemyDeath += UpdateScoreAndAccuracyText;
+        EventManager.onSubEnemyDeath += UpdateScoreAndAccuracyText;
 
-        EventHandeler.exitRoom += CloseAllMenus;
-        EventHandeler.exitRoom += RoomCompletionMenu;
-        EventHandeler.enterRoom += EnterRoom;
+        EventManager.exitRoom += CloseAllMenus;
+        EventManager.exitRoom += RoomCompletionMenu;
+        // EventManager.levelClear += LevelCompletionMenu;
 
-        EventHandeler.restart += CloseAllMenus;
-        EventHandeler.restart += CloseSpecialMenus;
+        EventManager.enterRoom += EnterRoom;
+
+        EventManager.restart += CloseAllMenus;
+        EventManager.restart += CloseSpecialMenus;
     }
 
     void OnDisable()
     {
-        EventHandeler.onPlayerDeath -= ActivateDeathScreen;
-        EventHandeler.onTargetDeath -= UpdateScoreAndAccuracyText;
-        EventHandeler.onEnemyDeath -= UpdateScoreAndAccuracyText;
-        EventHandeler.onSubEnemyDeath -= UpdateScoreAndAccuracyText;
+        EventManager.onPlayerDeath -= ActivateDeathScreen;
+        EventManager.onTargetDeath -= UpdateScoreAndAccuracyText;
+        EventManager.onEnemyDeath -= UpdateScoreAndAccuracyText;
+        EventManager.onSubEnemyDeath -= UpdateScoreAndAccuracyText;
 
-        EventHandeler.exitRoom -= CloseAllMenus;
-        EventHandeler.exitRoom -= RoomCompletionMenu;
-        EventHandeler.enterRoom -= EnterRoom;
+        EventManager.exitRoom -= CloseAllMenus;
+        EventManager.exitRoom -= RoomCompletionMenu;
+        EventManager.enterRoom -= EnterRoom;
 
-        EventHandeler.restart -= CloseAllMenus;
-        EventHandeler.restart -= CloseSpecialMenus;
+        EventManager.restart -= CloseAllMenus;
+        EventManager.restart -= CloseSpecialMenus;
     }
 
     void Start()
@@ -259,6 +263,37 @@ public class UiManager : MonoBehaviour
         startRoomTimeText.text = ConvertTime(GameManager.instance.curTime + timerScript.roomTime);
         roomTimeText.text = ConvertTime(timerScript.roomTime);
         totalTimeText.text = ConvertTime(GameManager.instance.curTime);
+    }
+
+    public void LevelCompletionMenu()
+    {
+        bool isOpening = !levelCompletionMenu.activeSelf;
+        levelCompletionMenu.SetActive(isOpening);
+        GameManager.instance.ForceLock(isOpening);
+        GameManager.instance.Pause(true);
+        GameManager.instance.CursorLock(! isOpening);
+
+        // The math for the display numbers can be a little odd due to the timing of the exit room event is called
+        // Debug.Log("Mathf.CeilToInt(GameManager.instance.roomScore * GameManager.instance.accuracy): " + Mathf.CeilToInt(GameManager.instance.roomScore * GameManager.instance.accuracy));
+        int accScore = Mathf.CeilToInt(GameManager.instance.roomScore * GameManager.instance.accuracy);
+        // Debug.Log("GameManager.instance.roomScore.ToString(): " + GameManager.instance.roomScore.ToString());
+        roomScoreText.text = GameManager.instance.roomScore.ToString();
+        // Debug.Log("(GameManager.instance.accuracy * 100).ToString(): " + (GameManager.instance.accuracy * 100).ToString());
+        accText.text = (GameManager.instance.accuracy * 100).ToString() + "%";
+        // Debug.Log("accScore.ToString(): " + accScore.ToString());
+        accScoreText.text = accScore.ToString();
+        // Debug.Log("Mathf.CeilToInt(GameManager.instance.score - accScore).ToString(): " + Mathf.CeilToInt(GameManager.instance.score - accScore).ToString());
+        currentScoreText.text = Mathf.CeilToInt(GameManager.instance.score).ToString();
+        // Debug.Log("GameManager.instance.score.ToString(): " + GameManager.instance.score.ToString());
+        totalScoreText.text = (GameManager.instance.score + accScore).ToString(); 
+
+        startRoomTimeText.text = ConvertTime(GameManager.instance.curTime + timerScript.roomTime);
+        roomTimeText.text = ConvertTime(timerScript.roomTime);
+        totalTimeText.text = ConvertTime(GameManager.instance.curTime);
+
+        // finalScoreText.text = GameManager.instance.score.ToString();
+        // floorsClearedText.text = MapManager.instance.floorsCleared.ToString();
+        // finalLevelText.text = MapManager.instance.currnetLvl.ToString();
     }
 
     public void EnterRoom()

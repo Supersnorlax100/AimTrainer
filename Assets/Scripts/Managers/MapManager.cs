@@ -72,14 +72,14 @@ public class MapManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        EventHandeler.levelClear += LevelClear;
-        EventHandeler.restart += Restart;
+        EventManager.levelClear += LevelClear;
+        EventManager.restart += Restart;
     }
 
     void OnDisable()
     {
-        EventHandeler.levelClear -= LevelClear;
-        EventHandeler.restart -= Restart;
+        EventManager.levelClear -= LevelClear;
+        EventManager.restart -= Restart;
     }
 
     private void Start()
@@ -93,7 +93,7 @@ public class MapManager : MonoBehaviour
         #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            EventHandeler.exitRoom?.Invoke();
+            EventManager.exitRoom?.Invoke();
         }
         if (Input.GetKeyDown("r"))
         {
@@ -137,6 +137,7 @@ public class MapManager : MonoBehaviour
         // GameManager.instance.Pause(true);
     }
 
+    // Generates new map + sets proper stats (currentLvl)
     public void LevelClear()
     {
         currnetLvl++;
@@ -146,6 +147,7 @@ public class MapManager : MonoBehaviour
         currentRoom = new Vector2(1,-1);
         pastRooms.Add(currentRoom);
         NodeAvailability();
+        MapVisibility(false);
     }
 
     public void ExitRoom() // Called from Game manager from leave room button on room completion menu
@@ -153,11 +155,10 @@ public class MapManager : MonoBehaviour
         canLeaveRoom = true;
         MapVisibility(true);
         floorsCleared++;
-
-        if (currentRoomType == RoomType.BOSS)
-        {
-            EventHandeler.levelClear?.Invoke();
-        }
+        // if (currentRoomType == RoomType.BOSS)
+        // {
+        //     EventManager.levelClear?.Invoke();
+        // }
     }
 
     public async Task GoToRoom(Vector2 room)
@@ -177,7 +178,7 @@ public class MapManager : MonoBehaviour
         // Debug.Log("map visibility");
         canLeaveRoom = false;
         // Debug.Log("can leave");
-        EventHandeler.enterRoom?.Invoke();
+        EventManager.enterRoom?.Invoke();
         // Debug.Log("event");
         // Debug.Log("go to room call: ");
         GameManager.instance.Pause(false);

@@ -31,8 +31,8 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        EventHandeler.onEnemyDeath += SpawnWait; // Make sure spawn runs before exit room check
-        EventHandeler.onSubEnemyDeath += ExitroomCheckDelay;
+        EventManager.onEnemyDeath += SpawnWait; // Make sure spawn runs before exit room check
+        EventManager.onSubEnemyDeath += ExitroomCheckDelay;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -47,8 +47,8 @@ public class EnemySpawner : MonoBehaviour
 
     void OnDisable()
     {
-        EventHandeler.onEnemyDeath -= SpawnWait;
-        EventHandeler.onSubEnemyDeath -= ExitroomCheckDelay;
+        EventManager.onEnemyDeath -= SpawnWait;
+        EventManager.onSubEnemyDeath -= ExitroomCheckDelay;
     }
 
     private void GenerateRandomHealthAndCount()
@@ -97,7 +97,7 @@ public class EnemySpawner : MonoBehaviour
         if (numberOfSpawnedEnemys >= maxEnemyCount && gameObject.GetComponentsInChildren<Transform>().Length <= 5)
         {
             // Debug.Log("exit room invoke");
-            EventHandeler.exitRoom?.Invoke();
+            EventManager.exitRoom?.Invoke();
         }
     }
     void ExitroomCheckDelay()
@@ -122,7 +122,7 @@ public class EnemySpawner : MonoBehaviour
         if (numberOfSpawnedEnemys >= maxEnemyCount && gameObject.GetComponentsInChildren<Transform>().Length <= 5)
         {
             // Debug.Log("exit room invoke");
-            EventHandeler.exitRoom?.Invoke();
+            EventManager.exitRoom?.Invoke();
         }
         else if (numberOfSpawnedEnemys >= maxEnemyCount)
         {
